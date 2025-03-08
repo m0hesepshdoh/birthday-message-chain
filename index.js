@@ -25,4 +25,4 @@ async function sendEmail(recipientEmail, message) {
 }
 
 // Test the function (replace with an actual email)
-sendEmail("example@gmail.com", "🎉 Happy Birthday! 🎂");
+sendEmail("hyb2002@hotmail.com", "🎉 Happy Birthday! 🎂");
