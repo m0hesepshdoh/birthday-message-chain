@@ -15,8 +15,22 @@
             <label for="email">Email:</label>
             <input type="email" id="email" required>
 
-            <label for="birthday">Birthday (MM/DD):</label>
-            <input type="text" id="birthday" placeholder="MM/DD" pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$" required>
+            <label for="birthday">Select Your Birthday:</label>
+
+<div class="slider-container">
+    <label>Month:</label>
+    <input type="range" id="monthSlider" min="1" max="12" value="1">
+    <span id="monthLabel">January</span>
+</div>
+
+<div class="slider-container">
+    <label>Day:</label>
+    <input type="range" id="daySlider" min="1" max="31" value="1">
+    <span id="dayLabel">1</span>
+</div>
+
+<p>Selected Date: <strong id="selectedDate">January 1</strong></p>
+<input type="hidden" id="birthday">
 
             <label for="message">Your Message (100 chars max):</label>
             <textarea id="message" maxlength="100" required></textarea>
