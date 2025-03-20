@@ -17,20 +17,20 @@
 
             <label for="birthday">Select Your Birthday:</label>
 
-<div class="slider-container">
-    <label>Month:</label>
-    <input type="range" id="monthSlider" min="1" max="12" value="1">
-    <span id="monthLabel">January</span>
-</div>
+            <div class="slider-container">
+                <label>Month:</label>
+                <input type="range" id="monthSlider" min="1" max="12" value="1">
+                <span id="monthLabel">January</span>
+            </div>
 
-<div class="slider-container">
-    <label>Day:</label>
-    <input type="range" id="daySlider" min="1" max="31" value="1">
-    <span id="dayLabel">1</span>
-</div>
+            <div class="slider-container">
+                <label>Day:</label>
+                <input type="range" id="daySlider" min="1" max="31" value="1">
+                <span id="dayLabel">1</span>
+            </div>
 
-<p>Selected Date: <strong id="selectedDate">January 1</strong></p>
-<input type="hidden" id="birthday">
+            <p>Selected Date: <strong id="selectedDate">January 1</strong></p>
+            <input type="hidden" id="birthday">
 
             <label for="message">Your Message (100 chars max):</label>
             <textarea id="message" maxlength="100" required></textarea>
@@ -40,6 +40,99 @@
         <p id="response"></p>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Mock Firebase initialization and data handling
+        const firebase = {
+            initializeApp: () => ({
+                firestore: () => ({
+                    collection: (collectionName) => ({
+                        add: (data) => {
+                            return new Promise((resolve, reject) => {
+                                // Simulate successful data addition
+                                console.log("Mock Firebase: Data added:", data);
+                                resolve({ id: "mockDocumentId" }); // Mock document ID
+                            });
+                        },
+                    }),
+                }),
+            }),
+        };
+
+        // Mock Firebase configuration (replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+        };
+
+        // Initialize Firebase (mocked)
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = app.firestore();
+
+        // Month names for display
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Get DOM elements
+        const monthSlider = document.getElementById("monthSlider");
+        const daySlider = document.getElementById("daySlider");
+        const monthLabel = document.getElementById("monthLabel");
+        const dayLabel = document.getElementById("dayLabel");
+        const selectedDateDisplay = document.getElementById("selectedDate");
+        const birthdayInput = document.getElementById("birthday");
+        const messageInput = document.getElementById("message");
+        const emailInput = document.getElementById("email");
+        const birthdayForm = document.getElementById("birthdayForm");
+        const responseDisplay = document.getElementById("response");
+
+        // Function to update the selected date display
+        function updateSelectedDate() {
+            const month = parseInt(monthSlider.value);
+            const day = parseInt(daySlider.value);
+            monthLabel.textContent = monthNames[month - 1];
+            dayLabel.textContent = day;
+            selectedDateDisplay.textContent = `${monthNames[month - 1]} ${day}`;
+            birthdayInput.value = `${month}/${day}`;
+        }
+
+        // Event listeners for sliders
+        monthSlider.addEventListener("input", updateSelectedDate);
+        daySlider.addEventListener("input", updateSelectedDate);
+
+        // Initial update
+        updateSelectedDate();
+
+        // Form submission handler
+        birthdayForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value;
+            const birthday = birthdayInput.value;
+            const message = messageInput.value;
+
+            // Mock Firebase data submission
+            db.collection("birthdayMessages")
+                .add({
+                    email: email,
+                    birthday: birthday,
+                    message: message,
+                    timestamp: new Date(),
+                })
+                .then(() => {
+                    responseDisplay.textContent = "Message sent successfully!";
+                    birthdayForm.reset();
+                    updateSelectedDate(); // Reset date display
+                })
+                .catch((error) => {
+                    console.error("Error sending message:", error);
+                    responseDisplay.textContent = "Failed to send message.";
+                });
+        });
+    </script>
 </body>
 </html>
