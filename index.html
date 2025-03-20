@@ -1,138 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Message</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Birthday Message Chain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
-<body>
-    <div class="container">
-        <h2>Send a Birthday Message</h2>
-        <form id="birthdayForm">
-            <label for="email">Email:</label>
-            <input type="email" id="email" required>
 
-            <label for="birthday">Select Your Birthday:</label>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+    <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-semibold english" style="color: var(--primary-color);">Birthday Message Chain</h2>
+            <h2 class="text-2xl font-semibold arabic" style="color: var(--primary-color);">سلسلة رسائل يوم ميلادك</h2>
+            <p class="text-gray-600 text-sm english">Join our magical chain of birthday messages. Your words will brighten someone's special day, and you'll receive a surprise message on your birthday too!</p>
+            <p class="text-gray-600 text-sm arabic">انضم إلى سلسلتنا السحرية لرسائل يوم الميلاد. كلماتك ستضيء يوم شخص مميز، وستتلقى رسالة مفاجئة في يوم ميلادك أيضًا!</p>
+        </div>
 
-            <div class="slider-container">
-                <label>Month:</label>
-                <input type="range" id="monthSlider" min="1" max="12" value="1">
-                <span id="monthLabel">January</span>
+        <form class="space-y-4" id="birthdayForm">
+            <div>
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2 english">Email</label>
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2 arabic">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div id="email-error" class="error-message english"></div>
             </div>
 
-            <div class="slider-container">
-                <label>Day:</label>
-                <input type="range" id="daySlider" min="1" max="31" value="1">
-                <span id="dayLabel">1</span>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 english">Birthday (Month & Day)</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2 arabic">يوم ميلادك (الشهر واليوم)</label>
+                <div class="date-picker">
+                    <div class="wheel-container">
+                        <div class="wheel" id="monthWheel"></div>
+                        <div class="wheel" id="dayWheel"></div>
+                    </div>
+                    <div class="selected-date" id="selectedDate">Selected Date: </div>
+                </div>
             </div>
 
-            <p>Selected Date: <strong id="selectedDate">January 1</strong></p>
-            <input type="hidden" id="birthday">
+            <div>
+                <label for="message" class="block text-gray-700 text-sm font-bold mb-2 english">Your Birthday Message</label>
+                <label for="message" class="block text-gray-700 text-sm font-bold mb-2 arabic">رسالة يوم ميلادك</label>
+                <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)" required maxlength="100" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none"></textarea>
+                <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p>
+                <div id="message-error" class="error-message english"></div>
+            </div>
 
-            <label for="message">Your Message (100 chars max):</label>
-            <textarea id="message" maxlength="100" required></textarea>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Join the Chain</button>
+            <div id="form-success" class="text-green-500 text-center mt-4 english" style="display: none;"></div>
 
-            <button type="submit">Submit</button>
+            <div id="form-error" class="text-red-500 text-center mt-4 english" style="display: none;"></div>
         </form>
-        <p id="response"></p>
     </div>
-
-    <script>
-        // Mock Firebase initialization and data handling
-        const firebase = {
-            initializeApp: () => ({
-                firestore: () => ({
-                    collection: (collectionName) => ({
-                        add: (data) => {
-                            return new Promise((resolve, reject) => {
-                                // Simulate successful data addition
-                                console.log("Mock Firebase: Data added:", data);
-                                resolve({ id: "mockDocumentId" }); // Mock document ID
-                            });
-                        },
-                    }),
-                }),
-            }),
-        };
-
-        // Mock Firebase configuration (replace with your actual config)
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-        };
-
-        // Initialize Firebase (mocked)
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = app.firestore();
-
-        // Month names for display
-        const monthNames = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-
-        // Get DOM elements
-        const monthSlider = document.getElementById("monthSlider");
-        const daySlider = document.getElementById("daySlider");
-        const monthLabel = document.getElementById("monthLabel");
-        const dayLabel = document.getElementById("dayLabel");
-        const selectedDateDisplay = document.getElementById("selectedDate");
-        const birthdayInput = document.getElementById("birthday");
-        const messageInput = document.getElementById("message");
-        const emailInput = document.getElementById("email");
-        const birthdayForm = document.getElementById("birthdayForm");
-        const responseDisplay = document.getElementById("response");
-
-        // Function to update the selected date display
-        function updateSelectedDate() {
-            const month = parseInt(monthSlider.value);
-            const day = parseInt(daySlider.value);
-            monthLabel.textContent = monthNames[month - 1];
-            dayLabel.textContent = day;
-            selectedDateDisplay.textContent = `${monthNames[month - 1]} ${day}`;
-            birthdayInput.value = `${month}/${day}`;
-        }
-
-        // Event listeners for sliders
-        monthSlider.addEventListener("input", updateSelectedDate);
-        daySlider.addEventListener("input", updateSelectedDate);
-
-        // Initial update
-        updateSelectedDate();
-
-        // Form submission handler
-        birthdayForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            const email = emailInput.value;
-            const birthday = birthdayInput.value;
-            const message = messageInput.value;
-
-            // Mock Firebase data submission
-            db.collection("birthdayMessages")
-                .add({
-                    email: email,
-                    birthday: birthday,
-                    message: message,
-                    timestamp: new Date(),
-                })
-                .then(() => {
-                    responseDisplay.textContent = "Message sent successfully!";
-                    birthdayForm.reset();
-                    updateSelectedDate(); // Reset date display
-                })
-                .catch((error) => {
-                    console.error("Error sending message:", error);
-                    responseDisplay.textContent = "Failed to send message.";
-                });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>
