@@ -16,7 +16,6 @@
       font-size: 16px;
     }
 
-    /* --- Keep all your existing CSS styles here --- */
     .date-picker { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; width: 100%; }
     .wheel-container { display: flex; overflow: hidden; width: 100%; height: 150px; border-radius: 8px; border: 1px solid var(--primary-color); background-color: var(--background-color); }
     .wheel { flex: 1; overflow-y: auto; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; border-right: 1px solid var(--primary-color); font-size: 16px; }
@@ -36,7 +35,6 @@
     .h-32 { height: 128px; }
     .flex-center { display: flex; justify-content: center; align-items: center; }
     .error-message { color: red; font-size: 14px; margin-top: 5px; }
-    /* --- End existing CSS styles --- */
 
   </style>
 </head>
@@ -90,15 +88,12 @@
   messagingSenderId: "220266164498",
   appId: "1:220266164498:web:2adcb2520b75f580cd83cb"
 };
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Initialize Cloud Firestore and get a reference to the service using the compat library
     const db = firebase.firestore();
-    // ========= END: Firebase Configuration & Initialization =========
 
+    const functions = firebase.functions();
 
-    // --- Your existing variables ---
     const monthWheel = document.getElementById('monthWheel');
     const dayWheel = document.getElementById('dayWheel');
     const selectedDateDisplay = document.getElementById('selectedDate');
@@ -109,10 +104,9 @@
     const formSuccess = document.getElementById('form-success');
     const formError = document.getElementById('form-error');
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    let selectedMonth = 0; // Keep as 0-11 index internally
-    let selectedDay = 1;   // Keep as 1-31 day number internally
+    let selectedMonth = 0; 
+    let selectedDay = 1;
 
-    // --- Your existing functions (populateWheel, generateDays, handleItemClick, updateSelectedDate, validateEmail) ---
     function populateWheel(wheel, items, selectedIndex = 0) {
       wheel.innerHTML = '';
       items.forEach((item, index) => {
@@ -121,29 +115,25 @@
         itemElement.textContent = item;
         itemElement.dataset.index = index;
         if (index === selectedIndex) itemElement.classList.add('selected');
-        // Add scroll into view logic here if needed, or handle via click/scroll events on the wheel
         itemElement.addEventListener('click', () => {
              handleItemClick(wheel, index);
-             // Scroll the clicked item to the center (optional enhancement)
              itemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
         wheel.appendChild(itemElement);
       });
-      // Initial scroll for pre-selected item
        setTimeout(() => {
            const selectedEl = wheel.querySelector('.selected');
            if (selectedEl) {
                selectedEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
            }
-       }, 50); // Slight delay for rendering
+       }, 50);
     }
 
     function generateDays(month) {
-      const daysInMonth = month === 1 ? 29 : new Date(2024, month + 1, 0).getDate(); // Use a non-leap year like 2024 for consistency unless handling leap years specifically
+      const daysInMonth = month === 1 ? 29 : new Date(2024, month + 1, 0).getDate();
       const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-      // Ensure selectedDay is valid for the new month
       selectedDay = Math.min(selectedDay, daysInMonth);
-      populateWheel(dayWheel, days, selectedDay - 1); // Pass selectedDay index (selectedDay - 1)
+      populateWheel(dayWheel, days, selectedDay - 1);
     }
 
 
@@ -154,8 +144,8 @@
         targetItem.classList.add('selected');
 
         if (wheel === monthWheel) {
-            selectedMonth = index; // selectedMonth is 0-11
-            generateDays(selectedMonth); // Regenerate days and update day wheel selection
+            selectedMonth = index;
+            generateDays(selectedMonth);
         } else {
             selectedDay = index + 1;
         }
@@ -186,10 +176,9 @@
       event.preventDefault();
       formError.style.display = 'none';
       formSuccess.style.display = 'none';
-      const submitButton = birthdayForm.querySelector('button[type="submit"]'); // Get the button
-      submitButton.disabled = true; // Disable button during processing
-      submitButton.textContent = 'Joining...'; // Provide visual feedback
-
+      const submitButton = birthdayForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Joining...';
 
       const email = emailInput.value.trim();
       const message = messageInput.value.trim();
@@ -203,7 +192,7 @@
            emailError.textContent = "";
        }
        const messageError = document.getElementById('message-error');
-        if (!message) { // Check if message is empty
+        if (!message) { 
             messageError.textContent = "Message is required.";
              hasErrors = true;
         } else if (message.length > 100) {
@@ -216,7 +205,7 @@
       if (hasErrors) {
         formError.textContent = "Please correct the errors above.";
         formError.style.display = 'block';
-        submitButton.disabled = false; // Re-enable button if validation fails
+        submitButton.disabled = false;
         submitButton.textContent = 'Join the Birthday Chain';
         return;
       }
