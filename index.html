@@ -179,9 +179,9 @@
     updateSelectedDate();
 
     function validateEmail(email) {
-      const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
-      return re.test(String(email).toLowerCase());
-    }
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(((hotmail|gmail|googlemail|yahoo)\.(com|co\.uk|ca|de|fr|net|org|[a-z]{2,}))|(\[?([0-9]{1,3}\.){3}[0-9]{1,3}\]?))$/i;
+  return re.test(String(email).toLowerCase());
+}
 
     birthdayForm.addEventListener('submit', (event) => {
       event.preventDefault();
