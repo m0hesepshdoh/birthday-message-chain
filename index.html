@@ -140,7 +140,6 @@
     }
 
     function generateDays(month) {
-      // Corrected leap year check logic if needed, but 29 for Feb is a simple approach
       const daysInMonth = month === 1 ? 29 : new Date(2024, month + 1, 0).getDate(); // Use a non-leap year like 2024 for consistency unless handling leap years specifically
       const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
       // Ensure selectedDay is valid for the new month
@@ -180,8 +179,8 @@
     updateSelectedDate();
 
     function validateEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+(hotmail|gmail|yahoo)))$/;
-        return re.test(String(email).toLowerCase());
+      const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
+      return re.test(String(email).toLowerCase());
     }
 
     birthdayForm.addEventListener('submit', (event) => {
