@@ -252,55 +252,41 @@ margin-top: 5px;
 
 
 <script>
+const firebaseConfig = {
+    apiKey: "AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w",
+    authDomain: "birthdaymessagesapp.firebaseapp.com",
+    projectId: "birthdaymessagesapp",
+    storageBucket: "birthdaymessagesapp.firebasestorage.app",
+    messagingSenderId: "220266164498",
+    appId: "1:220266164498:web:2adcb2520b75f580cd83cb"
+};
 
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();  
 const monthWheel = document.getElementById('monthWheel');
-
 const dayWheel = document.getElementById('dayWheel');
-
 const selectedDateDisplay = document.getElementById('selectedDate');
-
 const messageInput = document.getElementById('message');
-
 const charCountDisplay = document.getElementById('char-count');
-
 const birthdayForm = document.getElementById('birthdayForm');
-
 const emailInput = document.getElementById('email');
-
 const formSuccess = document.getElementById('form-success');
-
 const formError = document.getElementById('form-error');
 
 
-
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
 let selectedMonth = 0;
-
 let selectedDay = 1;
-
-
-
 function populateWheel(wheel, items, selectedIndex = 0) {
-
-wheel.innerHTML = '';
-
-items.forEach((item, index) => {
-
+  wheel.innerHTML = '';
+  items.forEach((item, index) => {
 const itemElement = document.createElement('div');
-
 itemElement.classList.add('wheel-item');
-
 itemElement.textContent = item;
-
 itemElement.dataset.index = index;
-
 if (index === selectedIndex) itemElement.classList.add('selected');
-
 itemElement.addEventListener('click', () => handleItemClick(wheel, index));
-
 wheel.appendChild(itemElement);
-
 });
 
 // Use a setTimeout to allow the DOM to update before scrolling.
@@ -314,21 +300,12 @@ scrollToSelectedIndex(wheel, selectedIndex);
 }
 
 
-
 function generateDays(month) {
-
 const daysInMonth = month === 1 ? 29 : new Date(2024, month + 1, 0).getDate();
-
 const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-
 populateWheel(dayWheel, days, Math.min(selectedDay - 1, days.length - 1));
-
 }
-
-
-
 function handleItemClick(wheel, index) {
-
 const items = wheel.querySelectorAll('.wheel-item');
 
 items.forEach(item => item.classList.remove('selected'));
