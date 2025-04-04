@@ -243,6 +243,13 @@
            submitButton.textContent = 'Join the Birthday Chain';
         });
 
+// --- Wrap the initialization calls ---
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("DOM fully loaded and parsed"); // Add this line for checking
+    populateWheel(monthWheel, months, selectedMonth);
+    generateDays(selectedMonth);
+    updateSelectedDate();
+});
     });
   </script>
 </body>
