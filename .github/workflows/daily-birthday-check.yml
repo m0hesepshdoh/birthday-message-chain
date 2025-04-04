@@ -2,8 +2,7 @@ name: Daily Birthday Check & Email
 
 on:
   schedule:
-    # Runs every day at 9:00 AM UTC. Adjust as needed.
-    # Use crontab syntax: Minute Hour DayOfMonth Month DayOfWeek
+    # Runs every day at 9:00 AM UTC.
     # Example: '0 9 * * *' = 9:00 AM UTC daily
     # Example: '0 6 * * *' = 9:00 AM in Jeddah (UTC+3)
     - cron: "0 6 * * *"
@@ -29,7 +28,9 @@ jobs:
       env:
         BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
         FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }} 
+        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }} # Add your sender email secret
       run: |
+        # Create the service account file from the secret
         echo "$FIREBASE_SERVICE_ACCOUNT" > serviceAccountKey.json
+        # Run your Node.js script
         node birthday-checker.js
