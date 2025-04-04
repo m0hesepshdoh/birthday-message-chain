@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^11.11.1",  // Using the version from my last example, adjust if needed
+    "firebase-admin": "^11.11.1",
     "sib-api-v3-sdk": "^8.5.0"
   }
 }
