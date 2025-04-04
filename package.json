@@ -1,5 +1,17 @@
 {
   "dependencies": {
-    "sib-api-v3-sdk": "^8.5.0"
-  }
+  "name": "birthday-message-sender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "birthday-checker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^11.11.1", // Use a specific version or ^11.0.0
+    "sib-api-v3-sdk": "^8.5.0"  }
+}
 }
