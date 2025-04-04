@@ -1,8 +1,13 @@
-name: Birthday Email Sender
+name: Daily Birthday Check & Email
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Runs every day at midnight (UTC)
+    # Runs every day at 9:00 AM UTC. Adjust as needed.
+    # Use crontab syntax: Minute Hour DayOfMonth Month DayOfWeek
+    # Example: '0 9 * * *' = 9:00 AM UTC daily
+    # Example: '0 6 * * *' = 9:00 AM in Jeddah (UTC+3)
+    - cron: "0 6 * * *"
+  workflow_dispatch:
 
 jobs:
   send-birthday-emails:
@@ -10,20 +15,21 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3 
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3 
       with:
-        node-version: '18'
+        node-version: '18' 
 
     - name: Install dependencies
       run: npm install
 
-    - name: Run birthday email script
+    - name: Run birthday checker script
       env:
         BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
         FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }} 
       run: |
         echo "$FIREBASE_SERVICE_ACCOUNT" > serviceAccountKey.json
         node birthday-checker.js
