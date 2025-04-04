@@ -1,5 +1,4 @@
 {
-  "dependencies": {
   "name": "birthday-message-sender",
   "version": "1.0.0",
   "description": "",
@@ -11,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^11.0.0",
-    "sib-api-v3-sdk": "^8.5.0"  }
-}
+    "firebase-admin": "^11.11.1",  // Using the version from my last example, adjust if needed
+    "sib-api-v3-sdk": "^8.5.0"
+  }
 }
