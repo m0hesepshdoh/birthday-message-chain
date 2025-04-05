@@ -1,10 +1,9 @@
 const SibApiV3Sdk = require('sib-api-v3-sdk');
-require('dotenv').config();  // Loads environment variables from .env file
+require('dotenv').config();
 
-// Set up API client
 const client = SibApiV3Sdk.ApiClient.instance;
 const apiKey = client.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY;  // Get API Key from environment variable
+apiKey.apiKey = process.env.BREVO_API_KEY;
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -23,6 +22,3 @@ async function sendEmail(recipientEmail, message) {
         console.error("❌ Error sending email:", error);
     }
 }
-
-// Test the function (replace with an actual email)
-sendEmail("hyb2002@hotmail.com", "🎉 Happy Birthday! 🎂");
