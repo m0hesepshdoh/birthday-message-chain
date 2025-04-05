@@ -43,13 +43,14 @@
   <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md">
     <div class="text-center mb-6">
       <h2 class="text-2xl font-semibold" style="color: var(--primary-color);">Birthday Message Chain</h2>
-      <p class="text-gray-600 text-sm">Join our magical chain of birthday messages. Your words will brighten someone's special day, and you'll receive a surprise message on your birthday too!</p>
+      <p class="text-gray-600 text-sm">Join our magical chain of birthday messages. Your words will brighten someone's Birthday, and 
+ in return you'll receive a surprise message from other's on your birthday!</p>
     </div>
 
     <form class="space-y-4" id="birthdayForm">
       <div>
         <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-        <input type="email" id="email" name="email" placeholder="your@email.com" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+        <input type="email" id="email" name="email" placeholder="your@email.com" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
         <div id="email-error" class="error-message"></div>
       </div>
 
@@ -65,8 +66,8 @@
       </div>
 
       <div>
-        <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Your Birthday Message</label>
-        <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)" required maxlength="100" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none"></textarea>
+        <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Birthday Message Other's Will Recive</label>
+        <textarea id="message" name="message" placeholder="Write a Creative and Kind Birthday Message (max 100 characters)" required maxlength="100" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
         <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p>
         <div id="message-error" class="error-message"></div>
       </div>
@@ -134,7 +135,6 @@
       populateWheel(dayWheel, days, selectedDay - 1);
     }
 
-
     function handleItemClick(wheel, index) {
         const items = wheel.querySelectorAll('.wheel-item');
         items.forEach(item => item.classList.remove('selected'));
@@ -152,7 +152,6 @@
          targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-
     function updateSelectedDate() {
       selectedDateDisplay.textContent = `Selected Date: ${months[selectedMonth]} ${selectedDay}`;
     }
@@ -166,7 +165,7 @@
     updateSelectedDate();
 
     function validateEmail(email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(((hotmail|gmail|googlemail|yahoo)\.(com|co\.uk|ca|de|fr|net|org|[a-z]{2,}))|(\[?([0-9]{1,3}\.){3}[0-9]{1,3}\]?))$/i;
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(((hotmail|gmail|googlemail|yahoo|icloud|outlook)\.(com|co\.uk|ca|de|fr|net|org|[a-z]{2,}))|(\[?([0-9]{1,3}\.){3}[0-9]{1,3}\]?))$/i;
   return re.test(String(email).toLowerCase());
 }
 
@@ -184,7 +183,7 @@
 
        const emailError = document.getElementById('email-error');
        if (!validateEmail(email)) {
-           emailError.textContent = "Please enter a valid Hotmail, Gmail or Yahoo address.";
+           emailError.textContent = "Please enter a valid Email address.";
            hasErrors = true;
        } else {
            emailError.textContent = "";
@@ -243,7 +242,7 @@
 
 // --- Wrap the initialization calls ---
 document.addEventListener('DOMContentLoaded', (event) => {
-    console.log("DOM fully loaded and parsed"); // Add this line for checking
+    console.log("DOM fully loaded and parsed");
     populateWheel(monthWheel, months, selectedMonth);
     generateDays(selectedMonth);
     updateSelectedDate();
