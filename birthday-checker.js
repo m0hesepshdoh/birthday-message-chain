@@ -136,7 +136,4 @@ async function sendSingleBirthdayEmail(recipientEmail, message, senderEmail) {
         console.error(`❌ Error sending birthday email to ${recipientEmail}:`, JSON.stringify(errorBody, null, 2));
     }
 }
-
-// --- Run the main function ---
-// This makes the script execute the check when run by `node birthday-checker.js`
 checkBirthdaysAndSendEmails();
