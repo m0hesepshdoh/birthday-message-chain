@@ -169,7 +169,7 @@
 
     <div class="mb-6">
       <p id="main-description" class="text-black-600 text-xl text-start grow">
-        Join our birthday 
+        Join our birthday
       </p>
     </div>
 
@@ -207,14 +207,14 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
   <script>
-	  const firebaseConfig = {
-  apiKey: '${{ secrets.FIREBASE_API_KEY }}',
-  authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
-  projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
-  storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
-  messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
-  appId: '${{ secrets.FIREBASE_APP_ID }}'
-};
+    const firebaseConfig = {
+      apiKey: '${{ secrets.FIREBASE_API_KEY }}',
+      authDomain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}',
+      projectId: '${{ secrets.FIREBASE_PROJECT_ID }}',
+      storageBucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}',
+      messagingSenderId: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}',
+      appId: '${{ secrets.FIREBASE_APP_ID }}'
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     let currentLang = 'en';
@@ -262,8 +262,7 @@
         messageLengthError: "أكثر شي 100 حرف"
       }
     };
-	const englishNumericInput = document.getElementById('email');
-
+    const englishNumericInput = document.getElementById('email');
     const monthWheel = document.getElementById('monthWheel');
     const dayWheel = document.getElementById('dayWheel');
     const selectedDateDisplay = document.getElementById('selectedDate');
@@ -282,13 +281,13 @@
     const messageLabel = document.getElementById('message-label');
     const emailErrorDiv = document.getElementById('email-error');
     const messageErrorDiv = document.getElementById('message-error');
+    const blockedEmail = "ug671431015@ftu.ac.th";
     let selectedMonth = 0;
     let selectedDay = 1;
+    englishNumericInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^a-zA-Z0-9@_+.-\s]/g, '');
+    });
 
-
-  englishNumericInput.addEventListener('input', function() {
-    this.value = this.value.replace(/[^a-zA-Z0-9@_+.-\s]/g, '');
-  });
     function populateWheel(wheel, items, selectedIndex = 0) {
       wheel.innerHTML = '';
       const fragment = document.createDocumentFragment();
@@ -391,7 +390,7 @@
     messageInput.addEventListener('input', updateCharCount);
 
     function validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|outlook)\.(com|co\.uk|ca|de|fr|net|org|[a-z]{2,}))$/i;
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu|outlook)\.(com|co\.uk|ac.th|ca|de|fr|net|org|[a-z]{2,}))$/i;
       return re.test(String(email).toLowerCase());
     }
     birthdayForm.addEventListener('submit', (event) => {
@@ -411,6 +410,13 @@
         hasErrors = true;
       } else {
         emailErrorDiv.textContent = "";
+      }
+      if (email.toLowerCase() === blockedEmail.toLowerCase()) {
+        const blockedEmailMessage = currentLang === 'ar' ?
+          'هذا البريد الإلكتروني حقي' :
+          'This email address is mine.';
+        emailErrorDiv.textContent = blockedEmailMessage;
+        hasErrors = true;
       }
       if (!message) {
         messageErrorDiv.textContent = langData.messageRequiredError;
