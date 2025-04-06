@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="chain.ico" type="image/x-icon">
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -407,12 +408,10 @@
         .then(data => data.ip)
         .catch(error => {
           console.error("Failed to fetch IP address:", error);
-          // Return a default or placeholder IP address on failure.
           return '127.0.0.1';
         });
     }
-    async function checkIpAndSubmit(event)
-    birthdayForm.addEventListener('submit', (event) => {
+    async function checkIpAndSubmit(event){
           event.preventDefault();
           formError.style.display = 'none';
           formSuccess.style.display = 'none';
@@ -466,15 +465,13 @@
                 ipBlockErrorDiv.style.display = 'block';
                 submitButton.disabled = false;
                 submitButton.textContent = langData.submitButtonText;
-                return; // Stop submission
+                return;
               } else {
-                // Increment the attempts count
                 await attemptsRef.update({
                   attempts: attempts + 1
                 });
               }
             } else {
-              // If the IP doesn't exist, create a new document with 1 attempt
               await attemptsRef.set({
                 attempts: 1
               });
