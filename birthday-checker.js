@@ -17,11 +17,11 @@ try {
 const db = admin.firestore();
 
 if (!process.env.BREVO_API_KEY) {
-  console.error("❌ BREVO_API_KEY environment variable not set!");
+  console.error("BREVO_API_KEY variable not set!");
   process.exit(1);
 }
 if (!process.env.SENDER_EMAIL) {
-  console.error("❌ SENDER_EMAIL environment variable not set!");
+  console.error("SENDER_EMAIL variable not set!");
   process.exit(1);
 }
 
@@ -30,7 +30,7 @@ const brevoApiKey = brevoClient.authentications["api-key"];
 brevoApiKey.apiKey = process.env.BREVO_API_KEY;
 const brevoApiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const SENDER_EMAIL = process.env.SENDER_EMAIL;
-const SENDER_NAME = "Birthday Chain - سلسلة يوم الولادة";
+const SENDER_NAME = "Birthday Chain - سلاسل الولادة";
 
 function isArabic(text) {
   if (!text) return false;
@@ -61,17 +61,9 @@ async function checkBirthdaysAndSendEmails() {
 
     console.log(`Found ${snapshot.size} birthday(s) today.`);
 
-    const randomMessagesPool = await getRandomMessages(snapshot.size);
-    if (randomMessagesPool.length === 0) {
-      console.warn("Could not fetch any random messages. Using default.");
-      randomMessagesPool.push({
-        message: "Hope you have a wonderful day",
-        lang: "en"
-      });
-    }
+    const potentialMessages = await getRandomMessagesPool();
 
     const emailPromises = [];
-    let messageIndex = 0;
 
     snapshot.forEach((doc) => {
       const birthdayPerson = doc.data();
@@ -88,10 +80,15 @@ async function checkBirthdaysAndSendEmails() {
 
       console.log(`Processing birthday for: ${birthdayPerson.email}`);
 
-      const selectedMessageData =
-        randomMessagesPool[messageIndex % randomMessagesPool.length];
-      const messageToSend = selectedMessageData.message;
-      messageIndex++;
+      let messageToSend = "Hope you have a wonderful day"; // Default message
+      if (potentialMessages.length > 0) {
+        const randomIndex = Math.floor(
+          Math.random() * potentialMessages.length
+        );
+        messageToSend = potentialMessages[randomIndex].message;
+      } else {
+        console.warn("Could not fetch any random messages. Using default.");
+      }
 
       emailPromises.push(
         sendSingleBirthdayEmail(
@@ -109,31 +106,26 @@ async function checkBirthdaysAndSendEmails() {
   }
 }
 
-async function getRandomMessages(limit = 10) {
+async function getRandomMessagesPool() {
   const messages = [];
   try {
     const snapshot = await db
       .collection("submissions")
-      .limit(Math.max(limit * 2, 50))
+      .where("message", "!=", null)
+      .where("message", ">", "")
       .get();
 
-    const potentialMessages = [];
     if (!snapshot.empty) {
       snapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.message && data.message.trim() !== "") {
-          potentialMessages.push(data.message.trim());
+        if (data.message) {
+          messages.push({ message: data.message.trim() });
         }
       });
     }
 
-    potentialMessages.sort(() => 0.5 - Math.random());
-    const selectedMessages = potentialMessages.slice(0, limit);
-
-    console.log(
-      `Selected ${selectedMessages.length} random messages from pool.`
-    );
-    return selectedMessages.map((msg) => ({ message: msg }));
+    console.log(`Fetched ${messages.length} potential random messages.`);
+    return messages;
   } catch (error) {
     console.error("Error fetching random messages:", error);
     return [];
@@ -152,51 +144,51 @@ async function sendSingleBirthdayEmail(recipientEmail, message, senderEmail) {
     console.log(
       `Message for ${recipientEmail} detected as Arabic. Sending Arabic email.`
     );
-    sendSmtpEmail.subject = "🎉 كل عام وأنت بخير";
+    sendSmtpEmail.subject = "كل عام وأنت بخير";
     sendSmtpEmail.htmlContent = `
         <html lang="ar" dir="rtl">
         <head><meta charset="UTF-8"></head>
         <body style="direction: rtl; text-align: right; font-family: Arial, sans-serif;">
-            <h2>يوم ميلاد سعيد &#127881;</h2>
-            <p>في شخص عشوائي رسل لك هذه الرسالة في يوم ميلادك</p>
-            <blockquote style="border-right: 4px solid #ccc; border-left: none; padding-right: 1em; margin-right: 1em; margin-left: 0; text-align: right; font-style: italic;">
-              <p>${message}</p>
-            </blockquote>
-            <p>نتمنى لك يوم سعيد 🎁</p>
-            <hr>
-            <a href="https://m0hesepshdoh.github.io/birthday-message-sender/" title="اكتب رسالتك لشخص عشوائي وكمل السلسلة">أكمل السلسلة</a>
-            </body></html>`;
+          <h2>يوم ميلاد سعيد</h2>
+          <p>في شخص عشوائي رسل لك هذه الرسالة في يوم ميلادك</p>
+          <blockquote style="border-right: 4px solid #ccc; border-left: none; padding-right: 1em; margin-right: 1em; margin-left: 0; text-align: right; font-style: italic;">
+            <p>${message}</p>
+          </blockquote>
+          <p>نتمنى لك يوم سعيد</p>
+          <hr>
+          <a href="https://m0hesepshdoh.github.io/birthday-message-sender/" title="اكتب رسالتك لشخص عشوائي">أكمل السلسلة</a>
+          </body></html>`;
   } else {
     console.log(
       `Message for ${recipientEmail} detected as non-Arabic. Sending English email.`
     );
-    sendSmtpEmail.subject = "🎉 Happy Birthday from the Message Chain!";
+    sendSmtpEmail.subject = "Happy Birthday from the Message Chain!";
     sendSmtpEmail.htmlContent = `
         <html lang="en">
         <head><meta charset="UTF-8"></head>
         <body style="font-family: Arial, sans-serif;">
-            <h2>Happy Birthday! &#127881;</h2>
-            <p>Someone in the Birthday Message Chain sent this to you :</p>
-            <blockquote style="border-left: 4px solid #ccc; padding-left: 1em; margin-left: 1em; font-style: italic;">
-              <p>${message}</p>
-            </blockquote>
-            <p>We hope you have a fantastic day!</p>
-            <hr>
-            <a href="https://m0hesepshdoh.github.io/birthday-message-sender/" title="Complete The Birthday Chain by Writing a Message">Continue the Chain</a>
+          <h2>Happy Birthday!</h2>
+          <p>Someone in the Birthday Message Chain sent this to you :</p>
+          <blockquote style="border-left: 4px solid #ccc; padding-left: 1em; margin-left: 1em; font-style: italic;">
+            <p>${message}</p>
+          </blockquote>
+          <p>We hope you have a fantastic day!</p>
+          <hr>
+          <a href="https://m0hesepshdoh.github.io/birthday-message-sender/" title="Complete The Birthday Chain">Continue the Chain</a>
         </body></html>`;
   }
 
   try {
     await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
     console.log(
-      `✅ Birthday email successfully sent to ${recipientEmail} (${
+      `email successfully sent to ${recipientEmail} (${
         messageIsArabic ? "Arabic" : "English"
       })`
     );
   } catch (error) {
     const errorBody = error.response ? error.response.body : error;
     console.error(
-      `❌ Error sending birthday email to ${recipientEmail}:`,
+      `Error sending email to ${recipientEmail}:`,
       JSON.stringify(errorBody, null, 2)
     );
   }
