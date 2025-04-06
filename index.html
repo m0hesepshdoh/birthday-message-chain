@@ -7,7 +7,7 @@
   <title>Birthday Chain</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -201,6 +201,7 @@
       <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Join the Birthday Chain</button>
       <div id="form-success" class="text-green-500 text-center mt-4" style="display: none;"></div>
       <div id="form-error" class="text-red-500 text-center mt-4" style="display: none;"></div>
+      <div id="ip-block-error" class="text-red-500 text-center mt-4" style="display: none;"></div>
     </form>
   </div>
 
@@ -239,6 +240,7 @@
         emailValidationError: "Please enter a valid hotmail, Gmail or Yahoo etc... address.",
         messageRequiredError: "Message is required.",
         messageLengthError: "Message must be 100 characters or less.",
+        ipBlockedError: "You have exceeded the maximum submission attempts."
       },
       ar: {
         title: "سلسلة رسائل ذكرى الولادة",
@@ -259,7 +261,8 @@
         months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
         emailValidationError: "استخدم بريد إلكتروني زي هوتميل، جيميل أو ياهو إلخ...",
         messageRequiredError: "لازم تكتب رسالة",
-        messageLengthError: "أكثر شي 100 حرف"
+        messageLengthError: "أكثر شي 100 حرف",
+        ipBlockedError: "تجاوزت الحد الأقصى لعدد محاولات الإرسال."
       }
     };
     const englishNumericInput = document.getElementById('email');
@@ -282,6 +285,8 @@
     const emailErrorDiv = document.getElementById('email-error');
     const messageErrorDiv = document.getElementById('message-error');
     const blockedEmail = "ug671431015@ftu.ac.th";
+    const ipBlockErrorDiv = document.getElementById('ip-block-error');
+    const BLOCKED_ATTEMPTS = 3;
     let selectedMonth = 0;
     let selectedDay = 1;
     englishNumericInput.addEventListener('input', function() {
@@ -373,6 +378,7 @@
       formSuccess.textContent = "";
       formError.style.display = 'none';
       formSuccess.style.display = 'none';
+      ipBlockErrorDiv.style.display = 'none';
     }
 
     function updateCharCount() {
@@ -386,6 +392,7 @@
       applyTranslations();
       generateDays(selectedMonth);
       updateSelectedDate();
+      updateCharCount();
     }
     messageInput.addEventListener('input', updateCharCount);
 
@@ -393,87 +400,122 @@
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu|outlook)\.(com|co\.uk|ac.th|ca|de|fr|net|org|[a-z]{2,}))$/i;
       return re.test(String(email).toLowerCase());
     }
+
+    function getIpAddress() {
+      return fetch('https://api64.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => data.ip)
+        .catch(error => {
+          console.error("Failed to fetch IP address:", error);
+          // Return a default or placeholder IP address on failure.
+          return '127.0.0.1';
+        });
+    }
+    async function checkIpAndSubmit(event)
     birthdayForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-      emailErrorDiv.textContent = "";
-      messageErrorDiv.textContent = "";
-      submitButton.disabled = true;
-      submitButton.textContent = translations[currentLang].submitButtonJoining;
-      const email = emailInput.value.trim();
-      const message = messageInput.value.trim();
-      let hasErrors = false;
-      const langData = translations[currentLang];
-      if (!validateEmail(email)) {
-        emailErrorDiv.textContent = langData.emailValidationError;
-        hasErrors = true;
-      } else {
-        emailErrorDiv.textContent = "";
-      }
-      if (email.toLowerCase() === blockedEmail.toLowerCase()) {
-        const blockedEmailMessage = currentLang === 'ar' ?
-          'هذا البريد الإلكتروني حقي' :
-          'This email address is mine.';
-        emailErrorDiv.textContent = blockedEmailMessage;
-        hasErrors = true;
-      }
-      if (!message) {
-        messageErrorDiv.textContent = langData.messageRequiredError;
-        hasErrors = true;
-      } else if (message.length > 100) {
-        messageErrorDiv.textContent = langData.messageLengthError;
-        hasErrors = true;
-      } else {
-        messageErrorDiv.textContent = "";
-      }
-      if (hasErrors) {
-        formError.textContent = langData.formGenericError;
-        formError.style.display = 'block';
-        submitButton.disabled = false;
-        submitButton.textContent = langData.submitButtonText;
-        return;
-      }
-      const formData = {
-        email: email,
-        birthMonth: selectedMonth + 1,
-        birthDay: selectedDay,
-        message: message,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      };
-      db.collection("submissions").add(formData)
-        .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-          formSuccess.textContent = langData.formSuccessMessage;
-          formSuccess.style.display = 'block';
-          birthdayForm.reset();
-          selectedMonth = 0;
-          selectedDay = 1;
+          event.preventDefault();
+          formError.style.display = 'none';
+          formSuccess.style.display = 'none';
+          ipBlockErrorDiv.style.display = 'none';
+          emailErrorDiv.textContent = "";
+          messageErrorDiv.textContent = "";
+          submitButton.disabled = true;
+          submitButton.textContent = translations[currentLang].submitButtonJoining;
+          const email = emailInput.value.trim();
+          const message = messageInput.value.trim();
+          let hasErrors = false;
+          const langData = translations[currentLang];
+          if (!validateEmail(email)) {
+            emailErrorDiv.textContent = langData.emailValidationError;
+            hasErrors = true;
+          } else {
+            emailErrorDiv.textContent = "";
+          }
+          if (email.toLowerCase() === blockedEmail.toLowerCase()) {
+            const blockedEmailMessage = currentLang === 'ar' ?
+              'هذا البريد الإلكتروني حقي' :
+              'This email address is mine.';
+            emailErrorDiv.textContent = blockedEmailMessage;
+            hasErrors = true;
+          }
+          if (!message) {
+            messageErrorDiv.textContent = langData.messageRequiredError;
+            hasErrors = true;
+          } else if (message.length > 100) {
+            messageErrorDiv.textContent = langData.messageLengthError;
+            hasErrors = true;
+          } else {
+            messageErrorDiv.textContent = "";
+          }
+          if (hasErrors) {
+            formError.textContent = langData.formGenericError;
+            formError.style.display = 'block';
+            submitButton.disabled = false;
+            submitButton.textContent = langData.submitButtonText;
+            return;
+          }
+          try {
+            const ipAddress = await getIpAddress();
+            const attemptsRef = db.collection('ipAttempts').doc(ipAddress);
+            const doc = await attemptsRef.get();
+            if (doc.exists) {
+              const attemptsData = doc.data();
+              const attempts = attemptsData.attempts || 0;
+              if (attempts >= BLOCKED_ATTEMPTS) {
+                ipBlockErrorDiv.textContent = langData.ipBlockedError;
+                ipBlockErrorDiv.style.display = 'block';
+                submitButton.disabled = false;
+                submitButton.textContent = langData.submitButtonText;
+                return; // Stop submission
+              } else {
+                // Increment the attempts count
+                await attemptsRef.update({
+                  attempts: attempts + 1
+                });
+              }
+            } else {
+              // If the IP doesn't exist, create a new document with 1 attempt
+              await attemptsRef.set({
+                attempts: 1
+              });
+            }
+            const formData = {
+              email: email,
+              birthMonth: selectedMonth + 1,
+              birthDay: selectedDay,
+              message: message,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              ipAddress: ipAddress
+            };
+            await db.collection("submissions").add(formData);
+            console.log("Document written successfully.");
+            formSuccess.textContent = langData.formSuccessMessage;
+            formSuccess.style.display = 'block';
+            birthdayForm.reset();
+            selectedMonth = 0;
+            selectedDay = 1;
+            applyTranslations();
+            generateDays(selectedMonth);
+            updateSelectedDate();
+            updateCharCount();
+            emailErrorDiv.textContent = "";
+            messageErrorDiv.textContent = "";
+          } catch (error) {
+            console.error("Error adding document: ", error);
+            formError.textContent = `${langData.formSubmitError} (${error.message})`;
+            formError.style.display = 'block';
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = langData.submitButtonText;
+          }
+        }
+        toggleLangBtn.addEventListener('click', toggleLanguage); birthdayForm.addEventListener('submit', checkIpAndSubmit); document.addEventListener('DOMContentLoaded', (event) => {
+          console.log("DOM fully loaded and parsed");
           applyTranslations();
           generateDays(selectedMonth);
           updateSelectedDate();
           updateCharCount();
-          emailErrorDiv.textContent = "";
-          messageErrorDiv.textContent = "";
-        })
-        .catch((error) => {
-          console.error("Error adding document: ", error);
-          formError.textContent = `${langData.formSubmitError} (${error.message})`;
-          formError.style.display = 'block';
-        })
-        .finally(() => {
-          submitButton.disabled = false;
-          submitButton.textContent = langData.submitButtonText;
         });
-    });
-    toggleLangBtn.addEventListener('click', toggleLanguage);
-    document.addEventListener('DOMContentLoaded', (event) => {
-      console.log("DOM fully loaded and parsed");
-      applyTranslations();
-      generateDays(selectedMonth);
-      updateSelectedDate();
-      updateCharCount();
-    });
   </script>
 </body>
 
