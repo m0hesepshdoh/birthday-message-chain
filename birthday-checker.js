@@ -1,12 +1,7 @@
 const admin = require("firebase-admin");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
-const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
+const serviceAccount = require("./serviceAccountKey.json");
 try {
-  if (!serviceAccountString) {
-    console.error("FIREBASE_SERVICE_ACCOUNT environment variable not set!");
-    process.exit(1);
-  }
-  const serviceAccount = JSON.parse(serviceAccountString);
   if (admin.apps.length === 0) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
