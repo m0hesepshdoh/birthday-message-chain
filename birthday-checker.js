@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccountString = process.env.SERVICE_ACCOUNT_KEY;
 try {
   if (admin.apps.length === 0) {
     admin.initializeApp({
