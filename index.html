@@ -219,7 +219,13 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    let currentLang = 'en';
+    function getBrowserLanguage() {
+  const userLang = navigator.language || navigator.userLanguage;
+    if (userLang.startsWith('ar')) {
+    return 'ar';
+  }
+  return 'en';
+}
     const translations = {
       en: {
         title: "Birthday Message Chain",
@@ -258,7 +264,7 @@
         formSuccessMessage: "شكراً لانضمامك إلى سلسلة رسائل ذكرى يوم الولادة",
         formGenericError: "في عندك أخطاء فوق صلحها",
         formSubmitError: "في مشكلة , ممكن تعيد مرة ثانية",
-        toggleButtonToEn: "Eng",
+        toggleButtonToEn: "English",
         months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
         emailValidationError: "استخدم بريد إلكتروني زي هوتميل، جيميل أو ياهو إلخ...",
         messageRequiredError: "لازم تكتب رسالة",
@@ -525,6 +531,8 @@
 }
         toggleLangBtn.addEventListener('click', toggleLanguage); birthdayForm.addEventListener('submit', checkIpAndSubmit); document.addEventListener('DOMContentLoaded', (event) => {
           console.log("DOM fully loaded and parsed");
+          
+          currentLang = getBrowserLanguage();
           applyTranslations();
           generateDays(selectedMonth);
           updateSelectedDate();
