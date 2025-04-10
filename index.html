@@ -81,7 +81,6 @@
     .wheel {
       flex: 1;
       overflow-y: auto;
-      scroll-snap-type: y mandatory;
       -webkit-overflow-scrolling: touch;
       border-right: 1px solid var(--primary-color);
       font-size: 16px;
@@ -102,7 +101,6 @@
       justify-content: center;
       font-size: 16px;
       cursor: pointer;
-      scroll-snap-align: center;
     }
 
     .wheel-item.selected {
@@ -188,7 +186,7 @@
 
     .submit-button {
       font-size: clamp(14px, 3.5vw, 16px);
-      padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
+      padding: clamp(8px, 2vw, 8px) clamp(12px, 3vw, 16px);
     }
   </style>
 </head>
@@ -235,9 +233,9 @@
       <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
     </form>
   </div>
-
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,Array.prototype.includes,Object.entries,Object.values,fetch"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
