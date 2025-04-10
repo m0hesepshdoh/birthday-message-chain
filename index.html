@@ -5,8 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Birthday Chain</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="chain.ico" type="image/x-icon">
   <style>
@@ -49,17 +48,19 @@
       display: block;
     }
 
+    #main-title,
+    .date-picker,
+    .flex.flex-col.items-center.mb-2 {
+      width: 100%;
+    }
+
     #main-title {
       font-size: 1.5rem;
       white-space: nowrap;
       overflow: hidden;
-      width: 100%;
+      text-overflow: ellipsis;
       text-align: center;
       padding: 0 10px;
-    }
-
-    .flex.flex-col.items-center.mb-2 {
-      width: 100%;
     }
 
     .date-picker {
@@ -67,7 +68,6 @@
       flex-direction: column;
       align-items: center;
       margin-bottom: 20px;
-      width: 100%;
     }
 
     .wheel-container {
@@ -122,30 +122,21 @@
 
     input,
     textarea,
-    button {
-      border-radius: 8px;
-    }
-
-    textarea {
-      font-size: 16px;
-    }
-
+    button,
     .bg-blue-500 {
       border-radius: 8px;
+    }
+
+    textarea,
+    .text-gray-600 {
+      font-size: 16px;
     }
 
     .text-2xl {
       font-size: 24px;
     }
 
-    .text-sm {
-      font-size: 14px;
-    }
-
-    .text-gray-600 {
-      font-size: 16px;
-    }
-
+    .text-sm,
     .text-gray-500 {
       font-size: 14px;
     }
@@ -176,15 +167,11 @@
   <div class="bg-white rounded-lg shadow-md p-6 w-full">
     <div class="flex flex-col items-center mb-2">
       <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
-      <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-[0.1rem] px-1.5 text-[0.6rem] rounded mt-2">
-        translate
-      </button>
+      <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-[0.1rem] px-1.5 text-[0.6rem] rounded mt-2">translate to</button>
     </div>
 
     <div class="mb-6">
-      <p id="main-description" class="text-black-600 text-xl text-start grow">
-        Join our birthday
-      </p>
+      <p id="main-description" class="text-black-600 text-xl text-start grow">Join our birthday</p>
     </div>
 
     <form class="space-y-4" id="birthdayForm">
@@ -213,9 +200,9 @@
       </div>
 
       <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Join the Birthday Chain</button>
-      <div id="form-success" class="text-green-500 text-center mt-4" style="display: none;"></div>
-      <div id="form-error" class="text-red-500 text-center mt-4" style="display: none;"></div>
-      <div id="ip-block-error" class="text-red-500 text-center mt-4" style="display: none;"></div>
+      <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
+      <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
+      <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
     </form>
   </div>
 
@@ -232,14 +219,6 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
-    function getBrowserLanguage() {
-      const userLang = navigator.language || navigator.userLanguage;
-      if (userLang.startsWith('ar')) {
-        return 'ar';
-      }
-      return 'en';
-    }
     const translations = {
       en: {
         title: "Birthday Message Chain",
@@ -283,48 +262,46 @@
         emailValidationError: "استخدم بريد إلكتروني زي هوتميل، جيميل أو ياهو إلخ...",
         messageRequiredError: "لازم تكتب رسالة",
         messageLengthError: "أكثر شي 100 حرف",
-        ipBlockedError: "جربت كثير اعطي فرصة لغيرك وحاول بيوم ثاني"
+        ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني"
       }
     };
-    const englishNumericInput = document.getElementById('email');
-    const monthWheel = document.getElementById('monthWheel');
-    const dayWheel = document.getElementById('dayWheel');
-    const selectedDateDisplay = document.getElementById('selectedDate');
-    const messageInput = document.getElementById('message');
-    const charCountDisplay = document.getElementById('char-count');
-    const birthdayForm = document.getElementById('birthdayForm');
-    const emailInput = document.getElementById('email');
-    const formSuccess = document.getElementById('form-success');
-    const formError = document.getElementById('form-error');
-    const toggleLangBtn = document.getElementById('toggleLangBtn');
-    const submitButton = document.getElementById('submit-button');
-    const mainTitle = document.getElementById('main-title');
-    const mainDescription = document.getElementById('main-description');
-    const emailLabel = document.getElementById('email-label');
-    const birthdayLabel = document.getElementById('birthday-label');
-    const messageLabel = document.getElementById('message-label');
-    const emailErrorDiv = document.getElementById('email-error');
-    const messageErrorDiv = document.getElementById('message-error');
+    const elements = {
+      email: document.getElementById('email'),
+      monthWheel: document.getElementById('monthWheel'),
+      dayWheel: document.getElementById('dayWheel'),
+      selectedDate: document.getElementById('selectedDate'),
+      message: document.getElementById('message'),
+      charCount: document.getElementById('char-count'),
+      birthdayForm: document.getElementById('birthdayForm'),
+      formSuccess: document.getElementById('form-success'),
+      formError: document.getElementById('form-error'),
+      toggleLangBtn: document.getElementById('toggleLangBtn'),
+      submitButton: document.getElementById('submit-button'),
+      mainTitle: document.getElementById('main-title'),
+      mainDescription: document.getElementById('main-description'),
+      emailLabel: document.getElementById('email-label'),
+      birthdayLabel: document.getElementById('birthday-label'),
+      messageLabel: document.getElementById('message-label'),
+      emailError: document.getElementById('email-error'),
+      messageError: document.getElementById('message-error'),
+      ipBlockError: document.getElementById('ip-block-error')
+    };
     const blockedEmail = "sepshdoh@gmail.com";
-    const ipBlockErrorDiv = document.getElementById('ip-block-error');
     const BLOCKED_ATTEMPTS = 3;
-    let selectedMonth = 0;
-    let selectedDay = 1;
-    englishNumericInput.addEventListener('input', function() {
-      this.value = this.value.replace(/[^a-zA-Z0-9@_+.-\s]/g, '');
+    let selectedMonth = 0,
+      selectedDay = 1,
+      currentLang;
+    elements.email.addEventListener('input', () => {
+      elements.email.value = elements.email.value.replace(/[^a-zA-Z0-9@_+.-\s]/g, '');
     });
-
-    function populateWheel(wheel, items, selectedIndex = 0) {
+    const populateWheel = (wheel, items, selectedIndex = 0) => {
       wheel.innerHTML = '';
       const fragment = document.createDocumentFragment();
       items.forEach((item, index) => {
         const itemElement = document.createElement('div');
-        itemElement.classList.add('wheel-item');
+        itemElement.className = 'wheel-item' + (index === selectedIndex ? ' selected' : '');
         itemElement.textContent = item;
         itemElement.dataset.index = index;
-        if (index === selectedIndex) {
-          itemElement.classList.add('selected');
-        }
         itemElement.addEventListener('click', () => {
           handleItemClick(wheel, index);
           itemElement.scrollIntoView({
@@ -335,198 +312,147 @@
         fragment.appendChild(itemElement);
       });
       wheel.appendChild(fragment);
-    }
-
-    function generateDays(monthIndex) {
+    };
+    const generateDays = monthIndex => {
       const daysInMonth = (monthIndex === 1) ? 29 : new Date(2024, monthIndex + 1, 0).getDate();
       const days = Array.from({
         length: daysInMonth
       }, (_, i) => i + 1);
       selectedDay = Math.min(selectedDay, daysInMonth);
-      populateWheel(dayWheel, days, selectedDay - 1);
-    }
-
-    function handleItemClick(wheel, index) {
-      const items = wheel.querySelectorAll('.wheel-item');
-      items.forEach(item => item.classList.remove('selected'));
-      const targetItem = items[index];
-      targetItem.classList.add('selected');
-      if (wheel === monthWheel) {
-        if (selectedMonth !== index) {
-          selectedMonth = index;
-          generateDays(selectedMonth);
-        }
+      populateWheel(elements.dayWheel, days, selectedDay - 1);
+    };
+    const handleItemClick = (wheel, index) => {
+      wheel.querySelectorAll('.wheel-item').forEach(item => item.classList.remove('selected'));
+      wheel.children[index].classList.add('selected');
+      if (wheel === elements.monthWheel && selectedMonth !== index) {
+        selectedMonth = index;
+        generateDays(selectedMonth);
       } else {
         selectedDay = index + 1;
       }
       updateSelectedDate();
-    }
-
-    function updateSelectedDate() {
-      const currentMonths = translations[currentLang].months;
-      selectedDateDisplay.textContent = `${translations[currentLang].selectedDatePrefix}${currentMonths[selectedMonth]} ${selectedDay}`;
-    }
-
-    function applyTranslations() {
+    };
+    const updateSelectedDate = () => {
+      elements.selectedDate.textContent = `${translations[currentLang].selectedDatePrefix}${translations[currentLang].months[selectedMonth]} ${selectedDay}`;
+    };
+    const applyTranslations = () => {
       const langData = translations[currentLang];
       const isRTL = currentLang === 'ar';
       document.documentElement.lang = currentLang;
       document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-      mainTitle.textContent = langData.title;
-      mainDescription.textContent = langData.description;
-      emailLabel.textContent = langData.emailLabel;
-      emailInput.placeholder = langData.emailPlaceholder;
-      birthdayLabel.textContent = langData.birthdayLabel;
-      messageLabel.textContent = langData.messageLabel;
-      messageInput.placeholder = langData.messagePlaceholder;
-      submitButton.textContent = langData.submitButtonText;
-      toggleLangBtn.textContent = isRTL ? langData.toggleButtonToEn : langData.toggleButtonToAr;
-      populateWheel(monthWheel, langData.months, selectedMonth);
+      elements.mainTitle.textContent = langData.title;
+      elements.mainDescription.textContent = langData.description;
+      elements.emailLabel.textContent = langData.emailLabel;
+      elements.email.placeholder = langData.emailPlaceholder;
+      elements.birthdayLabel.textContent = langData.birthdayLabel;
+      elements.messageLabel.textContent = langData.messageLabel;
+      elements.message.placeholder = langData.messagePlaceholder;
+      elements.submitButton.textContent = langData.submitButtonText;
+      elements.toggleLangBtn.textContent = isRTL ? langData.toggleButtonToEn : langData.toggleButtonToAr;
+      populateWheel(elements.monthWheel, langData.months, selectedMonth);
       updateSelectedDate();
       updateCharCount();
-      emailErrorDiv.textContent = "";
-      messageErrorDiv.textContent = "";
-      formError.textContent = "";
-      formSuccess.textContent = "";
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-      ipBlockErrorDiv.style.display = 'none';
-    }
-
-    function updateCharCount() {
+      [elements.emailError, elements.messageError, elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => {
+        el.textContent = "";
+        el.style.display = 'none';
+      });
+    };
+    const updateCharCount = () => {
       const langData = translations[currentLang];
-      charCountDisplay.textContent = `${messageInput.value.length}/100 ${langData.charCountSuffix}`;
-      charCountDisplay.className = `text-gray-500 text-xs text-right ${currentLang === 'ar' ? 'text-right' : 'text-right'}`;
-    }
-
-    function toggleLanguage() {
-      currentLang = (currentLang === 'en') ? 'ar' : 'en';
+      elements.charCount.textContent = `${elements.message.value.length}/100 ${langData.charCountSuffix}`;
+    };
+    const toggleLanguage = () => {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
       applyTranslations();
       generateDays(selectedMonth);
-      updateSelectedDate();
-      updateCharCount();
-    }
-    messageInput.addEventListener('input', updateCharCount);
-
-    function validateEmail(email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu|outlook)\.(com|co\.uk|ac.th|ca|de|fr|net|org|[a-z]{2,}))$/i;
-      return re.test(String(email).toLowerCase());
-    }
-
-    function getIpAddress() {
-      return fetch('https://api64.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => data.ip)
-        .catch(error => {
-          console.error("Failed to fetch IP address:", error);
-          return '127.0.0.1';
-        });
-    }
-    async function checkIpAndSubmit(event) {
+    };
+    elements.message.addEventListener('input', updateCharCount);
+    const validateEmail = email => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu|outlook)\.(com|co\.uk|ac.th|ca|de|fr|net|org|[a-z]{2,}))$/i.test(String(email).toLowerCase());
+    const getIpAddress = () => fetch('https://api64.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => data.ip)
+      .catch(() => '127.0.0.1');
+    const checkIpAndSubmit = async event => {
       event.preventDefault();
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-      ipBlockErrorDiv.style.display = 'none';
-      emailErrorDiv.textContent = "";
-      messageErrorDiv.textContent = "";
-      submitButton.disabled = true;
-      submitButton.textContent = translations[currentLang].submitButtonJoining;
-      const email = emailInput.value.trim();
-      const message = messageInput.value.trim();
-      let hasErrors = false;
+      [elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => el.style.display = 'none');
+      [elements.emailError, elements.messageError].forEach(el => el.textContent = "");
+      elements.submitButton.disabled = true;
+      elements.submitButton.textContent = translations[currentLang].submitButtonJoining;
+      const email = elements.email.value.trim();
+      const message = elements.message.value.trim();
       const langData = translations[currentLang];
+      let hasErrors = false;
       if (!validateEmail(email)) {
-        emailErrorDiv.textContent = langData.emailValidationError;
+        elements.emailError.textContent = langData.emailValidationError;
         hasErrors = true;
-      } else {
-        emailErrorDiv.textContent = "";
-      }
-      if (email.toLowerCase() === blockedEmail.toLowerCase()) {
-        const blockedEmailMessage = currentLang === 'ar' ?
-          'هذا البريد الإلكتروني حقي' :
-          'This email address is mine.';
-        emailErrorDiv.textContent = blockedEmailMessage;
+      } else if (email.toLowerCase() === blockedEmail.toLowerCase()) {
+        elements.emailError.textContent = currentLang === 'ar' ? 'هذا البريد الإلكتروني حقي' : 'This email address is mine.';
         hasErrors = true;
       }
       if (!message) {
-        messageErrorDiv.textContent = langData.messageRequiredError;
+        elements.messageError.textContent = langData.messageRequiredError;
         hasErrors = true;
       } else if (message.length > 100) {
-        messageErrorDiv.textContent = langData.messageLengthError;
+        elements.messageError.textContent = langData.messageLengthError;
         hasErrors = true;
-      } else {
-        messageErrorDiv.textContent = "";
       }
       if (hasErrors) {
-        formError.textContent = langData.formGenericError;
-        formError.style.display = 'block';
-        submitButton.disabled = false;
-        submitButton.textContent = langData.submitButtonText;
+        elements.formError.textContent = langData.formGenericError;
+        elements.formError.style.display = 'block';
+        elements.submitButton.disabled = false;
+        elements.submitButton.textContent = langData.submitButtonText;
         return;
       }
       try {
         const ipAddress = await getIpAddress();
         const attemptsRef = db.collection('ipAttempts').doc(ipAddress);
         const doc = await attemptsRef.get();
-        if (doc.exists) {
-          const attemptsData = doc.data();
-          const attempts = attemptsData.attempts || 0;
-          if (attempts >= BLOCKED_ATTEMPTS) {
-            ipBlockErrorDiv.textContent = langData.ipBlockedError;
-            ipBlockErrorDiv.style.display = 'block';
-            submitButton.disabled = false;
-            submitButton.textContent = langData.submitButtonText;
-            return;
-          }
+        if (doc.exists && doc.data().attempts >= BLOCKED_ATTEMPTS) {
+          elements.ipBlockError.textContent = langData.ipBlockedError;
+          elements.ipBlockError.style.display = 'block';
+          elements.submitButton.disabled = false;
+          elements.submitButton.textContent = langData.submitButtonText;
+          return;
         }
-        const formData = {
+        await db.collection("submissions").add({
           email: email,
           birthMonth: selectedMonth + 1,
           birthDay: selectedDay,
           message: message,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           ipAddress: ipAddress
-        };
-        await db.collection("submissions").add(formData);
-        console.log("Document written successfully");
-        if (doc.exists) {
-          await attemptsRef.update({
+        });
+        await (doc.exists ?
+          attemptsRef.update({
             attempts: firebase.firestore.FieldValue.increment(1)
-          });
-        } else {
-          await attemptsRef.set({
+          }) :
+          attemptsRef.set({
             attempts: 1
-          });
-        }
-        formSuccess.textContent = langData.formSuccessMessage;
-        formSuccess.style.display = 'block';
-        birthdayForm.reset();
+          }));
+        elements.formSuccess.textContent = langData.formSuccessMessage;
+        elements.formSuccess.style.display = 'block';
+        elements.birthdayForm.reset();
         selectedMonth = 0;
         selectedDay = 1;
-        populateWheel(monthWheel, langData.months, selectedMonth);
+        populateWheel(elements.monthWheel, langData.months, selectedMonth);
         generateDays(selectedMonth);
         updateSelectedDate();
         updateCharCount();
-        emailErrorDiv.textContent = "";
-        messageErrorDiv.textContent = "";
       } catch (error) {
         console.error("Error adding document: ", error);
-        formError.textContent = `${langData.formSubmitError} (${error.message})`;
-        formError.style.display = 'block';
+        elements.formError.textContent = `${langData.formSubmitError} (${error.message})`;
+        elements.formError.style.display = 'block';
       } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = langData.submitButtonText;
+        elements.submitButton.disabled = false;
+        elements.submitButton.textContent = langData.submitButtonText;
       }
-    }
-    toggleLangBtn.addEventListener('click', toggleLanguage);
-    birthdayForm.addEventListener('submit', checkIpAndSubmit);
-    document.addEventListener('DOMContentLoaded', (event) => {
-      console.log("DOM fully loaded and parsed");
-      currentLang = getBrowserLanguage();
+    };
+    elements.toggleLangBtn.addEventListener('click', toggleLanguage);
+    elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
+    document.addEventListener('DOMContentLoaded', () => {
+      currentLang = navigator.language?.startsWith('ar') ? 'ar' : 'en';
       applyTranslations();
       generateDays(selectedMonth);
-      updateSelectedDate();
-      updateCharCount();
     });
   </script>
 </body>
