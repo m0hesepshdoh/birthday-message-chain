@@ -427,7 +427,6 @@
   let hasErrors = false;
   const langData = translations[currentLang];
 
-  // Validation checks
   if (!validateEmail(email)) {
     emailErrorDiv.textContent = langData.emailValidationError;
     hasErrors = true;
@@ -487,11 +486,9 @@
       ipAddress: ipAddress
     };
 
-    // Add to Firestore
     await db.collection("submissions").add(formData);
     console.log("Document written successfully");
 
-    // Update attempts count only after successful submission
     if (doc.exists) {
       await attemptsRef.update({
         attempts: firebase.firestore.FieldValue.increment(1)
@@ -502,16 +499,13 @@
       });
     }
 
-    // Show success message
     formSuccess.textContent = langData.formSuccessMessage;
     formSuccess.style.display = 'block';
     
-    // Reset form but keep success message visible
     birthdayForm.reset();
     selectedMonth = 0;
     selectedDay = 1;
     
-    // Re-populate wheels without hiding success
     populateWheel(monthWheel, langData.months, selectedMonth);
     generateDays(selectedMonth);
     updateSelectedDate();
@@ -529,36 +523,6 @@
     submitButton.textContent = langData.submitButtonText;
   }
 }
-    const formData = {
-              email: email,
-              birthMonth: selectedMonth + 1,
-              birthDay: selectedDay,
-              message: message,
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-              ipAddress: ipAddress
-            };
-            await db.collection("submissions").add(formData);
-            console.log("Document written successfully.");
-            formSuccess.textContent = langData.formSuccessMessage;
-            formSuccess.style.display = 'block';
-            birthdayForm.reset();
-            selectedMonth = 0;
-            selectedDay = 1;
-            applyTranslations();
-            generateDays(selectedMonth);
-            updateSelectedDate();
-            updateCharCount();
-            emailErrorDiv.textContent = "";
-            messageErrorDiv.textContent = "";
-          } catch (error) {
-            console.error("Error adding document: ", error);
-            formError.textContent = `${langData.formSubmitError} (${error.message})`;
-            formError.style.display = 'block';
-          } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = langData.submitButtonText;
-          }
-        }
         toggleLangBtn.addEventListener('click', toggleLanguage); birthdayForm.addEventListener('submit', checkIpAndSubmit); document.addEventListener('DOMContentLoaded', (event) => {
           console.log("DOM fully loaded and parsed");
           applyTranslations();
