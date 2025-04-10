@@ -329,15 +329,6 @@
         fragment.appendChild(itemElement);
       });
       wheel.appendChild(fragment);
-      setTimeout(() => {
-        const selectedEl = wheel.querySelector('.wheel-item.selected');
-        if (selectedEl) {
-          selectedEl.scrollIntoView({
-            behavior: 'auto',
-            block: 'center'
-          });
-        }
-      }, 50);
     }
 
     function generateDays(monthIndex) {
