@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Birthday Chain</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +14,7 @@
       --primary-color: #CF0820;
       --secondary-color: #000000;
       --background-color: #FFFFFF;
-      font-size: 16px;
+      font-size: clamp(14px, 2.5vw, 16px);
     }
 
     [dir="rtl"] body {
@@ -127,16 +127,16 @@
 
     textarea,
     .text-gray-600 {
-      font-size: 16px;
+      font-size: clamp(14px, 3vw, 16px);
     }
 
     .text-2xl {
-      font-size: 24px;
+      font-size: clamp(1.1rem, 5vw, 1.5rem);
     }
 
     .text-sm,
     .text-gray-500 {
-      font-size: 14px;
+      font-size: clamp(12px, 3vw, 14px);
     }
 
     .w-full {
@@ -144,7 +144,7 @@
     }
 
     .h-32 {
-      height: 128px;
+      height: clamp(100px, 30vw, 128px);
     }
 
     .flex-center {
@@ -155,32 +155,64 @@
 
     .error-message {
       color: red;
-      font-size: 14px;
+      font-size: clamp(12px, 3vw, 14px);
       margin-top: 5px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: clamp(10px, 3vw, 20px);
+    }
+
+    .main-description {
+      font-size: clamp(14px, 3.5vw, 18px);
+      line-height: 1.4;
+      margin-bottom: clamp(10px, 3vw, 20px);
+    }
+
+    .toggle-button {
+      font-size: clamp(10px, 2.5vw, 12px);
+      padding: clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px);
+    }
+
+    .form-group {
+      margin-bottom: clamp(10px, 3vw, 16px);
+    }
+
+    input,
+    textarea {
+      padding: clamp(6px, 2vw, 8px) clamp(8px, 3vw, 12px);
+      font-size: clamp(14px, 3vw, 16px);
+    }
+
+    .submit-button {
+      font-size: clamp(14px, 3.5vw, 16px);
+      padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
     }
   </style>
 </head>
 
 <body class="bg-black-100 flex justify-center items-center min-h-screen p-4">
-  <div class="bg-white rounded-lg shadow-md p-6 w-full">
+  <div class="container bg-white rounded-lg shadow-md p-4 sm:p-6 w-full">
     <div class="flex flex-col items-center mb-2">
-      <h2 id="main-title" class="text-[24px] font-semibold">Birthday Message Chain</h2>
-      <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-[0.1rem] px-1.5 text-[0.6rem] rounded mt-2">translate to</button>
+      <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
+      <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button">translate to</button>
     </div>
 
-    <div class="mb-6">
-      <p id="main-description" class="text-black-600 text-xl text-start grow">Join our birthday</p>
+    <div class="mb-4 sm:mb-6">
+      <p id="main-description" class="text-black-600 main-description text-start grow">Join our birthday</p>
     </div>
 
     <form class="space-y-4" id="birthdayForm">
-      <div>
-        <label id="email-label" for="email" class="block text-black-700 text-sm font-bold mb-2">Email</label>
+      <div class="form-group">
+        <label id="email-label" for="email" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
         <input type="email" id="email" name="email" placeholder="your@email.com" required class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
         <div id="email-error" class="error-message"></div>
       </div>
 
-      <div>
-        <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-2">Birthday (Month & Day)</label>
+      <div class="form-group">
+        <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Birthday (Month & Day)</label>
         <div class="date-picker">
           <div class="wheel-container">
             <div class="wheel" id="monthWheel"></div>
@@ -190,14 +222,14 @@
         </div>
       </div>
 
-      <div>
-        <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-2">Your Birthday Message</label>
+      <div class="form-group">
+        <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Your Birthday Message</label>
         <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)" required maxlength="300" class="border rounded w-full py-2 px-3 text-black-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
         <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p>
         <div id="message-error" class="error-message"></div>
       </div>
 
-      <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Join the Birthday Chain</button>
+      <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full submit-button">Join the Birthday Chain</button>
       <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
       <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
       <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
