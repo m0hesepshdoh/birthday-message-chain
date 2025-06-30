@@ -16,8 +16,6 @@
   <!-- this bring a JS that have tailwindcss -->
   <link rel="icon" href="chain.ico" type="image/x-icon">
     <!-- adding an icon in browser tab -->
-    
-    <!--  -->
   <style>
   /*here is the start of css code*/
     body {
@@ -201,8 +199,9 @@
       padding: clamp(8px, 2vw, 8px) clamp(12px, 3vw, 16px);
     }
   </style>
+  <!--end of style-->
 </head>
-
+  <!--start of the head-->
 <body class="bg-black-100 flex justify-center items-center min-h-screen p-4">
   <!-- adjusting it to center -->
   <div class="container bg-white rounded-lg shadow-md p-4 sm:p-6 w-full">
@@ -212,14 +211,19 @@
       <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
       <!--using 2nd heading title to write while changing the font making it bold-->
       <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button">translate to</button>
+      <!-- translation button where its gray and text is white bold font rounded edge and it is button on click -->
     </div>
-
+<!-- start of other things in my webpage-->
     <div class="mb-4 sm:mb-6">
+      <!--in big screen 4 in small screen 6 -->
       <p id="main-description" class="text-black-600 main-description text-start grow">Join our birthday</p>
+      <!-- a description paragraph, black color grow with websize -->
     </div>
-
+<!--start of other things in my webpage -->
     <form class="space-y-4" id="birthdayForm">
+      <!--form to fill-->
       <div class="form-group">
+        <!-- -->
         <label id="email-label" for="email" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
         <input type="email" id="email" name="email" placeholder="your@email.com" required class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
         <div id="email-error" class="error-message"></div>
