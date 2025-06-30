@@ -223,35 +223,50 @@
     <form class="space-y-4" id="birthdayForm">
       <!--form to fill-->
       <div class="form-group">
-        <!-- -->
+        <!-- what is inside form-->
         <label id="email-label" for="email" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
-        <input type="email" id="email" name="email" placeholder="your@email.com" required class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
+        <!-- email blcok -->
+        <input type="email" id="email" name="email" placeholder="your@email.com" required class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" /><!-- input box where it have transpaernt text and rounded border -->
         <div id="email-error" class="error-message"></div>
+        <!-- error handling hidden text-->
       </div>
 
       <div class="form-group">
         <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Birthday (Month & Day)</label>
+        <!-- text that says month & day-->
         <div class="date-picker">
+          <!-- choose a date by picking-->
           <div class="wheel-container">
+            <!-- wheel like box that have the monthwheel and day wheel-->
             <div class="wheel" id="monthWheel"></div>
+            <!-- month wheel-->
             <div class="wheel" id="dayWheel"></div>
+            <!-- day wheel-->
           </div>
           <div class="selected-date" id="selectedDate">Selected Date: </div>
         </div>
       </div>
-
+<!-- here the selected date-->
       <div class="form-group">
         <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Your Birthday Message</label>
+        <!--a text where it is black and bold-->
         <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)" required maxlength="300" class="border rounded w-full py-2 px-3 text-black-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
+        <!-- here we have a text to fill area where maximum is 300 word and with a transparent encouraging text -->
         <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p>
         <div id="message-error" class="error-message"></div>
+        <!-- error message handling-->
       </div>
 
       <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full submit-button">Join the Birthday Chain</button>
+      <!--submission button with white background-->
       <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
+      <!--if the form is filled -->
       <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
+      <!-- if the form has errors-->
       <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
+      <!-- centering the error message -->
     </form>
+    <!-- end of the form-->
   </div>
 
   <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
