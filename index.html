@@ -1,14 +1,25 @@
 <!DOCTYPE html>
+<!-- this is the starting of the code -->
 <html lang="en" dir="ltr">
-
+<!-- here i choose the default language of the page -->
 <head>
+  <!-- this is the head of the code -->
   <meta charset="UTF-8" />
+  <!-- help the browser to identify how to read the html -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- to adjust the size of my document with user phone/PC-->
   <title>Birthday Chain</title>
+  <!-- title of the document-->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- calling font from google fonts by an API where the size of the font is adjusted, it is free to use also linking it to the style-->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- this bring a JS that have tailwindcss -->
   <link rel="icon" href="chain.ico" type="image/x-icon">
+    <!-- adding an icon in browser tab -->
+    
+    <!--  -->
   <style>
+  /*here is the start of css code*/
     body {
       font-family: 'Inter', sans-serif;
       --primary-color: #CF0820;
@@ -193,9 +204,13 @@
 </head>
 
 <body class="bg-black-100 flex justify-center items-center min-h-screen p-4">
+  <!-- adjusting it to center -->
   <div class="container bg-white rounded-lg shadow-md p-4 sm:p-6 w-full">
+    <!--making background white, rounding edges, shadow, keep distance from others -->
     <div class="flex flex-col items-center mb-2">
+      <!--to make inside this class element flex to center at anytime -->
       <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
+      <!--using 2nd heading title to write while changing the font making it bold-->
       <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button">translate to</button>
     </div>
 
