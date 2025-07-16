@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Chain - FAQs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      --primary-color: #CF0820;
+    }
+    
+    .faq-item {
+      transition: all 0.3s ease;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+    
+    .faq-question {
+      transition: color 0.2s ease;
+    }
+    
+    .faq-question:hover {
+      color: var(--primary-color);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding-top: 12px;
+    }
+    
+    .faq-item.active .faq-toggle svg {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 py-12 max-w-3xl">
+
+    <header class="text-center mb-12">
+      <h1 class="text-3xl font-bold text-gray-800 mb-3">Frequently Asked Questions</h1>
+      <p class="text-gray-600">Find answers to common questions about the Birthday Message Chain</p>
+      <div class="mt-6">
+        <a href="index.html" class="inline-flex items-center px-4 py-2 bg-[#CF0820] text-white rounded-md hover:bg-[#9d0618] transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+          Back to Home
+        </a>
+      </div>
+    </header>
+
+
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">What is the Birthday Message Chain?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you'll receive a random birthday message from someone else on your special day!</p>
+        </div>
+      </div>
+
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">How does it work?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">1. Submit your birthday and a heartfelt message<br>
+          2. Your message gets added to our database<br>
+          3. On your birthday, we'll email you a random message from another participant<br>
+          4. Your message will be shared with someone else on their birthday</p>
+        </div>
+      </div>
+
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">Is my personal information safe?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.</p>
+        </div>
+      </div>
+
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">Can I submit multiple messages?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.</p>
+        </div>
+      </div>
+
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">What should I write in my message?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">Write something kind, uplifting, and birthday-appropriate! Some ideas:<br>
+          - "May your birthday be as wonderful as you are!"<br>
+          - "Wishing you a year filled with joy and success!"<br>
+          - "Hope your special day is as amazing as you deserve!"<br>
+          Keep it positive and under 100 characters.</p>
+        </div>
+      </div>
+
+
+      <div class="faq-item p-6">
+        <div class="flex justify-between items-center cursor-pointer faq-question" onclick="toggleFAQ(this)">
+          <h3 class="text-lg font-semibold">Can I delete my message later?</h3>
+          <div class="faq-toggle ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        <div class="faq-answer">
+          <p class="text-gray-600 pt-0">Yes! If you'd like to remove your message from the chain, simply email us at <a href="mailto:support@birthdaychain.com" class="text-[#CF0820] hover:underline">support@birthdaychain.com</a> from the address you used to submit and we'll remove your entry.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mt-12 text-center bg-white p-6 rounded-xl shadow-md">
+      <h3 class="text-xl font-semibold mb-3">Still have questions?</h3>
+      <p class="text-gray-600 mb-4">We're happy to help! Contact our support team.</p>
+      <a href="mailto:support@birthdaychain.com" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+        </svg>
+        Email Support
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function toggleFAQ(element) {
+      const faqItem = element.closest('.faq-item');
+      faqItem.classList.toggle('active');
+    }
+
+    // Open first FAQ by default
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelector('.faq-item').classList.add('active');
+    });
+  </script>
+</body>
+</html>
