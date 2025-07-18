@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Message Chain - View Messages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      --primary-color: #CF0820;
+      --background-color: #FFFFFF;
+    }
+    
+    .message-card {
+      transition: all 0.3s ease;
+    }
+    
+    .message-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .birthday-badge {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .loader {
+      border-top-color: var(--primary-color);
+      animation: spinner 0.8s linear infinite;
+    }
+    
+    @keyframes spinner {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <header class="text-center mb-12">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Birthday Message Chain</h1>
+      <p class="text-gray-600">Heartfelt messages from people around the world</p>
+    </header>
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-700">All Messages</h2>
+      <div class="flex space-x-2">
+        <button id="sortDateBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Date</button>
+        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Month</button>
+      </div>
+    </div>
+
+    <div id="loadingIndicator" class="flex justify-center my-12">
+      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+    </div>
+
+    <div id="messagesContainer" class="grid gap-6">
+    </div>
+
+    <div id="noMessages" class="hidden text-center py-12">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+      </svg>
+      <h3 class="text-lg font-medium text-gray-700 mb-1">No messages yet</h3>
+      <p class="text-gray-500">Be the first to share your birthday wishes!</p>
+    </div>
+
+    <div id="errorDisplay" class="hidden text-center py-12 text-red-500">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <h3 class="text-lg font-medium mb-1">Failed to load messages</h3>
+      <p class="mb-4">Please try refreshing the page</p>
+      <button onclick="window.location.reload()" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Refresh</button>
+    </div>
+
+    <div class="mt-12 text-center">
+      <a href="index.html" class="inline-block px-6 py-2 bg-[#CF0820] text-white rounded-md hover:bg-[#9d0618] transition">Back to Submit Form</a>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
+      authDomain: 'birthdaymessagesapp.firebaseapp.com',
+      projectId: 'birthdaymessagesapp',
+      storageBucket: 'birthdaymessagesapp.appspot.com',
+      messagingSenderId: '220266164498',
+      appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchMessages();
+      
+      document.getElementById('sortDateBtn').addEventListener('click', () => {
+        fetchMessages('timestamp');
+      });
+      
+      document.getElementById('sortMonthBtn').addEventListener('click', () => {
+        fetchMessages('birthMonth');
+      });
+    });
+    
+    function fetchMessages(sortField = 'timestamp') {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      const errorDisplay = document.getElementById('errorDisplay');
+      const noMessages = document.getElementById('noMessages');
+      
+      loadingIndicator.classList.remove('hidden');
+      errorDisplay.classList.add('hidden');
+      noMessages.classList.add('hidden');
+      
+      let query = db.collection('submissions').orderBy(sortField);
+      
+      query.get()
+        .then((querySnapshot) => {
+          loadingIndicator.classList.add('hidden');
+          
+          const container = document.getElementById('messagesContainer');
+          container.innerHTML = '';
+          
+          if (querySnapshot.empty) {
+            noMessages.classList.remove('hidden');
+            return;
+          }
+          
+          querySnapshot.forEach((doc) => {
+            const msg = doc.data();
+            addMessageToDOM(msg);
+          });
+        })
+        .catch((error) => {
+          console.error("Error getting messages: ", error);
+          loadingIndicator.classList.add('hidden');
+          errorDisplay.classList.remove('hidden');
+        });
+    }
+    
+    function addMessageToDOM(msg) {
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+      
+      const container = document.getElementById('messagesContainer');
+      
+      const card = document.createElement('div');
+      card.className = 'message-card bg-white rounded-lg shadow-md p-6';
+      card.innerHTML = `
+        <div class="flex justify-between items-start mb-4">
+          <span class="birthday-badge px-3 py-1 rounded-full text-xs font-semibold">${monthNames[msg.birthMonth - 1]} ${msg.birthDay}</span>
+          <span class="text-gray-500 text-sm">${formatTimeAgo(msg.timestamp?.toDate())}</span>
+        </div>
+        <p class="text-gray-700 mb-4">"${msg.message}"</p>
+        <div class="text-right">
+          <span class="text-gray-400 text-sm">From: ${msg.email}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+    
+    function formatTimeAgo(date) {
+      if (!date) return "recently";
+      
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      
+      if (seconds < 60) return "just now";
+      if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+      return `${Math.floor(seconds / 86400)} days ago`;
+    }
+  </script>
+</body>
+</html>
