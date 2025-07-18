@@ -76,7 +76,7 @@ const translations = {
     },
     ar: {
         title: "سلسلة رسائل يوم الولادة",
-        description: "تعال شاركنا في سلسلة رسائل يوم الميلاد! كلمة منك ممكن تفرّح واحد ما تعرفه، وفي يوم ميلادك راح توصلك رسالة حلوة من شخص ما تعرفه.",
+        description: "تعال شاركنا في سلسلة رسائل يوم الولادة! كلمة منك ممكن تفرّح واحد ما تعرفه، وفي يوم ميلادك راح توصلك رسالة حلوة من شخص ما تعرفه.",
         emailLabel: "بريدك الإلكتروني الخاص",
         emailPlaceholder: " your@email.com ",
         birthdayLabel: "تاريخ ميلادك (الشهر واليوم)",
@@ -204,7 +204,6 @@ const applyTranslations = () => {
         el.style.display = 'none';
     });
 
-    document.getElementById('message-preview').classList.remove('hidden');
 };
 
 const updateCharCount = () => {

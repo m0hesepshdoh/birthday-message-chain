@@ -15,18 +15,17 @@ body {
     font-family: 'Cairo', sans-serif;
 }
 
-
+/* Logo styles */
 .logo {
     font-family: 'Comic Neue', cursive;
     background: linear-gradient(45deg, #CF0820, #FF6B6B, #FFD700);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: transparent;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-
+/* Navigation styles */
 .nav-link {
     position: relative;
     transition: all 0.3s ease;
@@ -51,12 +50,12 @@ body {
     width: 100%;
 }
 
-
+/* Footer styles */
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);
 }
 
-
+/* Confetti effect */
 @keyframes confetti {
     0% {
         transform: translateY(0) rotate(0deg);
@@ -75,7 +74,7 @@ body {
     animation: confetti 3s ease-in-out forwards;
 }
 
-
+/* Rest of your existing styles... */
 [dir="rtl"] .text-right {
     text-align: left;
 }
@@ -251,7 +250,7 @@ textarea {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
+/* Countdown styles */
 .countdown {
     background: rgba(207, 8, 32, 0.1);
     border-radius: 8px;
