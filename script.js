@@ -32,8 +32,16 @@ function updateCountdown(month, day) {
     const diff = nextBirthday - now;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    document.getElementById('birthday-countdown').textContent = `${days} days`;
-    document.getElementById('countdown-container').classList.remove('hidden');
+    const langData = translations[currentLang];
+    const dayLabel = days === 1 ? langData.day : langData.days;
+
+    const countdownBox = document.getElementById('countdown-container');
+    if (days === 0) {
+        countdownBox.classList.add('hidden');
+    } else {
+        document.getElementById('birthday-countdown').textContent = `${days} ${dayLabel}`;
+        countdownBox.classList.remove('hidden');
+    }
 }
 
 
@@ -87,16 +95,19 @@ const translations = {
         footerJoin: "Join Now",
         footerHub: "Message Hub",
         footerPrivacy: "Privacy",
-        footerFaq: "FAQ"
+        footerFaq: "FAQ",
+        days: "days",
+        day: "day",
+        copyright: "&copy; Mohammed Bafuleh"
     },
     ar: {
         title: "سلسلة رسائل يوم الولادة",
-        description: "تعال شاركنا في سلسلة رسائل يوم الولادة! كلمة منك ممكن تفرّح واحد ما تعرفه، وفي يوم ميلادك راح توصلك رسالة حلوة من شخص ما تعرفه.",
-        emailLabel: "بريدك الإلكتروني الخاص",
+        description: "شاركنا في سلسلة رسائل يوم الولادة! كلمة منك ممكن تفرّح واحد ما تعرفه، وفي يوم ميلادك راح توصلك رسالة حلوة من شخص ما تعرفه.",
+        emailLabel: "بريدك الإلكتروني لإستلام الرسالة العشوائية",
         emailPlaceholder: " your@email.com ",
-        birthdayLabel: "تاريخ ميلادك (الشهر واليوم)",
+        birthdayLabel: "تاريخ ولادتك",
         selectedDatePrefix: "اختيارك : ",
-        messageLabel: "الرسالة إللي بتوصل لواحد ما تعرفه",
+        messageLabel: "الرسالة إللي بتوصل لشخص عشوائي",
         messagePlaceholder: "اكتب شي جديد وغريب وبنفس الوقت خاص ليوم الميلاد (100 حرف)",
         charCountSuffix: "حرف",
         submitButtonText: "ادخل السلسلة",
@@ -119,12 +130,15 @@ const translations = {
         navHub: "الرسائل",
         navFaq: "الأسئلة الشائعة",
         navPrivacy: "الخصوصية",
-        footerTitle: "سلسلة رسائل يوم الميلاد",
-        footerDesc: "نجعل أيام الميلاد مميزة منذ 2024",
+        footerTitle: "سلسلة رسائل يوم الولادة",
+        footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
         footerJoin: "انضم الآن",
         footerHub: "الرسائل",
         footerPrivacy: "الخصوصية",
-        footerFaq: "الأسئلة الشائعة"
+        footerFaq: "الأسئلة الشائعة",
+        days: "يوم",
+        day: "أيام",
+        copyright: "&copy; محمد بافليح"
     }
 };
 
@@ -233,16 +247,21 @@ const applyTranslations = () => {
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
 
+    if (isRTL) {
+        document.body.classList.add('rtl');
+    } else {
+        document.body.classList.remove('rtl');
+    }
+
     // Main content
     elements.mainTitle.textContent = langData.title;
     elements.mainDescription.textContent = langData.description;
     elements.emailLabel.textContent = langData.emailLabel;
-    elements.email.placeholder = langData.emailPlaceholder;
     elements.birthdayLabel.textContent = langData.birthdayLabel;
     elements.messageLabel.textContent = langData.messageLabel;
     elements.message.placeholder = langData.messagePlaceholder;
     elements.submitButton.textContent = langData.submitButtonText;
-    elements.toggleLangBtn.textContent = isRTL ? langData.toggleButtonToEn : langData.toggleButtonToAr;
+    elements.toggleLangBtn.textContent = isRTL ? "🇺🇸" : "🇸🇦";
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
     updateCharCount();
@@ -258,6 +277,9 @@ const applyTranslations = () => {
     if (elements.footerHub) elements.footerHub.textContent = langData.footerHub;
     if (elements.footerPrivacy) elements.footerPrivacy.textContent = langData.footerPrivacy;
     if (elements.footerFaq) elements.footerFaq.textContent = langData.footerFaq;
+    if (document.getElementById('footer-copyright')) {
+        document.getElementById('footer-copyright').innerHTML = langData.copyright;
+    }
 
     // Other UI
     [elements.emailError, elements.messageError, elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => {
@@ -269,6 +291,12 @@ const applyTranslations = () => {
     if (elements.facebookBtn) elements.facebookBtn.title = langData.facebookLabel;
     if (elements.twitterBtn) elements.twitterBtn.title = langData.twitterLabel;
     if (elements.redditBtn) elements.redditBtn.title = langData.redditLabel;
+
+    updateCountdown(selectedMonth, selectedDay);
+    // Force reflow to ensure RTL layout updates
+    document.body.style.display = 'none';
+    document.body.offsetHeight;
+    document.body.style.display = '';
 };
 
 const updateCharCount = () => {

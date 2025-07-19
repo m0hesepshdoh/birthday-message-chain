@@ -2,66 +2,69 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Birthday message Chain</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
-        rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <link rel="icon" href="chain.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Birthday message Chain</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <link rel="icon" href="chain.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="flex flex-col min-h-screen">
 
-    <header class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h1 class="logo text-2xl font-bold" id="logo-title">Chain</h1>
-                </div>
-
-                <nav class="hidden md:flex space-x-6">
-                    <a href="hub/hub.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Message Hub</a>
-                    <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
-                    <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium" id="nav-privacy">Privacy</a>
-                </nav>
-
-                <button id="mobileMenuBtn" class="md:hidden text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+          <!-- Logo and title -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h1 class="logo text-2xl font-bold" id="logo-title">Chain</h1>
         </div>
-    </header>
 
+        <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
+          <!-- Navigation links -->
+          <a href="hub/hub.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Message Hub</a>
+          <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
+          <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium" id="nav-privacy">Privacy</a>
+        </nav>
 
-    <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
-        <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-            <a href="hub/hub.html" class="nav-link text-gray-700 font-medium py-2">Message Hub</a>
-            <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
-            <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium py-2">Privacy</a>
-        </div>
+        <button id="mobileMenuBtn" class="md:hidden text-gray-700">
+          <!-- Menu icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <main class="flex-grow container mx-auto px-4 py-8">
+
+  <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
+    <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+      <a href="hub/hub.html" class="nav-link text-gray-700 font-medium py-2">Message Hub</a>
+      <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
+      <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium py-2">Privacy</a>
+    </div>
+  </div>
+
+  <main class="flex-grow container mx-auto px-4 py-8">
     <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto">
       <div class="p-4 sm:p-6 w-full">
         <div class="flex flex-col items-center mb-2">
           <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
-          <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button">translate to</button>
+          <button id="toggleLangBtn"
+            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button"
+            aria-label="Switch language">🇸🇦</button>
         </div>
 
         <div class="mb-4 sm:mb-6">
@@ -73,17 +76,20 @@
           <p id="birthday-countdown" class="font-bold text-lg text-[#CF0820]"></p>
         </div>
 
-        
+
 
         <form class="space-y-4" id="birthdayForm">
           <div class="form-group">
-            <label id="email-label" for="email" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
+            <label id="email-label" for="email"
+              class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required
+              class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
             <div id="email-error" class="error-message"></div>
           </div>
 
           <div class="form-group">
-            <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Birthday (Month & Day)</label>
+            <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Birthday (Month &
+              Day)</label>
             <div class="date-picker">
               <div class="wheel-container">
                 <div class="wheel" id="monthWheel"></div>
@@ -94,13 +100,18 @@
           </div>
 
           <div class="form-group">
-            <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Your Birthday Message</label>
-            <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)" required maxlength="300" class="border rounded w-full py-2 px-3 text-black-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
+            <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Your
+              Birthday Message</label>
+            <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)"
+              required maxlength="300"
+              class="border rounded w-full py-2 px-3 text-black-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
             <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p>
             <div id="message-error" class="error-message"></div>
           </div>
 
-          <button id="submit-button" type="submit" class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full submit-button">Join the Birthday Chain</button>
+          <button id="submit-button" type="submit"
+            class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full submit-button">Join
+            the Birthday Chain</button>
           <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
           <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
           <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
@@ -111,17 +122,20 @@
           <div class="flex justify-center space-x-4">
             <button class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                <path
+                  d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
               </svg>
             </button>
             <button class="bg-blue-400 hover:bg-blue-500 text-white p-2 rounded-full">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                <path
+                  d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
               </svg>
             </button>
             <button class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                <path
+                  d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z" />
               </svg>
             </button>
           </div>
@@ -131,34 +145,36 @@
   </main>
 
 
-    <footer class="footer text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <div class="flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span class="font-bold text-lg" id="footer-title">Birthday Message Chain</span>
-                    </div>
-                    <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>
-                </div>
-
-                <div class="flex flex-col items-center md:items-end">
-                    <div class="flex space-x-4 mb-3">
-                        <a href="index.html" class="hover:text-yellow-300 transition-colors" id="footer-join">Join Now</a>
-                        <a href="hub/hub.html" class="hover:text-yellow-300 transition-colors" id="footer-hub">Message Hub</a>
-                        <a href="Privacy and terms/PaT.html" class="hover:text-yellow-300 transition-colors" id="footer-privacy">Privacy</a>
-                        <a href="FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
-                    </div>
-                    <p class="text-xs">&copy; Mohammed Bafuleh</p>
-                </div>
-            </div>
+  <footer class="footer text-white py-8">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
+      <!-- Links and copyright - will be on left in Arabic -->
+      <div class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
+        <!-- Logo content -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <span class="font-bold text-lg" id="footer-title">Birthday Message Chain</span>
+          <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>
         </div>
-    </footer>
-    <script src="script.js"></script>
+      </div>
+      <!-- Links and copyright -->
+      <div class="flex flex-col items-center md:items-end" id="footer-links-col">
+        <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
+          <!-- Footer links -->
+          <a href="index.html" class="hover:text-yellow-300 transition-colors" id="footer-join">Join Now</a>
+          <a href="hub/hub.html" class="hover:text-yellow-300 transition-colors" id="footer-hub">Message Hub</a>
+          <a href="Privacy and terms/PaT.html" class="hover:text-yellow-300 transition-colors"
+            id="footer-privacy">Privacy</a>
+          <a href="FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
+        </div>
+        <p class="text-xs" id="footer-copyright">&copy; Mohammed Bafuleh</p>
+      </div>
+    </div>
+  </footer>
+  <script src="script.js"></script>
 
 </body>
 
