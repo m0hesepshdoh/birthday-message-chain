@@ -116,13 +116,13 @@ const translations = {
         twitterLabel: "شارك على تويتر",
         redditLabel: "شارك على ريديت",
         logoTitle: "سلسلة",
-        navHub: "مركز الرسائل",
+        navHub: "الرسائل",
         navFaq: "الأسئلة الشائعة",
         navPrivacy: "الخصوصية",
         footerTitle: "سلسلة رسائل يوم الميلاد",
-        footerDesc: "نجعل أعياد الميلاد مميزة منذ 2024",
+        footerDesc: "نجعل أيام الميلاد مميزة منذ 2024",
         footerJoin: "انضم الآن",
-        footerHub: "مركز الرسائل",
+        footerHub: "الرسائل",
         footerPrivacy: "الخصوصية",
         footerFaq: "الأسئلة الشائعة"
     }
