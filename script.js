@@ -72,7 +72,22 @@ const translations = {
         emailValidationError: "Please enter a valid hotmail, Gmail or Yahoo etc... address.",
         messageRequiredError: "Message is required.",
         messageLengthError: "Message must be 100 characters or less.",
-        ipBlockedError: "You have exceeded the maximum submission attempts."
+        ipBlockedError: "You have exceeded the maximum submission attempts.",
+        countdownLabel: "Your next birthday in:",
+        shareLabel: "Share with friends:",
+        facebookLabel: "Share on Facebook",
+        twitterLabel: "Share on Twitter",
+        redditLabel: "Share on Reddit",
+        logoTitle: "Chain",
+        navHub: "Message Hub",
+        navFaq: "FAQ",
+        navPrivacy: "Privacy",
+        footerTitle: "Birthday Message Chain",
+        footerDesc: "Making birthdays special since 2024",
+        footerJoin: "Join Now",
+        footerHub: "Message Hub",
+        footerPrivacy: "Privacy",
+        footerFaq: "FAQ"
     },
     ar: {
         title: "سلسلة رسائل يوم الولادة",
@@ -94,7 +109,22 @@ const translations = {
         emailValidationError: "استخدم بريد إلكتروني زي هوتميل، جيميل أو ياهو إلخ...",
         messageRequiredError: "لازم تكتب رسالة",
         messageLengthError: "أكثر شي 100 حرف",
-        ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني"
+        ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني",
+        countdownLabel: "عيد ميلادك القادم بعد:",
+        shareLabel: "شارك مع أصدقائك:",
+        facebookLabel: "شارك على فيسبوك",
+        twitterLabel: "شارك على تويتر",
+        redditLabel: "شارك على ريديت",
+        logoTitle: "سلسلة",
+        navHub: "مركز الرسائل",
+        navFaq: "الأسئلة الشائعة",
+        navPrivacy: "الخصوصية",
+        footerTitle: "سلسلة رسائل يوم الميلاد",
+        footerDesc: "نجعل أعياد الميلاد مميزة منذ 2024",
+        footerJoin: "انضم الآن",
+        footerHub: "مركز الرسائل",
+        footerPrivacy: "الخصوصية",
+        footerFaq: "الأسئلة الشائعة"
     }
 };
 
@@ -118,7 +148,22 @@ const elements = {
     messageLabel: document.getElementById('message-label'),
     emailError: document.getElementById('email-error'),
     messageError: document.getElementById('message-error'),
-    ipBlockError: document.getElementById('ip-block-error')
+    ipBlockError: document.getElementById('ip-block-error'),
+    countdownLabel: document.querySelector('#countdown-container p.text-sm'),
+    shareLabel: document.querySelector('.mt-6.text-center p.text-sm'),
+    facebookBtn: document.querySelector('.flex.justify-center button:nth-child(1)'),
+    twitterBtn: document.querySelector('.flex.justify-center button:nth-child(2)'),
+    redditBtn: document.querySelector('.flex.justify-center button:nth-child(3)'),
+    logoTitle: document.getElementById('logo-title'),
+    navHub: document.getElementById('nav-hub'),
+    navFaq: document.getElementById('nav-faq'),
+    navPrivacy: document.getElementById('nav-privacy'),
+    footerTitle: document.getElementById('footer-title'),
+    footerDesc: document.getElementById('footer-desc'),
+    footerJoin: document.getElementById('footer-join'),
+    footerHub: document.getElementById('footer-hub'),
+    footerPrivacy: document.getElementById('footer-privacy'),
+    footerFaq: document.getElementById('footer-faq')
 };
 
 const blockedEmail = "ug671431015@ftu.ac.th";
@@ -187,6 +232,8 @@ const applyTranslations = () => {
     const isRTL = currentLang === 'ar';
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+
+    // Main content
     elements.mainTitle.textContent = langData.title;
     elements.mainDescription.textContent = langData.description;
     elements.emailLabel.textContent = langData.emailLabel;
@@ -199,11 +246,29 @@ const applyTranslations = () => {
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
     updateCharCount();
+
+    // Header, nav, footer
+    if (elements.logoTitle) elements.logoTitle.textContent = langData.logoTitle;
+    if (elements.navHub) elements.navHub.textContent = langData.navHub;
+    if (elements.navFaq) elements.navFaq.textContent = langData.navFaq;
+    if (elements.navPrivacy) elements.navPrivacy.textContent = langData.navPrivacy;
+    if (elements.footerTitle) elements.footerTitle.textContent = langData.footerTitle;
+    if (elements.footerDesc) elements.footerDesc.textContent = langData.footerDesc;
+    if (elements.footerJoin) elements.footerJoin.textContent = langData.footerJoin;
+    if (elements.footerHub) elements.footerHub.textContent = langData.footerHub;
+    if (elements.footerPrivacy) elements.footerPrivacy.textContent = langData.footerPrivacy;
+    if (elements.footerFaq) elements.footerFaq.textContent = langData.footerFaq;
+
+    // Other UI
     [elements.emailError, elements.messageError, elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => {
         el.textContent = "";
         el.style.display = 'none';
     });
-
+    if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
+    if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
+    if (elements.facebookBtn) elements.facebookBtn.title = langData.facebookLabel;
+    if (elements.twitterBtn) elements.twitterBtn.title = langData.twitterLabel;
+    if (elements.redditBtn) elements.redditBtn.title = langData.redditLabel;
 };
 
 const updateCharCount = () => {
@@ -218,7 +283,7 @@ const toggleLanguage = () => {
 };
 
 elements.message.addEventListener('input', updateCharCount);
-const validateEmail = email => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu|outlook)\.(com|co\.uk|ac.th|ca|de|fr|net|org|[a-z]{2,}))$/i.test(String(email).toLowerCase());
+const validateEmail = email => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu.ac|outlook)\.(com|co\.uk|th|ca|de|fr|net|org|[a-z]{2,}))$/i.test(String(email).toLowerCase());
 
 const getIpAddress = function () {
     return new Promise(function (resolve) {
@@ -292,6 +357,10 @@ const checkIpAndSubmit = async event => {
             elements.ipBlockError.style.display = 'block';
             elements.submitButton.disabled = false;
             elements.submitButton.textContent = langData.submitButtonText;
+            setTimeout(() => {
+                window.location.href = "message-hub.html";
+            }, 7000);
+
             return;
         }
         await db.collection("submissions").add({
@@ -311,6 +380,13 @@ const checkIpAndSubmit = async event => {
             }));
         elements.formSuccess.textContent = langData.formSuccessMessage;
         elements.formSuccess.style.display = 'block';
+        const countdownBox = document.getElementById('countdown-container');
+        if (countdownBox) {
+            countdownBox.classList.add('hidden');
+        }
+        setTimeout(() => {
+            window.location.href = "message-hub.html";
+        }, 7000);
         elements.birthdayForm.reset();
         selectedMonth = 0;
         selectedDay = 1;
