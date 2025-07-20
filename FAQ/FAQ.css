@@ -1,0 +1,166 @@
+body {
+    font-family: 'Inter', sans-serif;
+    --primary-color: #CF0820;
+    background-color: #FFF5F5;
+}
+
+[dir="rtl"] body {
+    font-family: 'Cairo', sans-serif;
+}
+
+.faq-item {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+    color: var(--primary-color);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 300px;
+    padding-top: 12px;
+}
+
+.faq-item.active .faq-toggle svg {
+    transform: rotate(180deg);
+}
+
+.logo {
+    font-family: 'Comic Neue', cursive;
+    background: linear-gradient(45deg, #CF0820, #FF6B6B, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.footer {
+    background: linear-gradient(to right, #CF0820, #9d0618);
+    position: relative;
+    z-index: 200; /* Higher than the button */
+}
+
+@media (max-width: 768px) {
+    .footer .container {
+        flex-direction: column;
+    }
+
+    [dir="rtl"] .footer .container {
+        flex-direction: column;
+    }
+
+    #footer-logo-desc,
+    #footer-links-col {
+        width: 100%;
+        text-align: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    #footer-links {
+        justify-content: center;
+    }
+
+    #footer-links-col {
+        order: 2;
+    }
+
+    #footer-logo-desc {
+        order: 1;
+        margin-bottom: 1rem;
+    }
+}
+
+/* FAQ.css */
+.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.rtl .faq-question {
+    flex-direction: row-reverse;
+}
+
+.rtl .faq-toggle {
+    margin-left: 0;
+    margin-right: 1rem;
+}
+
+.rtl #footer-links {
+    direction: rtl;
+}
+
+/* Floating language toggle button */
+#toggleLangBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    /* Ensure it's above everything */
+    background-color: #ffffff;
+    color: #CF0820;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#toggleLangBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background-color: #CF0820;
+    color: white;
+}
+
+/* For RTL languages */
+.rtl #toggleLangBtn {
+    right: auto;
+    left: 20px;
+}

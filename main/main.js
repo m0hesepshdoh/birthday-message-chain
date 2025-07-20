@@ -178,7 +178,7 @@ const translations = {
         messageRequiredError: "لازم تكتب رسالة",
         messageLengthError: "أكثر شي 100 حرف",
         ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني",
-        countdownLabel: "عيد ميلادك القادم بعد:",
+        countdownLabel: "يوم ميلادك القادم بعد:",
         shareLabel: "شارك مع أصدقائك:",
         facebookLabel: "فيسبوك",
         twitterLabel: "تويتر",

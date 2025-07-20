@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <link rel="icon" href="chain.ico" type="image/x-icon">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="main/main.css">
 </head>
 
 <body class="flex flex-col min-h-screen">
@@ -35,7 +35,6 @@
           <!-- Navigation links -->
           <a href="hub/hub.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Message Hub</a>
           <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
-          <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium" id="nav-privacy">Privacy</a>
         </nav>
 
         <button id="mobileMenuBtn" class="md:hidden text-gray-700">
@@ -51,9 +50,8 @@
 
   <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
     <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-      <a href="hub/hub.html" class="nav-link text-gray-700 font-medium py-2">Message Hub</a>
-      <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
-      <a href="Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium py-2">Privacy</a>
+      <a href="../hub/hub.html" class="nav-link text-gray-700 font-medium py-2">Message Hub</a>
+      <a href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
     </div>
   </div>
 
@@ -174,17 +172,14 @@
       <div class="flex flex-col items-center md:items-end" id="footer-links-col">
         <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
           <!-- Footer links -->
-          <a href="index.html" class="hover:text-yellow-300 transition-colors" id="footer-join">Join Now</a>
           <a href="hub/hub.html" class="hover:text-yellow-300 transition-colors" id="footer-hub">Message Hub</a>
-          <a href="Privacy and terms/PaT.html" class="hover:text-yellow-300 transition-colors"
-            id="footer-privacy">Privacy</a>
           <a href="FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
         </div>
         <p class="text-xs" id="footer-copyright">&copy; Mohammed Bafuleh</p>
       </div>
     </div>
   </footer>
-  <script src="script.js"></script>
+  <script src="main/main.js"></script>
 
 </body>
 

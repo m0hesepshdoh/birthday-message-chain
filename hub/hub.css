@@ -1,0 +1,105 @@
+body {
+    font-family: 'Inter', sans-serif;
+    --primary-color: #CF0820;
+    --background-color: #FFFFFF;
+}
+
+[dir="rtl"] body {
+    font-family: 'Cairo', sans-serif;
+}
+
+.message-card {
+    transition: all 0.3s ease;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.birthday-badge {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.loader {
+    border-top-color: var(--primary-color);
+    animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.floating-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 50;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.language-badge {
+    background-color: #4F46E5;
+    color: white;
+}
+
+.arabic-message {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Logo styles */
+.logo {
+    font-family: 'Comic Neue', cursive;
+    background: linear-gradient(45deg, #CF0820, #FF6B6B, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer styles */
+.footer {
+    background: linear-gradient(to right, #CF0820, #9d0618);
+}
+
+/* Navigation styles */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.current-page {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.current-page::after {
+    width: 100%;
+}
