@@ -74,7 +74,7 @@ body {
     width: 100%;
 }
 
-/* Sharing buttons styles - works for both LTR and RTL */
+/* Sharing buttons styles */
 .share-buttons-container {
     display: flex;
     justify-content: center;
@@ -89,7 +89,7 @@ body {
 }
 
 /* Remove left margin in RTL for correct spacing */
-[dir="rtl"] .share-buttons-container > * {
+[dir="rtl"] .share-buttons-container>* {
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
@@ -378,4 +378,40 @@ textarea {
         order: 1;
         margin-bottom: 1rem;
     }
+}
+
+/* Floating language toggle button */
+#toggleLangBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    /* Ensure it's above everything */
+    background-color: #ffffff;
+    color: #CF0820;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#toggleLangBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background-color: #CF0820;
+    color: white;
+}
+
+/* For RTL languages */
+.rtl #toggleLangBtn {
+    right: auto;
+    left: 20px;
 }
