@@ -45,48 +45,45 @@ function updateCountdown(month, day) {
 }
 
 function setupShareButtons() {
-    const shareButtons = document.querySelectorAll('.share-button');
+    // Only two buttons: copy-link-share and whatsapp-share
     const websiteUrl = window.location.href;
 
-    shareButtons.forEach(button => {
-        button.addEventListener('click', async (e) => {
+    // Copy Link Button
+    const copyBtn = document.getElementById('copy-link-share');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-
-            // Create a temporary input element for fallback
             const tempInput = document.createElement('input');
             tempInput.value = websiteUrl;
             document.body.appendChild(tempInput);
             tempInput.select();
 
             try {
-                // Try modern Clipboard API first
                 if (navigator.clipboard) {
                     await navigator.clipboard.writeText(websiteUrl);
-                }
-                // Fallback for older browsers
-                else if (document.execCommand('copy')) {
+                } else if (document.execCommand('copy')) {
                     document.execCommand('copy');
                 } else {
                     throw new Error('Clipboard API not available');
                 }
-
-                // Show success feedback
-                showCopyFeedback(button);
-
-                // For WhatsApp, open the share link directly
-                if (button.classList.contains('whatsapp-share')) {
-                    window.open(`https://wa.me/?text=${encodeURIComponent(websiteUrl)}`, '_blank');
-                }
+                showCopyFeedback(copyBtn);
             } catch (err) {
                 console.error('Failed to copy URL: ', err);
-                // Fallback: Show the URL in a prompt they can copy manually
                 prompt('Copy this URL:', websiteUrl);
             } finally {
-                // Clean up
                 document.body.removeChild(tempInput);
             }
         });
-    });
+    }
+
+    // WhatsApp Button
+    const whatsappBtn = document.getElementById('whatsapp-share');
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.open(`https://wa.me/?text=${encodeURIComponent(websiteUrl)}`, '_blank');
+        });
+    }
 }
 
 // Helper function to show copy feedback
@@ -345,19 +342,11 @@ const applyTranslations = () => {
     });
     if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
-    if (document.getElementById('facebook-share')) {
-        document.getElementById('facebook-share').title = langData.facebookLabel;
-        document.getElementById('facebook-share').querySelector('.tooltip').textContent = langData.facebookLabel;
-    }
-    if (document.getElementById('twitter-share')) {
-        document.getElementById('twitter-share').title = langData.twitterLabel;
-        document.getElementById('twitter-share').querySelector('.tooltip').textContent = langData.twitterLabel;
-    }
+    
     if (document.getElementById('whatsapp-share')) {
         document.getElementById('whatsapp-share').title = langData.whatsappLabel;
         document.getElementById('whatsapp-share').querySelector('.tooltip').textContent = langData.whatsappLabel;
     }
-    // ...existing code...
     if (document.getElementById('share-label')) {
         document.getElementById('share-label').textContent = langData.shareLabel;
     }
