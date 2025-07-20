@@ -74,6 +74,26 @@ body {
     width: 100%;
 }
 
+/* Sharing buttons styles - works for both LTR and RTL */
+.share-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Properly reverse the order in RTL */
+[dir="rtl"] .share-buttons-container {
+    flex-direction: row-reverse !important;
+}
+
+/* Remove left margin in RTL for correct spacing */
+[dir="rtl"] .share-buttons-container > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 /* Footer styles */
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);

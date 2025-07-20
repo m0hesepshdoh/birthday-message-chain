@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Birthday Message Chain - View Messages</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Message Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <link rel="icon" href="../chain.ico" type="image/x-icon">
   <style>
     body {
       font-family: 'Inter', sans-serif;
       --primary-color: #CF0820;
       --background-color: #FFFFFF;
+    }
+    
+    [dir="rtl"] body {
+      font-family: 'Cairo', sans-serif;
     }
     
     .message-card {
@@ -38,23 +43,125 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
+    .floating-button {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 50;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .language-badge {
+      background-color: #4F46E5;
+      color: white;
+    }
+    
+    .arabic-message {
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Logo styles */
+    .logo {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(45deg, #CF0820, #FF6B6B, #FFD700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Footer styles */
+    .footer {
+      background: linear-gradient(to right, #CF0820, #9d0618);
+    }
+
+    /* Navigation styles */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .current-page {
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+
+    .current-page::after {
+      width: 100%;
+    }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-  <div class="container mx-auto px-4 py-8 max-w-4xl">
-    <header class="text-center mb-12">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">Birthday Message Chain</h1>
-      <p class="text-gray-600">Heartfelt messages from people around the world</p>
-    </header>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h1 class="logo text-2xl font-bold" id="logo-title">Chain</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
+          <a href="../index.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Home</a>
+          <a href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
+          <a href="../Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium" id="nav-privacy">Privacy</a>
+        </nav>
+
+        <button id="mobileMenuBtn" class="md:hidden text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
+    <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+      <a href="../index.html" class="nav-link text-gray-700 font-medium py-2">Home</a>
+      <a href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
+      <a href="../Privacy and terms/PaT.html" class="nav-link text-gray-700 font-medium py-2">Privacy</a>
+    </div>
+  </div>
+
+  <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    <div class="flex flex-col items-center mb-2">
+      <h2 id="main-title" class="text-3xl font-bold text-gray-800 mb-2">Birthday Message Chain</h2>
+      <p id="main-description" class="text-gray-600">Heartfelt messages from people around the world</p>
+      <button id="toggleLangBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded mt-2 toggle-button" aria-label="Switch language">🇸🇦</button>
+    </div>
 
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold text-gray-700">All Messages</h2>
+      <h2 class="text-xl font-semibold text-gray-700" id="messages-title">All Messages</h2>
       <div class="flex space-x-2">
-        <button id="sortDateBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Date</button>
         <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Month</button>
+        <button id="sortLangBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Language</button>
       </div>
     </div>
 
+    <!-- Rest of your existing hub content... -->
     <div id="loadingIndicator" class="flex justify-center my-12">
       <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
     </div>
@@ -66,25 +173,60 @@
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
       </svg>
-      <h3 class="text-lg font-medium text-gray-700 mb-1">No messages yet</h3>
-      <p class="text-gray-500">Be the first to share your birthday wishes!</p>
+      <h3 class="text-lg font-medium text-gray-700 mb-1" id="no-messages-title">No messages yet</h3>
+      <p class="text-gray-500" id="no-messages-desc">Be the first to share your birthday wishes!</p>
     </div>
 
     <div id="errorDisplay" class="hidden text-center py-12 text-red-500">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
-      <h3 class="text-lg font-medium mb-1">Failed to load messages</h3>
-      <p class="mb-4">Please try refreshing the page</p>
+      <h3 class="text-lg font-medium mb-1" id="error-title">Failed to load messages</h3>
+      <p class="mb-4" id="error-desc">Please try refreshing the page</p>
       <button onclick="window.location.reload()" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Refresh</button>
     </div>
 
-    <div class="mt-12 text-center">
-      <a href="index.html" class="inline-block px-6 py-2 bg-[#CF0820] text-white rounded-md hover:bg-[#9d0618] transition">Back to Submit Form</a>
+    <div id="loadMoreContainer" class="text-center mt-6 hidden">
+      <button id="loadMoreBtn" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 flex items-center justify-center mx-auto">
+        <span id="loadMoreText">Load More Messages</span>
+        <span id="loadMoreSpinner" class="hidden ml-2">
+          <svg class="animate-spin h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </span>
+      </button>
     </div>
-  </div>
+  </main>
+
+  <a href="../index.html" class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg">
+    Submit Your Message
+  </a>
+
+  <footer class="footer text-white py-8">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
+      <div class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <span class="font-bold text-lg" id="footer-title">Birthday Message Chain</span>
+          <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>
+        </div>
+      </div>
+      <div class="flex flex-col items-center md:items-end" id="footer-links-col">
+        <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
+          <a href="../index.html" class="hover:text-yellow-300 transition-colors" id="footer-join">Join Now</a>
+          <a href="../FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
+          <a href="../Privacy and terms/PaT.html" class="hover:text-yellow-300 transition-colors" id="footer-privacy">Privacy</a>
+        </div>
+        <p class="text-xs" id="footer-copyright">&copy; Mohammed Bafuleh</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
+    // Initialize Firebase
     const firebaseConfig = {
       apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
       authDomain: 'birthdaymessagesapp.firebaseapp.com',
@@ -97,84 +239,267 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    document.addEventListener('DOMContentLoaded', function() {
-      fetchMessages();
+    // Language support
+    const translations = {
+      en: {
+        title: "Birthday Message Chain",
+        description: "Heartfelt messages from people around the world",
+        messagesTitle: "All Messages",
+        noMessagesTitle: "No messages yet",
+        noMessagesDesc: "Be the first to share your birthday wishes!",
+        errorTitle: "Failed to load messages",
+        errorDesc: "Please try refreshing the page",
+        loadMoreText: "Load More Messages",
+        logoTitle: "Chain",
+        navHub: "Home",
+        navFaq: "FAQ",
+        navPrivacy: "Privacy",
+        footerTitle: "Birthday Message Chain",
+        footerDesc: "Making birthdays special since 2024",
+        footerJoin: "Join Now",
+        footerFaq: "FAQ",
+        footerPrivacy: "Privacy",
+        copyright: "&copy; Mohammed Bafuleh"
+      },
+      ar: {
+        title: "سلسلة رسائل يوم الولادة",
+        description: "رسائل صادقة من أشخاص حول العالم",
+        messagesTitle: "جميع الرسائل",
+        noMessagesTitle: "لا توجد رسائل بعد",
+        noMessagesDesc: "كن أول من يشارك تمنيات عيد الميلاد!",
+        errorTitle: "فشل تحميل الرسائل",
+        errorDesc: "يرجى محاولة تحديث الصفحة",
+        loadMoreText: "تحميل المزيد من الرسائل",
+        logoTitle: "سلسلة",
+        navHub: "الصفحة الرئيسية",
+        navFaq: "الأسئلة الشائعة",
+        navPrivacy: "الخصوصية",
+        footerTitle: "سلسلة رسائل يوم الولادة",
+        footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
+        footerJoin: "انضم الآن",
+        footerFaq: "الأسئلة الشائعة",
+        footerPrivacy: "الخصوصية",
+        copyright: "&copy; محمد بافليح"
+      }
+    };
+
+    let currentLang = localStorage.getItem('selectedLanguage') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
+    let lastVisible = null;
+    let currentSortField = 'timestamp';
+    let currentLanguageFilter = null;
+    let isFetching = false;
+
+    // Apply translations
+    function applyTranslations() {
+      const langData = translations[currentLang];
+      const isRTL = currentLang === 'ar';
       
-      document.getElementById('sortDateBtn').addEventListener('click', () => {
-        fetchMessages('timestamp');
-      });
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+      
+      if (isRTL) {
+        document.body.classList.add('rtl');
+      } else {
+        document.body.classList.remove('rtl');
+      }
+
+      // Apply translations to all elements
+      document.getElementById('main-title').textContent = langData.title;
+      document.getElementById('main-description').textContent = langData.description;
+      document.getElementById('messages-title').textContent = langData.messagesTitle;
+      document.getElementById('no-messages-title').textContent = langData.noMessagesTitle;
+      document.getElementById('no-messages-desc').textContent = langData.noMessagesDesc;
+      document.getElementById('error-title').textContent = langData.errorTitle;
+      document.getElementById('error-desc').textContent = langData.errorDesc;
+      document.getElementById('loadMoreText').textContent = langData.loadMoreText;
+      document.getElementById('logo-title').textContent = langData.logoTitle;
+      document.getElementById('nav-hub').textContent = langData.navHub;
+      document.getElementById('nav-faq').textContent = langData.navFaq;
+      document.getElementById('nav-privacy').textContent = langData.navPrivacy;
+      document.getElementById('footer-title').textContent = langData.footerTitle;
+      document.getElementById('footer-desc').textContent = langData.footerDesc;
+      document.getElementById('footer-join').textContent = langData.footerJoin;
+      document.getElementById('footer-faq').textContent = langData.footerFaq;
+      document.getElementById('footer-privacy').textContent = langData.footerPrivacy;
+      document.getElementById('footer-copyright').innerHTML = langData.copyright;
+      document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇸🇦' : '🇺🇸';
+    }
+
+    // Toggle language
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      localStorage.setItem('selectedLanguage', currentLang);
+      applyTranslations();
+    }
+
+    document.getElementById('toggleLangBtn').addEventListener('click', toggleLanguage);
+
+    // Mobile menu toggle
+    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    });
+
+    // Rest of your existing hub functionality...
+    document.addEventListener('DOMContentLoaded', function() {
+      applyTranslations();
+      fetchMessages(7);
       
       document.getElementById('sortMonthBtn').addEventListener('click', () => {
-        fetchMessages('birthMonth');
+        currentSortField = 'birthMonth';
+        currentLanguageFilter = null;
+        fetchMessages(7, true);
+      });
+      
+      document.getElementById('sortLangBtn').addEventListener('click', () => {
+        currentSortField = 'language';
+        currentLanguageFilter = null;
+        fetchMessages(7, true);
+      });
+      
+      document.getElementById('loadMoreBtn').addEventListener('click', () => {
+        fetchMessages(7);
+      });
+      
+      // Infinite scroll detection
+      window.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+          if (!isFetching && lastVisible) {
+            fetchMessages(7);
+          }
+        }
       });
     });
-    
-    function fetchMessages(sortField = 'timestamp') {
+
+    function fetchMessages(limit = 7, reset = false) {
+      if (isFetching) return;
+      
+      isFetching = true;
       const loadingIndicator = document.getElementById('loadingIndicator');
       const errorDisplay = document.getElementById('errorDisplay');
       const noMessages = document.getElementById('noMessages');
+      const loadMoreContainer = document.getElementById('loadMoreContainer');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      const loadMoreText = document.getElementById('loadMoreText');
+      const loadMoreSpinner = document.getElementById('loadMoreSpinner');
+      
+      if (reset) {
+        lastVisible = null;
+        document.getElementById('messagesContainer').innerHTML = '';
+      } else {
+        loadMoreText.textContent = translations[currentLang].loadMoreText;
+        loadMoreSpinner.classList.remove('hidden');
+        loadMoreBtn.disabled = true;
+      }
       
       loadingIndicator.classList.remove('hidden');
       errorDisplay.classList.add('hidden');
       noMessages.classList.add('hidden');
       
-      let query = db.collection('submissions').orderBy(sortField);
+      let query = db.collection('submissions')
+                    .orderBy(currentSortField);
       
-      query.get()
-        .then((querySnapshot) => {
-          loadingIndicator.classList.add('hidden');
-          
-          const container = document.getElementById('messagesContainer');
-          container.innerHTML = '';
-          
-          if (querySnapshot.empty) {
-            noMessages.classList.remove('hidden');
-            return;
-          }
-          
-          querySnapshot.forEach((doc) => {
-            const msg = doc.data();
-            addMessageToDOM(msg);
+      // Apply language filter if set
+      if (currentLanguageFilter) {
+        query = query.where('language', '==', currentLanguageFilter);
+      }
+      
+      query = query.limit(limit);
+      
+      if (lastVisible && !reset) {
+        query = query.startAfter(lastVisible);
+      }
+      
+      // Simulate longer loading time (2 seconds)
+      setTimeout(() => {
+        query.get()
+          .then((querySnapshot) => {
+            loadingIndicator.classList.add('hidden');
+            isFetching = false;
+            
+            loadMoreText.textContent = translations[currentLang].loadMoreText;
+            loadMoreSpinner.classList.add('hidden');
+            loadMoreBtn.disabled = false;
+            
+            const container = document.getElementById('messagesContainer');
+            
+            if (querySnapshot.empty && reset) {
+              noMessages.classList.remove('hidden');
+              loadMoreContainer.classList.add('hidden');
+              return;
+            }
+            
+            querySnapshot.forEach((doc) => {
+              const msg = doc.data();
+              addMessageToDOM(msg);
+            });
+            
+            // Update last visible document
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+            
+            // Show/hide load more button
+            if (querySnapshot.size < limit) {
+              loadMoreContainer.classList.add('hidden');
+            } else {
+              loadMoreContainer.classList.remove('hidden');
+            }
+          })
+          .catch((error) => {
+            console.error("Error getting messages: ", error);
+            loadingIndicator.classList.add('hidden');
+            errorDisplay.classList.remove('hidden');
+            isFetching = false;
+            
+            loadMoreText.textContent = translations[currentLang].loadMoreText;
+            loadMoreSpinner.classList.add('hidden');
+            loadMoreBtn.disabled = false;
           });
-        })
-        .catch((error) => {
-          console.error("Error getting messages: ", error);
-          loadingIndicator.classList.add('hidden');
-          errorDisplay.classList.remove('hidden');
-        });
+      }, 2000); // 2 second delay
     }
     
     function addMessageToDOM(msg) {
-      const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
+      const monthNames = currentLang === 'en' 
+        ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        : ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
       
       const container = document.getElementById('messagesContainer');
       
       const card = document.createElement('div');
       card.className = 'message-card bg-white rounded-lg shadow-md p-6';
+      
+      // Add Arabic RTL direction if language is Arabic
+      const messageClass = msg.language === 'Arabic' ? 'arabic-message' : '';
+      
       card.innerHTML = `
         <div class="flex justify-between items-start mb-4">
-          <span class="birthday-badge px-3 py-1 rounded-full text-xs font-semibold">${monthNames[msg.birthMonth - 1]} ${msg.birthDay}</span>
+          <div class="flex space-x-2">
+            <span class="birthday-badge px-3 py-1 rounded-full text-xs font-semibold">${monthNames[msg.birthMonth - 1]} ${msg.birthDay}</span>
+            ${msg.language ? `<span class="language-badge px-3 py-1 rounded-full text-xs font-semibold">${msg.language}</span>` : ''}
+          </div>
           <span class="text-gray-500 text-sm">${formatTimeAgo(msg.timestamp?.toDate())}</span>
         </div>
-        <p class="text-gray-700 mb-4">"${msg.message}"</p>
-        <div class="text-right">
-          <span class="text-gray-400 text-sm">From: ${msg.email}</span>
-        </div>
+        <p class="text-gray-700 mb-4 ${messageClass}">${msg.message}</p>
       `;
       container.appendChild(card);
     }
     
     function formatTimeAgo(date) {
-      if (!date) return "recently";
+      if (!date) return currentLang === 'en' ? "just now" : "الآن";
       
       const now = new Date();
       const seconds = Math.floor((now - date) / 1000);
       
-      if (seconds < 60) return "just now";
-      if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
-      if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-      return `${Math.floor(seconds / 86400)} days ago`;
+      if (seconds < 60) return currentLang === 'en' ? "just now" : "الآن";
+      if (seconds < 3600) {
+        const minutes = Math.floor(seconds / 60);
+        return currentLang === 'en' ? `${minutes} minutes ago` : `منذ ${minutes} دقيقة`;
+      }
+      if (seconds < 86400) {
+        const hours = Math.floor(seconds / 3600);
+        return currentLang === 'en' ? `${hours} hours ago` : `منذ ${hours} ساعة`;
+      }
+      const days = Math.floor(seconds / 86400);
+      return currentLang === 'en' ? `${days} days ago` : `منذ ${days} يوم`;
     }
   </script>
 </body>

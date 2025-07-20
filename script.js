@@ -44,6 +44,63 @@ function updateCountdown(month, day) {
     }
 }
 
+function setupShareButtons() {
+    const shareButtons = document.querySelectorAll('.share-button');
+    const websiteUrl = window.location.href;
+
+    shareButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            // Create a temporary input element for fallback
+            const tempInput = document.createElement('input');
+            tempInput.value = websiteUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+
+            try {
+                // Try modern Clipboard API first
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(websiteUrl);
+                }
+                // Fallback for older browsers
+                else if (document.execCommand('copy')) {
+                    document.execCommand('copy');
+                } else {
+                    throw new Error('Clipboard API not available');
+                }
+
+                // Show success feedback
+                showCopyFeedback(button);
+
+                // For WhatsApp, open the share link directly
+                if (button.classList.contains('whatsapp-share')) {
+                    window.open(`https://wa.me/?text=${encodeURIComponent(websiteUrl)}`, '_blank');
+                }
+            } catch (err) {
+                console.error('Failed to copy URL: ', err);
+                // Fallback: Show the URL in a prompt they can copy manually
+                prompt('Copy this URL:', websiteUrl);
+            } finally {
+                // Clean up
+                document.body.removeChild(tempInput);
+            }
+        });
+    });
+}
+
+// Helper function to show copy feedback
+function showCopyFeedback(button) {
+    const originalText = button.querySelector('.tooltip')?.textContent || '';
+    const tooltip = button.querySelector('.tooltip');
+
+    if (tooltip) {
+        tooltip.textContent = 'Copied!';
+        setTimeout(() => {
+            tooltip.textContent = originalText;
+        }, 2000);
+    }
+}
 
 const firebaseConfig = {
     apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
@@ -85,7 +142,7 @@ const translations = {
         shareLabel: "Share with friends:",
         facebookLabel: "Share on Facebook",
         twitterLabel: "Share on Twitter",
-        redditLabel: "Share on Reddit",
+        whatsappLabel: "Share on WhatsApp",
         logoTitle: "Chain",
         navHub: "Message Hub",
         navFaq: "FAQ",
@@ -123,9 +180,9 @@ const translations = {
         ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني",
         countdownLabel: "عيد ميلادك القادم بعد:",
         shareLabel: "شارك مع أصدقائك:",
-        facebookLabel: "شارك على فيسبوك",
-        twitterLabel: "شارك على تويتر",
-        redditLabel: "شارك على ريديت",
+        facebookLabel: "فيسبوك",
+        twitterLabel: "تويتر",
+        whatsappLabel: "واتساب",
         logoTitle: "سلسلة",
         navHub: "الرسائل",
         navFaq: "الأسئلة الشائعة",
@@ -288,9 +345,22 @@ const applyTranslations = () => {
     });
     if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
-    if (elements.facebookBtn) elements.facebookBtn.title = langData.facebookLabel;
-    if (elements.twitterBtn) elements.twitterBtn.title = langData.twitterLabel;
-    if (elements.redditBtn) elements.redditBtn.title = langData.redditLabel;
+    if (document.getElementById('facebook-share')) {
+        document.getElementById('facebook-share').title = langData.facebookLabel;
+        document.getElementById('facebook-share').querySelector('.tooltip').textContent = langData.facebookLabel;
+    }
+    if (document.getElementById('twitter-share')) {
+        document.getElementById('twitter-share').title = langData.twitterLabel;
+        document.getElementById('twitter-share').querySelector('.tooltip').textContent = langData.twitterLabel;
+    }
+    if (document.getElementById('whatsapp-share')) {
+        document.getElementById('whatsapp-share').title = langData.whatsappLabel;
+        document.getElementById('whatsapp-share').querySelector('.tooltip').textContent = langData.whatsappLabel;
+    }
+    // ...existing code...
+    if (document.getElementById('share-label')) {
+        document.getElementById('share-label').textContent = langData.shareLabel;
+    }
 
     updateCountdown(selectedMonth, selectedDay);
     // Force reflow to ensure RTL layout updates
@@ -306,6 +376,7 @@ const updateCharCount = () => {
 
 const toggleLanguage = () => {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
+    localStorage.setItem('selectedLanguage', currentLang);
     applyTranslations();
     generateDays(selectedMonth);
 };
@@ -435,6 +506,7 @@ elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 document.addEventListener('DOMContentLoaded', function () {
     currentLang = (navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en';
+
     setTimeout(function () {
         applyTranslations();
         generateDays(selectedMonth);
@@ -446,4 +518,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }, 100);
+    setupShareButtons();
 });
