@@ -446,7 +446,7 @@ const checkIpAndSubmit = async event => {
             elements.submitButton.disabled = false;
             elements.submitButton.textContent = langData.submitButtonText;
             setTimeout(() => {
-                window.location.href = "../hub/hub.html";
+                window.location.href = "hub/hub.html";
             }, 7000);
 
             return;
@@ -473,7 +473,7 @@ const checkIpAndSubmit = async event => {
             countdownBox.classList.add('hidden');
         }
         setTimeout(() => {
-            window.location.href = "../hub/hub.html";
+            window.location.href = "hub/hub.html";
         }, 7000);
         elements.birthdayForm.reset();
         selectedMonth = 0;
