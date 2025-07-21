@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
   <meta charset="UTF-8">
@@ -30,8 +30,8 @@
         </div>
         <!-- Navigation links -->
         <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
-          <a href="../index.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Join Now</a>
-          <a href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
+          <a href="../index.html" class="nav-main text-gray-700 font-medium" id="nav-main">Join Now</a>
+          <a href="../FAQ/FAQ.html" class="nav-faq text-gray-700 font-medium" id="nav-faq">FAQ</a>
         </nav>
         <!-- Menu icon -->
         <button id="mobileMenuBtn" class="md:hidden text-gray-700">
@@ -45,8 +45,8 @@
 
   <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
     <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-      <a href="../index.html" class="nav-link text-gray-700 font-medium py-2">Join Now</a>
-      <a href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
+      <a href="../index.html" class="nav-main text-gray-700 font-medium py-2" id="mobile-nav-main">Join Now</a>
+      <a href="../FAQ/FAQ.html" class="nav-faq text-gray-700 font-medium py-2" id="mobile-nav-faq">FAQ</a>
     </div>
   </div>
 
@@ -59,10 +59,7 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold text-gray-700" id="messages-title">All Messages</h2>
       <div class="flex space-x-2">
-        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by
-          Month</button>
-        <button id="sortLangBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by
-          Language</button>
+        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Birth month</button>
       </div>
     </div>
 
@@ -113,10 +110,13 @@
     </div>
   </main>
 
-  <a href="../index.html"
-    class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg">
-    Join Now
-  </a>
+  <div class="flex justify-center my-8">
+    <a href="../index.html"
+      class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg static relative"
+      style="position: static; bottom: auto; right: auto;">
+      Join Now
+    </a>
+  </div>
 
   <footer class="footer text-white py-8">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
@@ -133,18 +133,17 @@
       </div>
       <div class="flex flex-col items-center md:items-end" id="footer-links-col">
         <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
-          <a href="../index.html" class="hover:text-yellow-300 transition-colors" id="footer-join">Join Now</a>
+          <a href="../index.html" class="hover:text-yellow-300 transition-colors" id="footer-main">Join Now</a>
           <a href="../FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
         </div>
         <p class="text-xs" id="footer-copyright">&copy; Mohammed Bafuleh</p>
       </div>
     </div>
   </footer>
-  <!-- Add this right before the closing </body> tag -->
   <button id="toggleLangBtn" title="Toggle Language">
     <span id="langToggleText">ع</span>
   </button>
-  <script src="hub.js"></script>
+  <script src="../hub/hub.js"></script>
 </body>
 
 </html>

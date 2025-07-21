@@ -1,12 +1,12 @@
-// Initialize Firebase
 const firebaseConfig = {
     apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
     authDomain: 'birthdaymessagesapp.firebaseapp.com',
     projectId: 'birthdaymessagesapp',
-    storageBucket: 'birthdaymessagesapp.appspot.com',
+    storageBucket: 'birthdaymessagesapp.firebasestorage.app',
     messagingSenderId: '220266164498',
     appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
 };
+
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
@@ -17,6 +17,7 @@ const translations = {
         title: "Birthday Message Chain",
         description: "Heartfelt messages from people around the world",
         messagesTitle: "All Messages",
+        sortMonth: "Sort by Birth month",
         noMessagesTitle: "No messages yet",
         noMessagesDesc: "Be the first to share your birthday wishes!",
         errorTitle: "Failed to load messages",
@@ -37,6 +38,7 @@ const translations = {
         title: "سلسلة رسائل يوم الولادة",
         description: "رسائل صادقة من أشخاص حول العالم",
         messagesTitle: "جميع الرسائل",
+        sortMonth: "ترتيب حسب شهر الميلاد",
         noMessagesTitle: "لا توجد رسائل بعد",
         noMessagesDesc: "كن أول من يشارك تمنيات عيد الميلاد!",
         errorTitle: "فشل تحميل الرسائل",
@@ -75,7 +77,18 @@ function applyTranslations() {
         document.body.classList.remove('rtl');
     }
 
-    // Apply translations to all elements
+    // Header and nav
+    document.getElementById('logo-title').textContent = langData.logoTitle;
+    document.getElementById('nav-main').textContent = langData.footerJoin;
+    document.getElementById('nav-faq').textContent = langData.navFaq;
+    // Mobile menu
+    document.getElementById('mobile-nav-main').textContent = langData.footerJoin;
+    document.getElementById('mobile-nav-faq').textContent = langData.navFaq;
+
+    // Sort button
+    document.getElementById('sortMonthBtn').textContent = langData.sortMonth;
+
+    // Main content
     document.getElementById('main-title').textContent = langData.title;
     document.getElementById('main-description').textContent = langData.description;
     document.getElementById('messages-title').textContent = langData.messagesTitle;
@@ -84,16 +97,14 @@ function applyTranslations() {
     document.getElementById('error-title').textContent = langData.errorTitle;
     document.getElementById('error-desc').textContent = langData.errorDesc;
     document.getElementById('loadMoreText').textContent = langData.loadMoreText;
-    document.getElementById('logo-title').textContent = langData.logoTitle;
-    document.getElementById('nav-hub').textContent = langData.navHub;
-    document.getElementById('nav-faq').textContent = langData.navFaq;
-    document.getElementById('nav-privacy').textContent = langData.navPrivacy;
+
+    // Footer
     document.getElementById('footer-title').textContent = langData.footerTitle;
     document.getElementById('footer-desc').textContent = langData.footerDesc;
-    document.getElementById('footer-join').textContent = langData.footerJoin;
+    document.getElementById('footer-main').textContent = langData.footerJoin;
     document.getElementById('footer-faq').textContent = langData.footerFaq;
-    document.getElementById('footer-privacy').textContent = langData.footerPrivacy;
     document.getElementById('footer-copyright').innerHTML = langData.copyright;
+
     document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇸🇦' : '🇺🇸';
 }
 
@@ -104,7 +115,9 @@ function toggleLanguage() {
     applyTranslations();
 }
 
-document.getElementById('toggleLangBtn').addEventListener('click', toggleLanguage);
+document.getElementById('toggleLangBtn').addEventListener('click', function () {
+    location.reload(); // This will reload the page
+});
 
 // Mobile menu toggle
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {
@@ -119,12 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
         currentSortField = 'birthMonth';
-        currentLanguageFilter = null;
-        fetchMessages(7, true);
-    });
-
-    document.getElementById('sortLangBtn').addEventListener('click', () => {
-        currentSortField = 'language';
         currentLanguageFilter = null;
         fetchMessages(7, true);
     });
