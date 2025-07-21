@@ -115,9 +115,8 @@ function toggleLanguage() {
     applyTranslations();
 }
 
-document.getElementById('toggleLangBtn').addEventListener('click', function () {
-    location.reload(); // This will reload the page
-});
+document.getElementById('toggleLangBtn').addEventListener('click', toggleLanguage);
+
 
 // Mobile menu toggle
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {
@@ -129,7 +128,7 @@ document.getElementById('mobileMenuBtn').addEventListener('click', function () {
 document.addEventListener('DOMContentLoaded', function () {
     applyTranslations();
     fetchMessages(7);
-
+    
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
         currentSortField = 'birthMonth';
         currentLanguageFilter = null;
