@@ -145,9 +145,9 @@ const translations = {
         countdownLabel: "Your next birthday in:",
         shareLabel: "Share with friends:",
         whatsappLabel: "Share on WhatsApp",
-        navJoin: "Join Now",
+        navFAQ: "FAQ",
         navHub: "Message Hub",
-        footerJoin: "Join Now",
+        footerFAQ: "FAQ",
         footerHub: "Message Hub",
         footerTitle: "Birthday Message Chain",
         footerDesc: "Making birthdays special since 2024",
@@ -180,9 +180,9 @@ const translations = {
         countdownLabel: "يوم ميلادك القادم بعد:",
         shareLabel: "شارك مع أصدقائك:",
         whatsappLabel: "واتساب",
-        navJoin: "انضم الآن",
+        navFAQ: "الاسئلة الشائعة",
         navHub: "الرسائل",
-        footerJoin: "انضم الآن",
+        footerFAQ: "الاسئلة الشائعة",
         footerHub: "الرسائل",
         footerTitle: "سلسلة رسائل يوم الولادة",
         footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
@@ -220,11 +220,11 @@ const elements = {
     twitterBtn: document.querySelector('.flex.justify-center button:nth-child(2)'),
     redditBtn: document.querySelector('.flex.justify-center button:nth-child(3)'),
     whatsappBtn: document.getElementById('whatsapp-share'),
-    navJoin: document.getElementById('nav-join'),
+    navFAQ: document.getElementById('nav-FAQ'),
     navHub: document.getElementById('nav-hub'),
-    mobileNavJoin: document.getElementById('mobile-nav-join'),
+    mobileNavFAQ: document.getElementById('mobile-nav-FAQ'),
     mobileNavHub: document.getElementById('mobile-nav-hub'),
-    footerJoin: document.getElementById('footer-join'),
+    footerFAQ: document.getElementById('footer-FAQ'),
     footerHub: document.getElementById('footer-hub'),
     footerTitle: document.querySelector('#footer-logo-desc span'),
     footerDesc: document.querySelector('#footer-logo-desc p'),
@@ -323,13 +323,13 @@ const applyTranslations = () => {
     updateCharCount();
 
     // Header, nav, footer
-    if (elements.navJoin) elements.navJoin.textContent = langData.navJoin;
+    if (elements.navFAQ) elements.navFAQ.textContent = langData.navFAQ;
     if (elements.navHub) elements.navHub.textContent = langData.navHub;
-    if (elements.mobileNavJoin) elements.mobileNavJoin.textContent = langData.navJoin;
+    if (elements.mobileNavFAQ) elements.mobileNavFAQ.textContent = langData.navFAQ;
     if (elements.mobileNavHub) elements.mobileNavHub.textContent = langData.navHub;
 
     // Footer translations
-    if (elements.footerJoin) elements.footerJoin.textContent = langData.footerJoin;
+    if (elements.footerFAQ) elements.footerFAQ.textContent = langData.footerFAQ;
     if (elements.footerHub) elements.footerHub.textContent = langData.footerHub;
     if (elements.footerTitle) elements.footerTitle.textContent = langData.footerTitle;
     if (elements.footerDesc) elements.footerDesc.textContent = langData.footerDesc;

@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <link rel="icon" href="chain.ico" type="image/x-icon" alt="Chain link icon representing connection">
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="main/main.css">
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -29,7 +29,7 @@
 
         <!-- Desktop navigation menu (hidden on mobile) -->
         <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
-          <li><a id="nav-join" href="../index.html" class="nav-link text-gray-700 font-medium">Join Now</a></li>
+          <li><a id="nav-FAQ" href="../index.html" class="nav-link text-gray-700 font-medium">FAQ</a></li>
           <!-- Navigation link -->
           <li><a id="nav-hub" href="../hub/hub.html" class="nav-link text-gray-700 font-medium text-[#CF0820]">Message
               Hub</a></li>
@@ -50,7 +50,7 @@
   <!-- Mobile menu (hidden by default) -->
   <aside id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
     <menu class="container mx-auto px-4 py-2 space-y-3"> <!-- Stacked menu items -->
-      <li><a id="mobile-nav-join" href="../index.html" class="nav-link text-gray-700 font-medium py-2">Join Now</a></li>
+      <li><a id="mobile-nav-FAQ" href="../index.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a></li>
       <li><a id="mobile-nav-hub" href="../hub/hub.html"
           class="nav-link text-gray-700 font-medium py-2 text-[#CF0820]">Message Hub</a></li>
     </menu>
@@ -157,7 +157,7 @@
       <!-- Footer navigation links -->
       <nav class="flex flex-col items-center md:items-end" id="footer-links-col">
         <menu class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
-          <li><a id="footer-join" href="../index.html" class="hover:text-yellow-300 transition-colors">Join Now</a></li>
+          <li><a id="footer-FAQ" href="../index.html" class="hover:text-yellow-300 transition-colors">FAQ</a></li>
           <li><a id="footer-hub" href="../hub/hub.html" class="hover:text-yellow-300 transition-colors">Message Hub</a>
           </li>
         </menu>
@@ -170,7 +170,7 @@
   <button id="toggleLangBtn" title="Toggle Language" aria-label="Toggle between English and Arabic">
     <span id="langToggleText">ع</span> <!-- Arabic character for language toggle -->
   </button>
-  <script src="main.js"></script>
+  <script src="main/main.js"></script>
 
 </body>
 
