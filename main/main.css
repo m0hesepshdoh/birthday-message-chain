@@ -181,6 +181,7 @@ body {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
     border-right: 1px solid var(--primary-color);
     font-size: 16px;
 }
@@ -201,6 +202,7 @@ body {
     justify-content: center;
     font-size: 16px;
     cursor: pointer;
+    scroll-snap-align: center;
 }
 
 .wheel-item.selected {
@@ -303,6 +305,7 @@ textarea {
     margin-top: 10px;
 }
 
+
 .message-card {
     background: white;
     border-radius: 8px;
@@ -334,18 +337,19 @@ textarea {
 }
 
 [dir="rtl"] #footer-logo-desc {
-    margin-left: auto;
+    margin-left: 1.5rem;
     text-align: right;
 }
 
 [dir="rtl"] #footer-links-col {
     align-items: flex-start;
+    margin-right: 1.5rem;
     text-align: left;
-    margin-right: auto;
 }
 
 [dir="rtl"] #footer-links {
     flex-direction: row;
+    gap: 1.5rem;
 }
 
 /* Mobile view adjustments */
@@ -364,10 +368,13 @@ textarea {
         text-align: center;
         align-items: center;
         margin: 0;
+        margin-left: 0;
+        margin-right: 0;
     }
 
     #footer-links {
         justify-content: center;
+        gap: 1rem;
     }
 
     #footer-links-col {

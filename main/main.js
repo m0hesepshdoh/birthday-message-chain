@@ -22,6 +22,14 @@ function createConfetti() {
 
 
 function updateCountdown(month, day) {
+    const countdownBox = document.getElementById('countdown-container');
+
+    // Hide countdown if no valid date is provided
+    if (month === undefined || day === undefined) {
+        countdownBox.classList.add('hidden');
+        return;
+    }
+
     const now = new Date();
     let nextBirthday = new Date(now.getFullYear(), month, day);
 
@@ -35,7 +43,6 @@ function updateCountdown(month, day) {
     const langData = translations[currentLang];
     const dayLabel = days === 1 ? langData.day : langData.days;
 
-    const countdownBox = document.getElementById('countdown-container');
     if (days === 0) {
         countdownBox.classList.add('hidden');
     } else {
@@ -217,6 +224,7 @@ const elements = {
     emailError: document.getElementById('email-error'),
     messageError: document.getElementById('message-error'),
     ipBlockError: document.getElementById('ip-block-error'),
+    shareLabel: document.getElementById('share-label'),
     countdownLabel: document.querySelector('#countdown-container p.text-sm'),
     shareLabel: document.querySelector('.mt-6.text-center p.text-sm'),
     facebookBtn: document.querySelector('.flex.justify-center button:nth-child(1)'),
@@ -225,12 +233,9 @@ const elements = {
     logoTitle: document.getElementById('logo-title'),
     navHub: document.getElementById('nav-hub'),
     navFaq: document.getElementById('nav-faq'),
-    navPrivacy: document.getElementById('nav-privacy'),
     footerTitle: document.getElementById('footer-title'),
     footerDesc: document.getElementById('footer-desc'),
-    footerJoin: document.getElementById('footer-join'),
     footerHub: document.getElementById('footer-hub'),
-    footerPrivacy: document.getElementById('footer-privacy'),
     footerFaq: document.getElementById('footer-faq')
 };
 
@@ -246,6 +251,7 @@ elements.email.addEventListener('input', () => {
 
 const populateWheel = (wheel, items, selectedIndex = 0) => {
     wheel.innerHTML = '';
+    wheel.dataset.initialized = "true"; // Mark as initialized
     const fragment = document.createDocumentFragment();
     items.forEach((item, index) => {
         const itemElement = document.createElement('div');
@@ -253,6 +259,7 @@ const populateWheel = (wheel, items, selectedIndex = 0) => {
         itemElement.textContent = item;
         itemElement.dataset.index = index;
         itemElement.addEventListener('click', () => {
+            wheel.dataset.initialized = "false"; // Mark as user-interacted
             handleItemClick(wheel, index);
             itemElement.scrollIntoView({
                 behavior: 'smooth',
@@ -288,7 +295,9 @@ const handleItemClick = function (wheel, index) {
         selectedDay = index + 1;
     }
     updateSelectedDate();
-    updateCountdown(selectedMonth, selectedDay);
+    if (wheel.dataset.initialized !== "true") {
+        updateCountdown(selectedMonth, selectedDay);
+    }
 };
 
 const updateSelectedDate = () => {
@@ -342,7 +351,7 @@ const applyTranslations = () => {
     });
     if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
-    
+
     if (document.getElementById('whatsapp-share')) {
         document.getElementById('whatsapp-share').title = langData.whatsappLabel;
         document.getElementById('whatsapp-share').querySelector('.tooltip').textContent = langData.whatsappLabel;
@@ -493,19 +502,66 @@ const checkIpAndSubmit = async event => {
 };
 elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
+
 document.addEventListener('DOMContentLoaded', function () {
     currentLang = (navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en';
+    document.getElementById('countdown-container').classList.add('hidden');
 
     setTimeout(function () {
         applyTranslations();
         generateDays(selectedMonth);
-        var wheelItems = document.querySelectorAll('.wheel-item');
-        for (var i = 0; i < wheelItems.length; i++) {
-            wheelItems[i].addEventListener('touchstart', function (e) {
+        updateCharCount();
+
+        // Improved touch handling for wheel scrolling
+        const wheels = document.querySelectorAll('.wheel');
+        wheels.forEach(wheel => {
+            wheel.dataset.initialized = "true";
+
+            let startY, scrollTop;
+            let isScrolling = false;
+            let scrollTimeout;
+
+            wheel.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].pageY - wheel.offsetTop;
+                scrollTop = wheel.scrollTop;
+                isScrolling = true;
+                clearTimeout(scrollTimeout);
+            }, { passive: false });
+
+            wheel.addEventListener('touchmove', (e) => {
+                if (!isScrolling) return;
                 e.preventDefault();
+                const y = e.touches[0].pageY - wheel.offsetTop;
+                const walk = (y - startY) * 2;
+                wheel.scrollTop = scrollTop - walk;
+            }, { passive: false });
+
+            wheel.addEventListener('touchend', () => {
+                isScrolling = false;
+                scrollTimeout = setTimeout(() => {
+                    const items = wheel.querySelectorAll('.wheel-item');
+                    const itemHeight = items[0]?.offsetHeight || 40;
+                    const scrollPosition = wheel.scrollTop;
+                    const centerIndex = Math.round(scrollPosition / itemHeight);
+
+                    if (items[centerIndex]) {
+                        handleItemClick(wheel, parseInt(items[centerIndex].dataset.index));
+                        items[centerIndex].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                }, 200);
+            });
+        });
+
+        // Click/tap selection for wheel items
+        document.querySelectorAll('.wheel-item').forEach(item => {
+            item.addEventListener('click', function () {
                 handleItemClick(this.parentNode, parseInt(this.dataset.index));
             });
-        }
+        });
+
     }, 100);
     setupShareButtons();
 });
