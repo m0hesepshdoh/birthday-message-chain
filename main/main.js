@@ -144,19 +144,14 @@ const translations = {
         ipBlockedError: "You have exceeded the maximum submission attempts.",
         countdownLabel: "Your next birthday in:",
         shareLabel: "Share with friends:",
-        facebookLabel: "Share on Facebook",
-        twitterLabel: "Share on Twitter",
         whatsappLabel: "Share on WhatsApp",
-        logoTitle: "Chain",
+        navJoin: "Join Now",
         navHub: "Message Hub",
-        navFaq: "FAQ",
-        navPrivacy: "Privacy",
-        footerTitle: "Birthday Message Chain",
-        footerDesc: "Making birthdays special since 2024",
         footerJoin: "Join Now",
         footerHub: "Message Hub",
-        footerPrivacy: "Privacy",
-        footerFaq: "FAQ",
+        footerTitle: "Birthday Message Chain",
+        footerDesc: "Making birthdays special since 2024",
+        logoTitle: "Chain",
         days: "days",
         day: "day",
         copyright: "&copy; Mohammed Bafuleh"
@@ -184,19 +179,14 @@ const translations = {
         ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني",
         countdownLabel: "يوم ميلادك القادم بعد:",
         shareLabel: "شارك مع أصدقائك:",
-        facebookLabel: "فيسبوك",
-        twitterLabel: "تويتر",
         whatsappLabel: "واتساب",
-        logoTitle: "سلسلة",
+        navJoin: "انضم الآن",
         navHub: "الرسائل",
-        navFaq: "الأسئلة الشائعة",
-        navPrivacy: "الخصوصية",
-        footerTitle: "سلسلة رسائل يوم الولادة",
-        footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
         footerJoin: "انضم الآن",
         footerHub: "الرسائل",
-        footerPrivacy: "الخصوصية",
-        footerFaq: "الأسئلة الشائعة",
+        footerTitle: "سلسلة رسائل يوم الولادة",
+        footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
+        logoTitle: "سلسلة",
         days: "يوم",
         day: "أيام",
         copyright: "&copy; محمد بافليح"
@@ -223,20 +213,22 @@ const elements = {
     messageLabel: document.getElementById('message-label'),
     emailError: document.getElementById('email-error'),
     messageError: document.getElementById('message-error'),
-    ipBlockError: document.getElementById('ip-block-error'),
+    ipBlockError: document.getElementById('ipblockerror'),
     shareLabel: document.getElementById('share-label'),
     countdownLabel: document.querySelector('#countdown-container p.text-sm'),
-    shareLabel: document.querySelector('.mt-6.text-center p.text-sm'),
     facebookBtn: document.querySelector('.flex.justify-center button:nth-child(1)'),
     twitterBtn: document.querySelector('.flex.justify-center button:nth-child(2)'),
     redditBtn: document.querySelector('.flex.justify-center button:nth-child(3)'),
-    logoTitle: document.getElementById('logo-title'),
+    whatsappBtn: document.getElementById('whatsapp-share'),
+    navJoin: document.getElementById('nav-join'),
     navHub: document.getElementById('nav-hub'),
-    navFaq: document.getElementById('nav-faq'),
-    footerTitle: document.getElementById('footer-title'),
-    footerDesc: document.getElementById('footer-desc'),
+    mobileNavJoin: document.getElementById('mobile-nav-join'),
+    mobileNavHub: document.getElementById('mobile-nav-hub'),
+    footerJoin: document.getElementById('footer-join'),
     footerHub: document.getElementById('footer-hub'),
-    footerFaq: document.getElementById('footer-faq')
+    footerTitle: document.querySelector('#footer-logo-desc span'),
+    footerDesc: document.querySelector('#footer-logo-desc p'),
+    logoTitle: document.getElementById('logo-title')
 };
 
 const blockedEmail = "ug671431015@ftu.ac.th";
@@ -305,6 +297,7 @@ const updateSelectedDate = () => {
 };
 
 const applyTranslations = () => {
+    const langText = document.getElementById('langToggleText');
     const langData = translations[currentLang];
     const isRTL = currentLang === 'ar';
     document.documentElement.lang = currentLang;
@@ -324,22 +317,25 @@ const applyTranslations = () => {
     elements.messageLabel.textContent = langData.messageLabel;
     elements.message.placeholder = langData.messagePlaceholder;
     elements.submitButton.textContent = langData.submitButtonText;
-    elements.toggleLangBtn.textContent = isRTL ? "🇺🇸" : "🇸🇦";
+    elements.toggleLangBtn.textContent = isRTL ? "🌍" : "🇵🇸";
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
     updateCharCount();
 
     // Header, nav, footer
-    if (elements.logoTitle) elements.logoTitle.textContent = langData.logoTitle;
+    if (elements.navJoin) elements.navJoin.textContent = langData.navJoin;
     if (elements.navHub) elements.navHub.textContent = langData.navHub;
-    if (elements.navFaq) elements.navFaq.textContent = langData.navFaq;
-    if (elements.navPrivacy) elements.navPrivacy.textContent = langData.navPrivacy;
-    if (elements.footerTitle) elements.footerTitle.textContent = langData.footerTitle;
-    if (elements.footerDesc) elements.footerDesc.textContent = langData.footerDesc;
+    if (elements.mobileNavJoin) elements.mobileNavJoin.textContent = langData.navJoin;
+    if (elements.mobileNavHub) elements.mobileNavHub.textContent = langData.navHub;
+
+    // Footer translations
     if (elements.footerJoin) elements.footerJoin.textContent = langData.footerJoin;
     if (elements.footerHub) elements.footerHub.textContent = langData.footerHub;
-    if (elements.footerPrivacy) elements.footerPrivacy.textContent = langData.footerPrivacy;
-    if (elements.footerFaq) elements.footerFaq.textContent = langData.footerFaq;
+    if (elements.footerTitle) elements.footerTitle.textContent = langData.footerTitle;
+    if (elements.footerDesc) elements.footerDesc.textContent = langData.footerDesc;
+
+    // Logo translation
+    if (elements.logoTitle) elements.logoTitle.textContent = langData.logoTitle;
     if (document.getElementById('footer-copyright')) {
         document.getElementById('footer-copyright').innerHTML = langData.copyright;
     }
@@ -351,7 +347,6 @@ const applyTranslations = () => {
     });
     if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
-
     if (document.getElementById('whatsapp-share')) {
         document.getElementById('whatsapp-share').title = langData.whatsappLabel;
         document.getElementById('whatsapp-share').querySelector('.tooltip').textContent = langData.whatsappLabel;
@@ -377,9 +372,14 @@ const toggleLanguage = () => {
     localStorage.setItem('selectedLanguage', currentLang);
     applyTranslations();
     generateDays(selectedMonth);
+    langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
 };
 
-elements.message.addEventListener('input', updateCharCount);
+elements.message.addEventListener('input', function () {
+    updateCharCount();
+    // Ensure the count updates even if the event doesn't fire properly
+    requestAnimationFrame(updateCharCount);
+});
 const validateEmail = email => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu.ac|outlook)\.(com|co\.uk|th|ca|de|fr|net|org|[a-z]{2,}))$/i.test(String(email).toLowerCase());
 
 const getIpAddress = function () {
@@ -417,7 +417,10 @@ const getIpAddress = function () {
 const checkIpAndSubmit = async event => {
     event.preventDefault();
     [elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => el.style.display = 'none');
-    [elements.emailError, elements.messageError].forEach(el => el.textContent = "");
+    [elements.emailError, elements.messageError].forEach(el => {
+        el.textContent = "";
+        el.style.display = 'none';
+    });
     elements.submitButton.disabled = true;
     elements.submitButton.textContent = translations[currentLang].submitButtonJoining;
     const email = elements.email.value.trim();
@@ -504,11 +507,14 @@ elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 
 document.addEventListener('DOMContentLoaded', function () {
-    currentLang = (navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en';
+    currentLang = localStorage.getItem('selectedLanguage') ||
+        ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
+
     document.getElementById('countdown-container').classList.add('hidden');
 
     setTimeout(function () {
         applyTranslations();
+        updateCountdown(selectedMonth, selectedDay);
         generateDays(selectedMonth);
         updateCharCount();
 
@@ -522,22 +528,24 @@ document.addEventListener('DOMContentLoaded', function () {
             let scrollTimeout;
 
             wheel.addEventListener('touchstart', (e) => {
-                startY = e.touches[0].pageY - wheel.offsetTop;
+                startY = e.touches[0].pageY;
                 scrollTop = wheel.scrollTop;
                 isScrolling = true;
                 clearTimeout(scrollTimeout);
+                wheel.style.scrollSnapType = 'none';
             }, { passive: false });
 
             wheel.addEventListener('touchmove', (e) => {
                 if (!isScrolling) return;
                 e.preventDefault();
-                const y = e.touches[0].pageY - wheel.offsetTop;
+                const y = e.touches[0].pageY;
                 const walk = (y - startY) * 2;
                 wheel.scrollTop = scrollTop - walk;
             }, { passive: false });
 
             wheel.addEventListener('touchend', () => {
                 isScrolling = false;
+                wheel.style.scrollSnapType = 'y mandatory';
                 scrollTimeout = setTimeout(() => {
                     const items = wheel.querySelectorAll('.wheel-item');
                     const itemHeight = items[0]?.offsetHeight || 40;
@@ -551,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             block: 'center'
                         });
                     }
-                }, 200);
+                }, 100);
             });
         });
 

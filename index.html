@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Birthday message Chain</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
@@ -12,48 +12,49 @@
   <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <link rel="icon" href="chain.ico" type="image/x-icon">
-  <link rel="stylesheet" href="main/main.css">
+  <link rel="icon" href="chain.ico" type="image/x-icon" alt="Chain link icon representing connection">
+  <link rel="stylesheet" href="main.css">
 </head>
 
-<body class="flex flex-col min-h-screen">
-
+<body class="bg-gray-50 min-h-screen flex flex-col">
   <header class="bg-white shadow-sm">
-    <div class="container mx-auto px-4 py-3">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center space-x-2 rtl:space-x-reverse">
-          <!-- Logo and title -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h1 class="logo text-2xl font-bold" id="logo-title">Chain</h1>
-        </div>
+    <section class="container mx-auto px-4 py-3"> <!-- Container with padding -->
+      <nav class="flex justify-between items-center"> <!-- Flex navigation bar -->
+        <!-- Logo section -->
+        <figure class="flex items-center space-x-2 rtl:space-x-reverse">
+          <img src="../img/chain.png" alt="Yellow chain link logo representing connection" class="h-8 w-8">
+          <!-- Logo image -->
+          <figcaption class="logo text-2xl" id="logo-title">Chain</figcaption> <!-- Logo text -->
+        </figure>
 
-        <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
-          <!-- Navigation links -->
-          <a href="hub/hub.html" class="nav-link text-gray-700 font-medium" id="nav-hub">Message Hub</a>
-          <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium" id="nav-faq">FAQ</a>
-        </nav>
+        <!-- Desktop navigation menu (hidden on mobile) -->
+        <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
+          <li><a id="nav-join" href="../index.html" class="nav-link text-gray-700 font-medium">Join Now</a></li>
+          <!-- Navigation link -->
+          <li><a id="nav-hub" href="../hub/hub.html" class="nav-link text-gray-700 font-medium text-[#CF0820]">Message
+              Hub</a></li>
+          <!-- Active link with red color -->
+        </menu>
 
-        <button id="mobileMenuBtn" class="md:hidden text-gray-700">
-          <!-- Menu icon -->
+        <!-- Mobile menu button (visible only on small screens) -->
+        <button id="mobileMenuBtn" class="md:hidden text-gray-700" aria-label="Toggle mobile menu">
+          <!-- Hamburger menu icon -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-      </div>
-    </div>
+      </nav>
+    </section>
   </header>
 
-
-  <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
-    <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
-      <a href="hub/hub.html" class="nav-link text-gray-700 font-medium py-2">Message Hub</a>
-      <a href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a>
-    </div>
-  </div>
+  <!-- Mobile menu (hidden by default) -->
+  <aside id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
+    <menu class="container mx-auto px-4 py-2 space-y-3"> <!-- Stacked menu items -->
+      <li><a id="mobile-nav-join" href="../index.html" class="nav-link text-gray-700 font-medium py-2">Join Now</a></li>
+      <li><a id="mobile-nav-hub" href="../hub/hub.html"
+          class="nav-link text-gray-700 font-medium py-2 text-[#CF0820]">Message Hub</a></li>
+    </menu>
+  </aside>
 
   <main class="flex-grow container mx-auto px-4 py-8">
     <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto">
@@ -106,14 +107,14 @@
             the Birthday Chain</button>
           <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
           <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
-          <div id="ip-block-error" class="text-red-500 text-center mt-4 hidden"></div>
+          <div id="ipblockerror" class="text-red-500 text-center mt-4 hidden"></div>
         </form>
 
         <p id="share-label" class="text-sm text-center mt-6 mb-2"></p>
         <div class="share-buttons-container flex justify-center space-x-4 rtl:space-x-reverse mb-6" id="share-buttons">
           <!-- Copy Link Button -->
           <button class="share-button bg-gray-600 hover:bg-gray-800 text-white p-2 rounded-full" id="copy-link-share"
-            title="Copy Link">
+            title="Copy Link" aria-label="Copy link to share">
             <!-- Copy icon SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -124,7 +125,7 @@
           </button>
           <!-- WhatsApp -->
           <button class="share-button whatsapp-share bg-green-500 hover:bg-green-600 text-white p-2 rounded-full"
-            id="whatsapp-share" title="Share on WhatsApp">
+            id="whatsapp-share" title="Share on WhatsApp" aria-label="Share on WhatsApp">
             <svg height="20px" width="20px" version="1.1" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 58 58" xml:space="preserve">
               <g>
@@ -141,36 +142,35 @@
     </div>
   </main>
 
-  <footer class="footer text-white py-8">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
-      <!-- Links and copyright -->
-      <div class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
-        <!-- Logo content -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <div>
-          <span class="font-bold text-lg" id="footer-title">Birthday Message Chain</span>
-          <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>
-        </div>
-      </div>
-      <!-- Links and copyright -->
-      <div class="flex flex-col items-center md:items-end" id="footer-links-col">
-        <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
-          <!-- Footer links -->
-          <a href="hub/hub.html" class="hover:text-yellow-300 transition-colors" id="footer-hub">Message Hub</a>
-          <a href="FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors" id="footer-faq">FAQ</a>
-        </div>
-        <p class="text-xs" id="footer-copyright">&copy; Mohammed Bafuleh</p>
-      </div>
-    </div>
+  <!-- Footer section -->
+  <footer class="footer text-white py-8 w-full">
+    <section class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+      <!-- Footer logo and description -->
+      <figure class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
+        <img src="../img/chainF.png" alt="Yellow chain link logo in footer section" class="h-6 w-6">
+        <!-- Footer logo -->
+        <figcaption>
+          <span class="font-bold text-lg">Birthday Message Chain</span> <!-- Project name -->
+          <p class="text-sm mt-2">Making birthdays special since 2024</p> <!-- Tagline -->
+        </figcaption>
+      </figure>
+      <!-- Footer navigation links -->
+      <nav class="flex flex-col items-center md:items-end" id="footer-links-col">
+        <menu class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
+          <li><a id="footer-join" href="../index.html" class="hover:text-yellow-300 transition-colors">Join Now</a></li>
+          <li><a id="footer-hub" href="../hub/hub.html" class="hover:text-yellow-300 transition-colors">Message Hub</a>
+          </li>
+        </menu>
+        <p id="footer-copyright" class="text-xs">&copy; Mohammed Bafuleh</p> <!-- Copyright notice -->
+      </nav>
+    </section>
   </footer>
-  <button id="toggleLangBtn" title="Toggle Language">
-    <span id="langToggleText">ع</span>
+
+  <!-- Language toggle button -->
+  <button id="toggleLangBtn" title="Toggle Language" aria-label="Toggle between English and Arabic">
+    <span id="langToggleText">ع</span> <!-- Arabic character for language toggle -->
   </button>
-  <script src="main/main.js"></script>
+  <script src="main.js"></script>
 
 </body>
 
