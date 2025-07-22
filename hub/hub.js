@@ -24,15 +24,13 @@ const translations = {
         errorDesc: "Please try refreshing the page",
         loadMoreText: "Load More Messages",
         logoTitle: "Chain",
-        navHub: "Home",
+        navJoin: "Join Now",
         navFaq: "FAQ",
-        navPrivacy: "Privacy",
         footerTitle: "Birthday Message Chain",
         footerDesc: "Making birthdays special since 2024",
         footerJoin: "Join Now",
         footerFaq: "FAQ",
-        footerPrivacy: "Privacy",
-        copyright: "&copy; Mohammed Bafuleh"
+        copyright: "© Mohammed Bafuleh"
     },
     ar: {
         title: "سلسلة رسائل يوم الولادة",
@@ -45,15 +43,13 @@ const translations = {
         errorDesc: "يرجى محاولة تحديث الصفحة",
         loadMoreText: "تحميل المزيد من الرسائل",
         logoTitle: "سلسلة",
-        navHub: "الصفحة الرئيسية",
+        navJoin: "انضم الآن",
         navFaq: "الأسئلة الشائعة",
-        navPrivacy: "الخصوصية",
         footerTitle: "سلسلة رسائل يوم الولادة",
         footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
         footerJoin: "انضم الآن",
         footerFaq: "الأسئلة الشائعة",
-        footerPrivacy: "الخصوصية",
-        copyright: "&copy; محمد بافليح"
+        copyright: "© محمد بافليح"
     }
 };
 
@@ -79,10 +75,10 @@ function applyTranslations() {
 
     // Header and nav
     document.getElementById('logo-title').textContent = langData.logoTitle;
-    document.getElementById('nav-main').textContent = langData.footerJoin;
+    document.getElementById('nav-main').textContent = langData.navJoin;
     document.getElementById('nav-faq').textContent = langData.navFaq;
     // Mobile menu
-    document.getElementById('mobile-nav-main').textContent = langData.footerJoin;
+    document.getElementById('mobile-nav-main').textContent = langData.navJoin;
     document.getElementById('mobile-nav-faq').textContent = langData.navFaq;
 
     // Sort button
@@ -128,7 +124,7 @@ document.getElementById('mobileMenuBtn').addEventListener('click', function () {
 document.addEventListener('DOMContentLoaded', function () {
     applyTranslations();
     fetchMessages(7);
-    
+
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
         currentSortField = 'birthMonth';
         currentLanguageFilter = null;

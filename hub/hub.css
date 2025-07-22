@@ -70,7 +70,7 @@ body {
     background: linear-gradient(to right, #CF0820, #9d0618);
 }
 
-/* Navigation styles */
+/* Navigation styles
 .nav-link {
     position: relative;
     transition: all 0.3s ease;
@@ -95,14 +95,14 @@ body {
     width: 100%;
 }
 
-.current-page {
+/*.current-page {
     color: var(--primary-color);
     font-weight: bold;
 }
 
 .current-page::after {
     width: 100%;
-}
+}*/
 
 /* Floating language toggle button */
 #toggleLangBtn {
