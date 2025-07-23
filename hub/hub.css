@@ -3,22 +3,34 @@ body {
     --primary-color: #CF0820;
     --background-color: #FFFFFF;
 }
+
 @font-face {
-    font-family: 'MyFont'; /* Name the font family */
-    src: url('../font/Franklin Gothic.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont';
+    /* Name the font family */
+    src: url('../font/Franklin Gothic.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
 
 /* Define a custom font face for Arabic text */
 @font-face {
-    font-family: 'MyFont2'; /* Name the font family */
-    src: url('../font/KSAHeading.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont2';
+    /* Name the font family */
+    src: url('../font/KSAHeading.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
+
 [dir="rtl"] body {
     font-family: 'Cairo', sans-serif;
 }
@@ -65,15 +77,18 @@ body {
     text-align: center;
     animation: pulse 2s infinite;
 }
+
 @keyframes pulse {
     0% {
         transform: translateX(-50%) scale(1);
         box-shadow: 0 0 0 0 rgba(207, 8, 32, 0.7);
     }
+
     70% {
         transform: translateX(-50%) scale(1.05);
         box-shadow: 0 0 0 10px rgba(207, 8, 32, 0);
     }
+
     100% {
         transform: translateX(-50%) scale(1);
         box-shadow: 0 0 0 0 rgba(207, 8, 32, 0);
@@ -92,8 +107,8 @@ body {
 
 /* Logo styles */
 .logo {
-    font-family: 'MyFont', 'Comic Neue', cursive; /* Font stack */
-    background: linear-gradient(45deg, #CF0820, #FF6B6B, #FFD700);
+    font-family: 'MyFont', 'Comic Neue', cursive;
+    background: linear-gradient(45deg, #FFD700, #CF0820);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -102,13 +117,15 @@ body {
 
 /* Arabic version of logo */
 [dir="rtl"] .logo {
-    font-family: 'MyFont2', 'Cairo', sans-serif; /* Arabic font stack */
+    font-family: 'MyFont2', 'Cairo', sans-serif;
+    /* Arabic font stack */
 }
 
 /* Footer styles */
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);
-    z-index: 200; /* Higher than other elements */
+    z-index: 200;
+    /* Higher than other elements */
 }
 
 /* Floating language toggle button */
