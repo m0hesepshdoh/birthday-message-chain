@@ -4,7 +4,22 @@
     --background-color: #FFFFFF;
     --accent-color: #FFD700;
 }
+@font-face {
+    font-family: 'MyFont'; /* Name the font family */
+    src: url('../font/Franklin Gothic.ttf') format('truetype'); /* Path to font file */
+    font-weight: normal; /* Normal weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Ensure text remains visible during font load */
+}
 
+/* Define a custom font face for Arabic text */
+@font-face {
+    font-family: 'MyFont2'; /* Name the font family */
+    src: url('../font/KSAHeading.ttf') format('truetype'); /* Path to font file */
+    font-weight: normal; /* Normal weight */
+    font-style: normal; /* Normal style */
+    font-display: swap; /* Ensure text remains visible during font load */
+}
 body {
     font-family: 'Inter', sans-serif;
     background-color: #FFF5F5;
