@@ -459,7 +459,7 @@ const checkIpAndSubmit = async event => {
             elements.submitButton.textContent = langData.submitButtonText;
             setTimeout(() => {
                 window.location.href = "hub/hub.html";
-            }, 7000);
+            }, 10000);
 
             return;
         }
@@ -486,7 +486,7 @@ const checkIpAndSubmit = async event => {
         }
         setTimeout(() => {
             window.location.href = "hub/hub.html";
-        }, 7000);
+        }, 10000);
         elements.birthdayForm.reset();
         selectedMonth = 0;
         selectedDay = 1;
