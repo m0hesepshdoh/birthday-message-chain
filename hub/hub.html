@@ -11,7 +11,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-  <link rel="icon" href="../chain.ico" type="image/x-icon">
+  <link rel="icon" href="../img/chain.ico" type="image/x-icon">
   <link rel="stylesheet" href="hub.css">
 </head>
 
@@ -21,12 +21,8 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-2 rtl:space-x-reverse">
           <!-- Logo and title -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h1 class="logo text-2xl font-bold" id="logo-title">Chain</h1>
+          <img src="../img/chain.png" alt="Yellow Chain Logo" class="h-8 w-8"> <!-- Logo image -->
+          <h1 class="logo text-2xl" id="logo-title">Chain</h1>
         </div>
         <!-- Navigation links -->
         <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
@@ -59,7 +55,7 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold text-gray-700" id="messages-title">All Messages</h2>
       <div class="flex space-x-2">
-        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Birth month</button>
+        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Birthday</button>
       </div>
     </div>
 
@@ -111,21 +107,16 @@
   </main>
 
   <div class="flex justify-center my-8">
-    <a href="../index.html"
-      class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg static relative"
-      style="position: static; bottom: auto; right: auto;">
-      Join Now
+    <a href="../index.html" id="joinNowBtn"
+      class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg">
+      <span id="joinNowText">Join Now</span>
     </a>
   </div>
 
   <footer class="footer text-white py-8">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
       <div class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+        <img src="../img/chainF.png" alt="Yellow Chain Logo" class="h-6 w-6"> <!-- Footer logo -->
         <div>
           <span class="font-bold text-lg" id="footer-title">Birthday Message Chain</span>
           <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>

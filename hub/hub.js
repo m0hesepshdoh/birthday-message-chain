@@ -17,7 +17,7 @@ const translations = {
         title: "Birthday Message Chain",
         description: "Heartfelt messages from people around the world",
         messagesTitle: "All Messages",
-        sortMonth: "Sort by Birth month",
+        sortMonth: "Sort by Birthday",
         noMessagesTitle: "No messages yet",
         noMessagesDesc: "Be the first to share your birthday wishes!",
         errorTitle: "Failed to load messages",
@@ -30,13 +30,15 @@ const translations = {
         footerDesc: "Making birthdays special since 2024",
         footerJoin: "Join Now",
         footerFaq: "FAQ",
-        copyright: "© Mohammed Bafuleh"
+        copyright: "© Mohammed Bafuleh",
+        joinNowButton: "Join Now"
+
     },
     ar: {
         title: "سلسلة رسائل يوم الولادة",
         description: "رسائل صادقة من أشخاص حول العالم",
         messagesTitle: "جميع الرسائل",
-        sortMonth: "ترتيب حسب شهر الميلاد",
+        sortMonth: "ترتيب حسب يوم الولادة",
         noMessagesTitle: "لا توجد رسائل بعد",
         noMessagesDesc: "كن أول من يشارك تمنيات عيد الميلاد!",
         errorTitle: "فشل تحميل الرسائل",
@@ -49,7 +51,8 @@ const translations = {
         footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
         footerJoin: "انضم الآن",
         footerFaq: "الأسئلة الشائعة",
-        copyright: "© محمد بافليح"
+        copyright: "© محمد بافليح",
+        joinNowButton: "انضم الآن"
     }
 };
 
@@ -81,6 +84,9 @@ function applyTranslations() {
     document.getElementById('mobile-nav-main').textContent = langData.navJoin;
     document.getElementById('mobile-nav-faq').textContent = langData.navFaq;
 
+    //floating button
+    document.getElementById('joinNowBtn').textContent = langData.joinNowButton;
+
     // Sort button
     document.getElementById('sortMonthBtn').textContent = langData.sortMonth;
 
@@ -101,7 +107,7 @@ function applyTranslations() {
     document.getElementById('footer-faq').textContent = langData.footerFaq;
     document.getElementById('footer-copyright').innerHTML = langData.copyright;
 
-    document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇸🇦' : '🇺🇸';
+    document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
 }
 
 // Toggle language
@@ -126,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchMessages(7);
 
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
-        currentSortField = 'birthMonth';
+        currentSortField = 'birthDay';
         currentLanguageFilter = null;
         fetchMessages(7, true);
     });
@@ -228,7 +234,7 @@ function fetchMessages(limit = 7, reset = false) {
                 loadMoreSpinner.classList.add('hidden');
                 loadMoreBtn.disabled = false;
             });
-    }, 2000); // 2 second delay
+    }, 2300); // 2 second delay
 }
 
 function addMessageToDOM(msg) {
