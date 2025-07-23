@@ -28,6 +28,7 @@ let currentLang = localStorage.getItem('selectedLanguage') || 'en';
 async function translatePage() {
     // Only translate if language is Arabic
     if (currentLang !== 'ar') return;
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // Check if we've already translated (prevent duplicate calls)
     if (document.documentElement.classList.contains('translated')) return;
@@ -41,40 +42,39 @@ async function translatePage() {
         { selector: 'header.text-center p', text: 'Find answers to common questions about the Birthday Message Chain' },
         { selector: 'header.text-center a', text: 'Back To Join' },
         { selector: '.logo', text: 'Chain' },
-        { selector: 'nav a:nth-child(1)', text: 'Join Now' },
-        { selector: 'nav a:nth-child(2)', text: 'Message Hub' },
-        { selector: '#mobileMenu a:nth-child(1)', text: 'Join Now' },
-        { selector: '#mobileMenu a:nth-child(2)', text: 'Message Hub' },
+        { selector: 'nav.flex.justify-between.items-center a[href="../index.html"]', text: 'Join Now' },
+        { selector: 'nav.flex.justify-between.items-center a[href="../hub/hub.html"]', text: 'Message Hub' },
+        { selector: '#mobileMenu a[href="../index.html"]', text: 'Join Now' },
+        { selector: '#mobileMenu a[href="../hub/hub.html"]', text: 'Message Hub' },
 
         // FAQ items
-        { selector: '.faq-item:nth-child(1) h3', text: 'What is the Birthday Message Chain?' },
-        { selector: '.faq-item:nth-child(1) p', text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!' },
+        { selector: '.faq-item:nth-child(1) h2', text: 'What is the Birthday Message Chain?' },
+        { selector: '.faq-item:nth-child(1) .faq-answer p', text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!' },
 
-        { selector: '.faq-item:nth-child(2) h3', text: 'How does it work?' },
-        { selector: '.faq-item:nth-child(2) p', text: '1. Submit your birthday and a heartfelt message<br>2. Your message gets added to our database<br>3. On your birthday, we\'ll email you a random message from another participant<br>4. Your message will be shared with someone else on their birthday' },
+        { selector: '.faq-item:nth-child(2) h2', text: 'How does it work?' },
+        { selector: '.faq-item:nth-child(2) .faq-answer', text: '1. Submit your birthday and a heartfelt message\n2. Your message gets added to our database\n3. On your birthday, we\'ll email you a random message from another participant\n4. Your message will be shared with someone else on their birthday' },
 
-        { selector: '.faq-item:nth-child(3) h3', text: 'Is my personal information safe?' },
-        { selector: '.faq-item:nth-child(3) p', text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.' },
+        { selector: '.faq-item:nth-child(3) h2', text: 'Is my personal information safe?' },
+        { selector: '.faq-item:nth-child(3) .faq-answer p', text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.' },
 
-        { selector: '.faq-item:nth-child(4) h3', text: 'Can I submit multiple messages?' },
-        { selector: '.faq-item:nth-child(4) p', text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.' },
+        { selector: '.faq-item:nth-child(4) h2', text: 'Can I submit multiple messages?' },
+        { selector: '.faq-item:nth-child(4) .faq-answer p', text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.' },
 
-        { selector: '.faq-item:nth-child(5) h3', text: 'What should I write in my message?' },
-        { selector: '.faq-item:nth-child(5) p', text: 'Write something kind, uplifting, and birthday-appropriate! Some ideas:<br>- "May your birthday be as wonderful as you are!"<br>- "Wishing you a year filled with joy and success!"<br>- "Hope your special day is as amazing as you deserve!"<br>Keep it positive and under 100 characters.' },
+        { selector: '.faq-item:nth-child(5) h2', text: 'What should I write in my message?' },
+        { selector: '.faq-item:nth-child(5) .faq-answer p', text: 'Write something kind, uplifting, and birthday-appropriate! Some ideas:\n- "May your birthday be as wonderful as you are!"\n- "Wishing you a year filled with joy and success!"\n- "Hope your special day is as amazing as you deserve!"\nKeep it positive and under 100 characters.' },
 
-        { selector: '.faq-item:nth-child(6) h3', text: 'Can I delete my message later?' },
-        { selector: '.faq-item:nth-child(6) p', text: 'Yes! If you\'d like to remove your message from the chain, simply email us at <a href="mailto:ug671431015@ftu.ac.th" class="text-[#CF0820] hover:underline">ug671431015@ftu.ac.th</a> from the address you used to submit and we\'ll remove your entry.' },
-
+        { selector: '.faq-item:nth-child(6) h2', text: 'Can I delete my message later?' },
+        { selector: '.faq-item:nth-child(6) .faq-answer p', text: 'Yes! If you\'d like to remove your message from the chain, simply email us at ug671431015@ftu.ac.th from the address you used to submit and we\'ll remove your entry.' },
         // Contact section
         { selector: '.mt-12.text-center h3', text: 'Still have questions?' },
         { selector: '.mt-12.text-center p', text: 'We\'re happy to help! Contact our support team.' },
         { selector: '.mt-12.text-center a', text: 'Email Support' },
 
         // Footer
+        { selector: '#footer-links a[href="../index.html"]', text: 'Join Now' },
+        { selector: '#footer-links a[href="../hub/hub.html"]', text: 'Message Hub' },
         { selector: '#footer-logo-desc span', text: 'Birthday Message Chain' },
-        { selector: '#footer-logo-desc p', text: 'Making birthdays special since 2024' },
-        { selector: '#footer-links a:nth-child(1)', text: 'Join Now' },
-        { selector: '#footer-links a:nth-child(2)', text: 'Message Hub' },
+        { selector: '#footer-logo-desc p', text: 'Making birthdays special since 2024' }
     ];
 
     // Translate each element in the array

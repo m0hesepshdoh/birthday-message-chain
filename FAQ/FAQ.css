@@ -1,37 +1,53 @@
 /* Define a custom font face for English text */
 @font-face {
-    font-family: 'MyFont'; /* Name the font family */
-    src: url('../font/Franklin Gothic.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont';
+    /* Name the font family */
+    src: url('../font/Franklin Gothic.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
 
 /* Define a custom font face for Arabic text */
 @font-face {
-    font-family: 'MyFont2'; /* Name the font family */
-    src: url('../font/KSAHeading.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont2';
+    /* Name the font family */
+    src: url('../font/KSAHeading.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
 
 /* Base body styles */
 body {
-    font-family: 'Inter', sans-serif; /* Default font stack */
-    --primary-color: #CF0820; /* Define primary color variable */
-    background-color: #FFF5F5; /* Light red background */
+    font-family: 'Inter', sans-serif;
+    /* Default font stack */
+    --primary-color: #CF0820;
+    /* Define primary color variable */
+    background-color: #FFF5F5;
+    /* Light red background */
 }
 
 /* RTL (right-to-left) body styles for Arabic */
 [dir="rtl"] body {
-    font-family: 'Cairo', sans-serif; /* Arabic-appropriate font */
+    font-family: 'Cairo', sans-serif;
+    /* Arabic-appropriate font */
 }
 
 /* FAQ item container styles */
 .faq-item {
-    transition: all 0.3s ease; /* Smooth transitions */
-    border-bottom: 1px solid #e5e7eb; /* Bottom border */
+    transition: all 0.3s ease;
+    /* Smooth transitions */
+    border-bottom: 1px solid #e5e7eb;
+    /* Bottom border */
 }
 
 /* Remove border from last FAQ item */
@@ -41,25 +57,32 @@ body {
 
 /* FAQ question styles */
 .faq-question {
-    transition: color 0.2s ease; /* Color transition */
+    transition: color 0.2s ease;
+    /* Color transition */
 }
 
 /* Hover effect for questions */
 .faq-question:hover {
-    color: var(--primary-color); /* Use primary color */
+    color: var(--primary-color);
+    /* Use primary color */
 }
 
 /* FAQ answer container (initially hidden) */
 .faq-answer {
-    max-height: 0; /* Start collapsed */
-    overflow: hidden; /* Hide overflow */
-    transition: max-height 0.3s ease, padding 0.3s ease; /* Smooth expand/collapse */
+    max-height: 0;
+    /* Start collapsed */
+    overflow: hidden;
+    /* Hide overflow */
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    /* Smooth expand/collapse */
 }
 
 /* Expanded FAQ answer styles */
 .faq-item.active .faq-answer {
-    max-height: 300px; /* Expand to max height */
-    padding-top: 12px; /* Add top padding */
+    max-height: 300px;
+    /* Expand to max height */
+    padding-top: 12px;
+    /* Add top padding */
 }
 
 /* Rotate toggle icon when active */
@@ -69,8 +92,10 @@ body {
 
 /* RTL direction for FAQ items */
 .rtl .faq-item {
-    direction: rtl; /* Right-to-left text */
-    text-align: right; /* Right alignment */
+    direction: rtl;
+    /* Right-to-left text */
+    text-align: right;
+    /* Right alignment */
 }
 
 /* RTL answer text alignment */
@@ -81,30 +106,42 @@ body {
 /* RTL list styles in answers */
 .rtl .faq-answer ol,
 .rtl .faq-answer ul {
-    direction: rtl; /* Right-to-left */
-    text-align: right; /* Right alignment */
-    padding-right: 1rem; /* Right padding */
+    direction: rtl;
+    /* Right-to-left */
+    text-align: right;
+    /* Right alignment */
+    padding-right: 1rem;
+    /* Right padding */
 }
 
 /* Logo styling with gradient text */
 .logo {
-    font-family: 'MyFont', 'Comic Neue', cursive; /* Font stack */
-    background: linear-gradient(45deg,#FFD700, #CF0820); /* Gradient */
-    -webkit-background-clip: text; /* Clip background to text */
-    background-clip: text; /* Standard property */
-    -webkit-text-fill-color: transparent; /* Transparent text */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-family: 'MyFont', 'Comic Neue', cursive;
+    /* Font stack */
+    background: linear-gradient(45deg, #FFD700, #CF0820);
+    /* Gradient */
+    -webkit-background-clip: text;
+    /* Clip background to text */
+    background-clip: text;
+    /* Standard property */
+    -webkit-text-fill-color: transparent;
+    /* Transparent text */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
 /* Arabic version of logo */
 [dir="rtl"] .logo {
-    font-family: 'MyFont2', 'Cairo', sans-serif; /* Arabic font stack */
+    font-family: 'MyFont2', 'Cairo', sans-serif;
+    /* Arabic font stack */
 }
 
 /* Navigation link styles */
 .nav-link {
-    position: relative; /* For pseudo-element */
-    transition: all 0.3s ease; /* Smooth transitions */
+    position: relative;
+    /* For pseudo-element */
+    transition: all 0.3s ease;
+    /* Smooth transitions */
 }
 
 /* Nav link hover color */
@@ -114,33 +151,48 @@ body {
 
 /* Underline animation for nav links */
 .nav-link::after {
-    content: ''; /* Required for pseudo-element */
-    position: absolute; /* Position under link */
-    width: 0; /* Start with no width */
-    height: 2px; /* Underline height */
-    bottom: 0; /* Position at bottom */
-    left: 0; /* Start from left */
-    background-color: var(--primary-color); /* Primary color */
-    transition: width 0.3s ease; /* Animate width */
+    content: '';
+    /* Required for pseudo-element */
+    position: absolute;
+    /* Position under link */
+    width: 0;
+    /* Start with no width */
+    height: 2px;
+    /* Underline height */
+    bottom: 0;
+    /* Position at bottom */
+    left: 0;
+    /* Start from left */
+    background-color: var(--primary-color);
+    /* Primary color */
+    transition: width 0.3s ease;
+    /* Animate width */
 }
 
 /* Expand underline on hover */
 .nav-link:hover::after {
-    width: 100%; /* Full width */
+    width: 100%;
+    /* Full width */
 }
 
 /* Footer gradient background */
 .footer {
-    background: linear-gradient(to right, #CF0820, #9d0618); /* Red gradient */
-    position: relative; /* For z-index */
-    z-index: 200; /* Higher than other elements */
+    background: linear-gradient(to right, #CF0820, #9d0618);
+    /* Red gradient */
+    position: relative;
+    /* For z-index */
+    z-index: 200;
+    /* Higher than other elements */
 }
 
 /* Footer container padding */
 .footer .container {
-    padding-left: 1.5rem; /* Left padding */
-    padding-right: 1.5rem; /* Right padding */
-    width: 100%; /* Full width */
+    padding-left: 1.5rem;
+    /* Left padding */
+    padding-right: 1.5rem;
+    /* Right padding */
+    width: 100%;
+    /* Full width */
 }
 
 /* RTL footer container (same padding) */
@@ -152,13 +204,15 @@ body {
 /* Larger screens footer padding */
 @media (min-width: 768px) {
     .footer .container {
-        padding-left: 2rem; /* Increased padding */
+        padding-left: 2rem;
+        /* Increased padding */
         padding-right: 2rem;
     }
 }
 
 /* Mobile footer styles */
 @media (max-width: 768px) {
+
     /* Stack footer content vertically */
     .footer .container {
         flex-direction: column;
@@ -176,10 +230,14 @@ body {
     /* Mobile footer sections */
     #footer-logo-desc,
     #footer-links-col {
-        width: 100%; /* Full width */
-        text-align: center; /* Center text */
-        align-items: center; /* Center items */
-        margin: 0; /* Remove margin */
+        width: 100%;
+        /* Full width */
+        text-align: center;
+        /* Center text */
+        align-items: center;
+        /* Center items */
+        margin: 0;
+        /* Remove margin */
     }
 
     /* Center footer links */
@@ -189,13 +247,16 @@ body {
 
     /* Reorder footer columns */
     #footer-links-col {
-        order: 2; /* Move to bottom */
+        order: 2;
+        /* Move to bottom */
     }
 
     /* Logo/description at top */
     #footer-logo-desc {
-        order: 1; /* Move to top */
-        margin-bottom: 1rem; /* Add spacing */
+        order: 1;
+        /* Move to top */
+        margin-bottom: 1rem;
+        /* Add spacing */
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -204,8 +265,10 @@ body {
 
 /* Base RTL direction */
 .rtl {
-    direction: rtl; /* Right-to-left */
-    text-align: right; /* Right alignment */
+    direction: rtl;
+    /* Right-to-left */
+    text-align: right;
+    /* Right alignment */
 }
 
 /* Reverse question layout in RTL */
@@ -215,14 +278,18 @@ body {
 
 /* Default LTR toggle positioning */
 .faq-toggle {
-    margin-left: 1rem; /* Space on left */
-    transition: transform 0.3s ease; /* Smooth rotation */
+    margin-left: 1rem;
+    /* Space on left */
+    transition: transform 0.3s ease;
+    /* Smooth rotation */
 }
 
 /* RTL toggle positioning */
 .rtl .faq-toggle {
-    margin-left: 0; /* Remove left margin */
-    margin-right: 1rem; /* Add right margin */
+    margin-left: 0;
+    /* Remove left margin */
+    margin-right: 1rem;
+    /* Add right margin */
 }
 
 /* RTL footer links direction */
@@ -232,36 +299,57 @@ body {
 
 /* Floating language toggle button */
 #toggleLangBtn {
-    position: fixed; /* Fixed position */
-    bottom: 20px; /* From bottom */
-    right: 20px; /* From right */
-    z-index: 100; /* Above other content */
-    background-color: #ffffff; /* White background */
-    color: #CF0820; /* Primary color text */
-    border: none; /* No border */
-    border-radius: 50%; /* Circular */
-    width: 30px; /* Fixed width */
-    height: 30px; /* Fixed height */
+    position: fixed;
+    /* Fixed position */
+    bottom: 20px;
+    /* From bottom */
+    right: 20px;
+    /* From right */
+    z-index: 100;
+    /* Above other content */
+    background-color: #ffffff;
+    /* White background */
+    color: #CF0820;
+    /* Primary color text */
+    border: none;
+    /* No border */
+    border-radius: 50%;
+    /* Circular */
+    width: 30px;
+    /* Fixed width */
+    height: 30px;
+    /* Fixed height */
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer; /* Pointer cursor */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Shadow */
-    transition: all 0.3s ease; /* Smooth transitions */
-    font-weight: bold; /* Bold text */
-    font-size: 16px; /* Text size */
+    cursor: pointer;
+    /* Pointer cursor */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Shadow */
+    transition: all 0.3s ease;
+    /* Smooth transitions */
+    font-weight: bold;
+    /* Bold text */
+    font-size: 16px;
+    /* Text size */
 }
 
 /* Hover effect for language button */
 #toggleLangBtn:hover {
-    transform: translateY(-2px); /* Lift slightly */
-    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08); /* Enhanced shadow */
-    background-color: #CF0820; /* Primary color */
-    color: white; /* White text */
+    transform: translateY(-2px);
+    /* Lift slightly */
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    /* Enhanced shadow */
+    background-color: #CF0820;
+    /* Primary color */
+    color: white;
+    /* White text */
 }
 
 /* RTL language button positioning */
 .rtl #toggleLangBtn {
-    right: auto; /* Reset right */
-    left: 20px; /* Position on left */
+    right: auto;
+    /* Reset right */
+    left: 20px;
+    /* Position on left */
 }
