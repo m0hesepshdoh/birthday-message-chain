@@ -12,8 +12,11 @@
   <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <link rel="icon" href="chain.ico" type="image/x-icon" alt="Chain link icon representing connection">
+  <link rel="icon" href="img/chain.ico" type="image/x-icon" alt="Chain link icon representing connection">
   <link rel="stylesheet" href="main/main.css">
+  <link rel="preload" href="font/KSAHeading.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="font/Franklin Gothic.ttf" as="font" type="font/ttf" crossorigin>
+
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -22,7 +25,7 @@
       <nav class="flex justify-between items-center"> <!-- Flex navigation bar -->
         <!-- Logo section -->
         <figure class="flex items-center space-x-2 rtl:space-x-reverse">
-          <img src="../img/chain.png" alt="Yellow chain link logo representing connection" class="h-8 w-8">
+          <img src="img/chain.png" alt="Yellow chain link logo representing connection" class="h-8 w-8">
           <!-- Logo image -->
           <figcaption class="logo text-2xl" id="logo-title">Chain</figcaption> <!-- Logo text -->
         </figure>
@@ -147,7 +150,7 @@
     <section class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
       <!-- Footer logo and description -->
       <figure class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
-        <img src="../img/chainF.png" alt="Yellow chain link logo in footer section" class="h-6 w-6">
+        <img src="img/chainF.png" alt="Yellow chain link logo in footer section" class="h-6 w-6">
         <!-- Footer logo -->
         <figcaption>
           <span class="font-bold text-lg">Birthday Message Chain</span> <!-- Project name -->
