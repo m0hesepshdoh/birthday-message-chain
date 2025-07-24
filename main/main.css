@@ -103,6 +103,10 @@ body {
     width: 100%;
 }
 
+.hidden{
+display: none;
+}
+
 #main-title {
     font-size: 1.5rem;
     white-space: nowrap;
@@ -249,15 +253,6 @@ textarea {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-/* Countdown styles */
-.countdown {
-    background: rgba(207, 8, 32, 0.1);
-    border-radius: 8px;
-    padding: 8px 12px;
-    margin-top: 10px;
-}
-
 
 .message-card {
     background: white;

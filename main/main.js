@@ -3,54 +3,6 @@ document.getElementById('mobileMenuBtn').addEventListener('click', function () {
     menu.classList.toggle('hidden');
 });
 
-
-function createConfetti() {
-    const container = document.querySelector('body');
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        container.appendChild(confetti);
-
-        setTimeout(() => {
-            confetti.remove();
-        }, 5000);
-    }
-}
-
-
-function updateCountdown(month, day) {
-    const countdownBox = document.getElementById('countdown-container');
-
-    // Hide countdown if no valid date is provided
-    if (month === undefined || day === undefined) {
-        countdownBox.classList.add('hidden');
-        return;
-    }
-
-    const now = new Date();
-    let nextBirthday = new Date(now.getFullYear(), month, day);
-
-    if (nextBirthday < now) {
-        nextBirthday = new Date(now.getFullYear() + 1, month, day);
-    }
-
-    const diff = nextBirthday - now;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    const langData = translations[currentLang];
-    const dayLabel = days === 1 ? langData.day : langData.days;
-
-    if (days === 0) {
-        countdownBox.classList.add('hidden');
-    } else {
-        document.getElementById('birthday-countdown').textContent = `${days} ${dayLabel}`;
-        countdownBox.classList.remove('hidden');
-    }
-}
-
 function setupShareButtons() {
     // Only two buttons: copy-link-share and whatsapp-share
     const websiteUrl = window.location.href;
@@ -142,7 +94,6 @@ const translations = {
         messageRequiredError: "Message is required.",
         messageLengthError: "Message must be 100 characters or less.",
         ipBlockedError: "You have exceeded the maximum submission attempts.",
-        countdownLabel: "Your next birthday in:",
         shareLabel: "Share with friends:",
         whatsappLabel: "Share on WhatsApp",
         navFAQ: "FAQ",
@@ -177,7 +128,6 @@ const translations = {
         messageRequiredError: "لازم تكتب رسالة",
         messageLengthError: "أكثر شي 100 حرف",
         ipBlockedError: "كم مرة ترسل يا خوي جرب في يوم ثاني",
-        countdownLabel: "يوم ميلادك القادم بعد:",
         shareLabel: "شارك مع أصدقائك:",
         whatsappLabel: "واتساب",
         navFAQ: "الاسئلة الشائعة",
@@ -215,7 +165,6 @@ const elements = {
     messageError: document.getElementById('message-error'),
     ipBlockError: document.getElementById('ipblockerror'),
     shareLabel: document.getElementById('share-label'),
-    countdownLabel: document.querySelector('#countdown-container p.text-sm'),
     facebookBtn: document.querySelector('.flex.justify-center button:nth-child(1)'),
     twitterBtn: document.querySelector('.flex.justify-center button:nth-child(2)'),
     redditBtn: document.querySelector('.flex.justify-center button:nth-child(3)'),
@@ -287,9 +236,6 @@ const handleItemClick = function (wheel, index) {
         selectedDay = index + 1;
     }
     updateSelectedDate();
-    if (wheel.dataset.initialized !== "true") {
-        updateCountdown(selectedMonth, selectedDay);
-    }
 };
 
 const updateSelectedDate = () => {
@@ -345,7 +291,6 @@ const applyTranslations = () => {
         el.textContent = "";
         el.style.display = 'none';
     });
-    if (elements.countdownLabel) elements.countdownLabel.textContent = langData.countdownLabel;
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
     if (document.getElementById('whatsapp-share')) {
         document.getElementById('whatsapp-share').title = langData.whatsappLabel;
@@ -354,8 +299,6 @@ const applyTranslations = () => {
     if (document.getElementById('share-label')) {
         document.getElementById('share-label').textContent = langData.shareLabel;
     }
-
-    updateCountdown(selectedMonth, selectedDay);
     // Force reflow to ensure RTL layout updates
     document.body.style.display = 'none';
     document.body.offsetHeight;
@@ -469,7 +412,6 @@ const checkIpAndSubmit = async event => {
             birthDay: selectedDay,
             message: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            ipAddress: ipAddress
         });
         await (doc.exists ?
             attemptsRef.update({
@@ -480,10 +422,6 @@ const checkIpAndSubmit = async event => {
             }));
         elements.formSuccess.textContent = langData.formSuccessMessage;
         elements.formSuccess.style.display = 'block';
-        const countdownBox = document.getElementById('countdown-container');
-        if (countdownBox) {
-            countdownBox.classList.add('hidden');
-        }
         setTimeout(() => {
             window.location.href = "hub/hub.html";
         }, 10000);
@@ -510,11 +448,9 @@ document.addEventListener('DOMContentLoaded', function () {
     currentLang = localStorage.getItem('selectedLanguage') ||
         ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
 
-    document.getElementById('countdown-container').classList.add('hidden');
 
     setTimeout(function () {
         applyTranslations();
-        updateCountdown(selectedMonth, selectedDay);
         generateDays(selectedMonth);
         updateCharCount();
 
