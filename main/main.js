@@ -192,7 +192,7 @@ elements.email.addEventListener('input', () => {
 
 const populateWheel = (wheel, items, selectedIndex = 0) => {
     wheel.innerHTML = '';
-    wheel.dataset.initialized = "true"; // Mark as initialized
+   // wheel.dataset.initialized = "true"; // Mark as initialized
     const fragment = document.createDocumentFragment();
     items.forEach((item, index) => {
         const itemElement = document.createElement('div');
