@@ -1,114 +1,229 @@
 // Toggle FAQ item visibility when clicked
 function toggleFAQ(element) {
-    // Find the closest parent element with class 'faq-item'
     const faqItem = element.closest('.faq-item');
-    // Toggle the 'active' class on the FAQ item
     faqItem.classList.toggle('active');
 }
 
-// Open first FAQ by default when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // Add 'active' class to the first FAQ item
-    document.querySelector('.faq-item').classList.add('active');
-
-    // Mobile menu toggle functionality
-    document.getElementById('mobileMenuBtn').addEventListener('click', function () {
-        // Get mobile menu element
-        const menu = document.getElementById('mobileMenu');
-        // Toggle 'hidden' class on the menu
-        menu.classList.toggle('hidden');
-    });
-});
-
-// FAQ.js
 // Get current language from localStorage or default to English ('en')
 let currentLang = localStorage.getItem('selectedLanguage') || 'en';
 
 // Function to translate page content to Arabic
 async function translatePage() {
-    // Only translate if language is Arabic
     if (currentLang !== 'ar') return;
+
+    // Wait for DOM to be fully ready
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Check if we've already translated (prevent duplicate calls)
     if (document.documentElement.classList.contains('translated')) return;
-    // Mark document as translated
     document.documentElement.classList.add('translated');
 
-    // Array of elements to translate with their selectors and English text
+    // Elements to translate with corrected selectors
     const elementsToTranslate = [
         // Main heading and subheading
-        { selector: 'header.text-center h1', text: 'Frequently Asked Questions' },
-        { selector: 'header.text-center p', text: 'Find answers to common questions about the Birthday Message Chain' },
-        { selector: 'header.text-center a', text: 'Back To Join' },
-        { selector: '.logo', text: 'Chain' },
-        { selector: 'nav.flex.justify-between.items-center a[href="../index.html"]', text: 'Join Now' },
-        { selector: 'nav.flex.justify-between.items-center a[href="../hub/hub.html"]', text: 'Message Hub' },
-        { selector: '#mobileMenu a[href="../index.html"]', text: 'Join Now' },
-        { selector: '#mobileMenu a[href="../hub/hub.html"]', text: 'Message Hub' },
+        { selector: 'main header h1', text: 'الأسئلة المتكررة' },
+        { selector: 'main header p', text: 'اعثر على إجابات للأسئلة الشائعة حول سلسلة رسائل عيد الميلاد' },
+        { selector: 'main header a', text: 'العودة للانضمام' },
+        
+        // Navigation
+        { selector: 'nav a[href="../index.html"]', text: 'انضم الآن' },
+        { selector: 'nav a[href="../hub/hub.html"]', text: 'مركز الرسائل' },
+        { selector: '#mobileMenu a[href="../index.html"]', text: 'انضم الآن' },
+        { selector: '#mobileMenu a[href="../hub/hub.html"]', text: 'مركز الرسائل' },
 
-        // FAQ items
-        { selector: '.faq-item:nth-child(1) h2', text: 'What is the Birthday Message Chain?' },
-        { selector: '.faq-item:nth-child(1) .faq-answer p', text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!' },
+        // FAQ questions - direct translation
+        { selector: '.faq-item:nth-child(1) h2', text: 'ما هي سلسلة رسائل عيد الميلاد؟' },
+        { selector: '.faq-item:nth-child(2) h2', text: 'كيف تعمل؟' },
+        { selector: '.faq-item:nth-child(3) h2', text: 'هل معلوماتي الشخصية آمنة؟' },
+        { selector: '.faq-item:nth-child(4) h2', text: 'هل يمكنني إرسال رسائل متعددة؟' },
+        { selector: '.faq-item:nth-child(5) h2', text: 'ماذا يجب أن أكتب في رسالتي؟' },
+        { selector: '.faq-item:nth-child(6) h2', text: 'هل يمكنني حذف رسالتي لاحقاً؟' },
 
-        { selector: '.faq-item:nth-child(2) h2', text: 'How does it work?' },
-        { selector: '.faq-item:nth-child(2) .faq-answer', text: '1. Submit your birthday and a heartfelt message\n2. Your message gets added to our database\n3. On your birthday, we\'ll email you a random message from another participant\n4. Your message will be shared with someone else on their birthday' },
-
-        { selector: '.faq-item:nth-child(3) h2', text: 'Is my personal information safe?' },
-        { selector: '.faq-item:nth-child(3) .faq-answer p', text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.' },
-
-        { selector: '.faq-item:nth-child(4) h2', text: 'Can I submit multiple messages?' },
-        { selector: '.faq-item:nth-child(4) .faq-answer p', text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.' },
-
-        { selector: '.faq-item:nth-child(5) h2', text: 'What should I write in my message?' },
-        { selector: '.faq-item:nth-child(5) .faq-answer p', text: 'Write something kind, uplifting, and birthday-appropriate! Some ideas:\n- "May your birthday be as wonderful as you are!"\n- "Wishing you a year filled with joy and success!"\n- "Hope your special day is as amazing as you deserve!"\nKeep it positive and under 100 characters.' },
-
-        { selector: '.faq-item:nth-child(6) h2', text: 'Can I delete my message later?' },
-        { selector: '.faq-item:nth-child(6) .faq-answer p', text: 'Yes! If you\'d like to remove your message from the chain, simply email us at ug671431015@ftu.ac.th from the address you used to submit and we\'ll remove your entry.' },
         // Contact section
-        { selector: '.mt-12.text-center h3', text: 'Still have questions?' },
-        { selector: '.mt-12.text-center p', text: 'We\'re happy to help! Contact our support team.' },
-        { selector: '.mt-12.text-center a', text: 'Email Support' },
+        { selector: 'section.mt-12 h3', text: 'لا تزال لديك أسئلة؟' },
+        { selector: 'section.mt-12 p', text: 'نحن سعداء لمساعدتك! اتصل بفريق الدعم لدينا.' },
+        { selector: 'section.mt-12 a', text: 'دعم البريد الإلكتروني' },
 
         // Footer
-        { selector: '#footer-links a[href="../index.html"]', text: 'Join Now' },
-        { selector: '#footer-links a[href="../hub/hub.html"]', text: 'Message Hub' },
-        { selector: '#footer-logo-desc span', text: 'Birthday Message Chain' },
-        { selector: '#footer-logo-desc p', text: 'Making birthdays special since 2024' }
+        { selector: 'footer a[href="../index.html"]', text: 'انضم الآن' },
+        { selector: 'footer a[href="../hub/hub.html"]', text: 'مركز الرسائل' },
+        { selector: 'footer span.font-bold', text: 'سلسلة رسائل عيد الميلاد' },
+        { selector: 'footer p.text-sm', text: 'نجعل أعياد الميلاد مميزة منذ 2024' },
+        { selector: '#footer-links-col p', text: '© محمد بافليح' }
     ];
 
-    // Translate each element in the array
+    // FAQ answers that need API translation
+    const answersToTranslate = [
+        { 
+            selector: '.faq-item:nth-child(1) .faq-answer', 
+            text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!' 
+        },
+        { 
+            selector: '.faq-item:nth-child(3) .faq-answer', 
+            text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.' 
+        },
+        { 
+            selector: '.faq-item:nth-child(4) .faq-answer', 
+            text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.' 
+        },
+        { 
+            selector: '.faq-item:nth-child(6) .faq-answer', 
+            text: 'Yes! If you\'d like to remove your message from the chain, simply email us from the address you used to submit and we\'ll remove your entry.' 
+        }
+    ];
+
+    // List items for "How does it work?" - need API translation
+    const listItemsToTranslate = [
+        { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(1)', text: 'Submit your birthday and a heartfelt message' },
+        { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(2)', text: 'Your message gets added to our database' },
+        { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(3)', text: 'On your birthday, we\'ll email you a random message from another participant' },
+        { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(4)', text: 'Your message will be shared with someone else on their birthday' }
+    ];
+
+    // Message examples that need API translation
+    const messageExamples = [
+        { selector: '.faq-item:nth-child(5) .faq-answer p', text: 'Write something kind, uplifting, and birthday-appropriate! Some ideas:\n- May your birthday be as wonderful as you are!\n- Wishing you a year filled with joy and success!\n- Hope your special day is as amazing as you deserve!\nKeep it positive and under 100 characters.' }
+    ];
+
+    // Translate direct elements (no API needed)
     for (const element of elementsToTranslate) {
-        const el = document.querySelector(element.selector);
-        if (el) {
-            try {
-                // Fetch translation from MyMemory API
-                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(element.text)}&langpair=en|ar`);
-                const data = await response.json();
-                if (data.responseData && data.responseData.translatedText) {
-                    // Update element with translated text
-                    el.innerHTML = data.responseData.translatedText;
-                }
-            } catch (error) {
-                console.error('Translation error:', error);
+        try {
+            const el = document.querySelector(element.selector);
+            if (el && !el.dataset.translated) {
+                el.textContent = element.text;
+                el.dataset.translated = 'true';
             }
+        } catch (error) {
+            console.error(`Error translating ${element.selector}:`, error);
         }
     }
 
-    // Set RTL (Right-to-Left) direction for Arabic
+    // Translate FAQ answers using API
+    for (const answer of answersToTranslate) {
+        try {
+            const el = document.querySelector(answer.selector);
+            if (el && !el.dataset.translated) {
+                const translated = await translateText(answer.text);
+                el.textContent = translated;
+                el.dataset.translated = 'true';
+            }
+        } catch (error) {
+            console.error(`Error translating answer ${answer.selector}:`, error);
+        }
+    }
+
+    // Translate list items using API
+    for (const item of listItemsToTranslate) {
+        try {
+            const el = document.querySelector(item.selector);
+            if (el && !el.dataset.translated) {
+                const translated = await translateText(item.text);
+                el.textContent = translated;
+                el.dataset.translated = 'true';
+            }
+        } catch (error) {
+            console.error(`Error translating list item ${item.selector}:`, error);
+        }
+    }
+
+    // Translate message examples using API
+    for (const example of messageExamples) {
+        try {
+            const el = document.querySelector(example.selector);
+            if (el && !el.dataset.translated) {
+                const translated = await translateText(example.text);
+                // Handle line breaks properly
+                el.innerHTML = translated.replace(/\n/g, '<br>');
+                el.dataset.translated = 'true';
+            }
+        } catch (error) {
+            console.error(`Error translating message examples:`, error);
+        }
+    }
+
+    // Apply RTL direction to the entire document
     document.documentElement.dir = 'rtl';
     document.documentElement.lang = 'ar';
-    document.documentElement.classList.add('rtl');
+    document.body.classList.add('rtl');
 
-    // Update language toggle button text
+    // Update language toggle
     const langText = document.getElementById('langToggleText');
-    langText.textContent = '🌍';
-    document.getElementById('toggleLangBtn').setAttribute('title', 'Switch to English');
+    if (langText) langText.textContent = '🌐';
+    const toggleBtn = document.getElementById('toggleLangBtn');
+    if (toggleBtn) toggleBtn.setAttribute('title', 'Switch to English');
+}
+
+// Improved translation function using only API
+async function translateText(text) {
+    if (!text.trim()) return text;
+
+    try {
+        // Using MyMemory Translation API (free tier available)
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ar`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.responseData && data.responseData.translatedText) {
+            return data.responseData.translatedText;
+        }
+        
+        // If MyMemory fails, try LibreTranslate (if available)
+        const libreResponse = await fetch('https://libretranslate.de/translate', {
+            method: 'POST',
+            body: JSON.stringify({
+                q: text,
+                source: 'en',
+                target: 'ar',
+                format: 'text'
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (libreResponse.ok) {
+            const libreData = await libreResponse.json();
+            return libreData.translatedText || text;
+        }
+        
+        throw new Error('Both translation services failed');
+        
+    } catch (error) {
+        console.error('Translation API error:', error);
+        
+        // Fallback translations for common phrases
+        const fallbackTranslations = {
+            'Submit your birthday and a heartfelt message': 'أرسل تاريخ ميلادك ورسالة صادقة',
+            'Your message gets added to our database': 'يتم إضافة رسالتك إلى قاعدة البيانات',
+            'On your birthday, we\'ll email you a random message from another participant': 'في عيد ميلادك، سنرسل لك رسالة عشوائية من مشارك آخر',
+            'Your message will be shared with someone else on their birthday': 'ستتم مشاركة رسالتك مع شخص آخر في عيد ميلاده',
+            'Write something kind, uplifting, and birthday-appropriate!': 'اكتب شيئاً لطيفاً ومشجعاً ومناسباً لعيد الميلاد!'
+        };
+        
+        return fallbackTranslations[text] || text;
+    }
 }
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // Get language preference from localStorage
+    // Open first FAQ by default
+    const firstFaq = document.querySelector('.faq-item');
+    if (firstFaq) {
+        firstFaq.classList.add('active');
+    }
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    // Get language preference
     currentLang = localStorage.getItem('selectedLanguage') || 'en';
 
     // Translate immediately if Arabic is selected
@@ -116,45 +231,35 @@ document.addEventListener('DOMContentLoaded', function () {
         translatePage();
     }
 
-    // Add language toggle button functionality
+    // Language toggle button functionality
     const toggleLangBtn = document.getElementById('toggleLangBtn');
     if (toggleLangBtn) {
-        // Set initial button text based on current language
         const langText = document.getElementById('langToggleText');
-        langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
+        if (langText) {
+            langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
+        }
         toggleLangBtn.setAttribute('title', currentLang === 'en' ? 'Switch to Arabic' : 'Switch to English');
 
-        // Toggle language when button is clicked
-        toggleLangBtn.addEventListener('click', function () {
-            // Switch between English and Arabic
+        toggleLangBtn.addEventListener('click', async function () {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
-            // Save preference to localStorage
             localStorage.setItem('selectedLanguage', currentLang);
 
             if (currentLang === 'ar') {
-                // Set Arabic layout (RTL)
                 document.documentElement.dir = 'rtl';
                 document.documentElement.lang = 'ar';
                 document.body.classList.add('rtl');
-                translatePage();
+                await translatePage();
             } else {
-                // Revert to English layout (LTR)
                 document.documentElement.dir = 'ltr';
                 document.documentElement.lang = 'en';
                 document.body.classList.remove('rtl');
                 location.reload();
             }
 
-            // Update button immediately
-            langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
-            toggleLangBtn.setAttribute('title', currentLang === 'en' ? 'Switch to Arabic' : 'Switch to English');
-
-            // Translate or revert translation
-            if (currentLang === 'ar') {
-                translatePage();
-            } else {
-                location.reload(); // Refresh to return to English
+            if (langText) {
+                langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
             }
+            toggleLangBtn.setAttribute('title', currentLang === 'en' ? 'Switch to Arabic' : 'Switch to English');
         });
     }
 });
