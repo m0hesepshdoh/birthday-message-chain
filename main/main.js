@@ -112,7 +112,7 @@ const translations = {
         description: "شاركنا في سلسلة رسائل يوم الولادة! كلمة منك ممكن تفرّح واحد ما تعرفه، وفي يوم ميلادك راح توصلك رسالة حلوة من شخص ما تعرفه.",
         emailLabel: "بريدك الإلكتروني لإستلام الرسالة العشوائية",
         emailPlaceholder: " your@email.com ",
-        birthdayLabel: "تاريخ ولادتك",
+        birthdayLabel: "اختر تاريخ ولادتك",
         selectedDatePrefix: "اختيارك : ",
         messageLabel: "الرسالة إللي بتوصل لشخص عشوائي",
         messagePlaceholder: "اكتب شي جديد وغريب وبنفس الوقت خاص ليوم الميلاد (100 حرف)",
