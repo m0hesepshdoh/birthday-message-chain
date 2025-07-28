@@ -263,7 +263,7 @@ const applyTranslations = () => {
     elements.messageLabel.textContent = langData.messageLabel;
     elements.message.placeholder = langData.messagePlaceholder;
     elements.submitButton.textContent = langData.submitButtonText;
-    elements.toggleLangBtn.textContent = isRTL ? "🌍" : "🇵🇸";
+    elements.toggleLangBtn.textContent = isRTL ? "🌐" : "🇵🇸";
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
     updateCharCount();
@@ -315,7 +315,7 @@ const toggleLanguage = () => {
     localStorage.setItem('selectedLanguage', currentLang);
     applyTranslations();
     generateDays(selectedMonth);
-    langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
+    langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
 };
 
 elements.message.addEventListener('input', function () {

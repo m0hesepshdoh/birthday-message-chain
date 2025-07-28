@@ -107,7 +107,7 @@ function applyTranslations() {
     document.getElementById('footer-faq').textContent = langData.footerFaq;
     document.getElementById('footer-copyright').innerHTML = langData.copyright;
 
-    document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇵🇸' : '🌍';
+    document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
 }
 
 // Toggle language
