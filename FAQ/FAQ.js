@@ -19,6 +19,8 @@ async function translatePage() {
 
     // Elements to translate with corrected selectors
     const elementsToTranslate = [
+
+        { selector: ".logo", text: "سلسلة" },
         // Main heading and subheading
         { selector: 'main header h1', text: 'الأسئلة المتكررة' },
         { selector: 'main header p', text: 'اعثر على إجابات للأسئلة الشائعة حول سلسلة رسائل عيد الميلاد' },
