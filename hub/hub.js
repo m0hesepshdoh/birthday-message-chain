@@ -7,7 +7,6 @@ const firebaseConfig = {
     appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
 };
 
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -59,11 +58,11 @@ const translations = {
 };
 
 let currentLang = localStorage.getItem('selectedLanguage') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
-let lastVisible = null;
 let currentSortField = localStorage.getItem('sortField') || 'timestamp';
 let isSortingByBirthday = localStorage.getItem('isSortingByBirthday') === 'true' || false;
 let currentLanguageFilter = null;
 let isFetching = false;
+let lastVisible = null;
 
 // Apply translations
 function applyTranslations() {
@@ -121,7 +120,6 @@ function toggleLanguage() {
 }
 
 document.getElementById('toggleLangBtn').addEventListener('click', toggleLanguage);
-
 
 // Mobile menu toggle
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {

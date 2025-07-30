@@ -1,9 +1,3 @@
-body {
-    font-family: 'Inter', sans-serif;
-    --primary-color: #CF0820;
-    --background-color: #FFFFFF;
-}
-
 @font-face {
     font-family: 'MyFont';
     /* Name the font family */
@@ -29,6 +23,12 @@ body {
     /* Normal style */
     font-display: swap;
     /* Ensure text remains visible during font load */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    --primary-color: #CF0820;
+    --background-color: #FFFFFF;
 }
 
 [dir="rtl"] body {
