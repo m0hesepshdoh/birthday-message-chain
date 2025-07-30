@@ -14,10 +14,11 @@ const db = firebase.firestore();
 // Language support
 const translations = {
     en: {
-        title: "Birthday Message Chain",
+        title: "Birthday Messages",
         description: "Heartfelt messages from people around the world",
         messagesTitle: "All Messages",
         sortMonth: "Sort by Birthday",
+        sortLatest: "Sort by Latest",
         noMessagesTitle: "No messages yet",
         noMessagesDesc: "Be the first to share your birthday wishes!",
         errorTitle: "Failed to load messages",
@@ -35,12 +36,13 @@ const translations = {
 
     },
     ar: {
-        title: "سلسلة رسائل يوم الولادة",
+        title: "رسائل يوم الولادة",
         description: "رسائل صادقة من أشخاص حول العالم",
         messagesTitle: "جميع الرسائل",
         sortMonth: "ترتيب حسب يوم الولادة",
+        sortLatest: "ترتيب حسب الأحدث",
         noMessagesTitle: "لا توجد رسائل بعد",
-        noMessagesDesc: "كن أول من يشارك تمنيات عيد الميلاد!",
+        noMessagesDesc: "كن أول من يشارك تمنيات يوم الولادة!",
         errorTitle: "فشل تحميل الرسائل",
         errorDesc: "يرجى محاولة تحديث الصفحة",
         loadMoreText: "تحميل المزيد من الرسائل",
@@ -58,7 +60,8 @@ const translations = {
 
 let currentLang = localStorage.getItem('selectedLanguage') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
 let lastVisible = null;
-let currentSortField = 'timestamp';
+let currentSortField = localStorage.getItem('sortField') || 'timestamp';
+let isSortingByBirthday = localStorage.getItem('isSortingByBirthday') === 'true' || false;
 let currentLanguageFilter = null;
 let isFetching = false;
 
@@ -88,8 +91,7 @@ function applyTranslations() {
     document.getElementById('joinNowBtn').textContent = langData.joinNowButton;
 
     // Sort button
-    document.getElementById('sortMonthBtn').textContent = langData.sortMonth;
-
+    document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ? langData.sortLatest : langData.sortMonth;
     // Main content
     document.getElementById('main-title').textContent = langData.title;
     document.getElementById('main-description').textContent = langData.description;
@@ -114,6 +116,7 @@ function applyTranslations() {
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
     localStorage.setItem('selectedLanguage', currentLang);
+    window.location.reload(); // This will refresh the page
     applyTranslations();
 }
 
@@ -132,7 +135,17 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchMessages(7);
 
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
-        currentSortField = 'birthDay';
+        isSortingByBirthday = !isSortingByBirthday;
+        currentSortField = isSortingByBirthday ? 'birthDay' : 'timestamp';
+        // Save to localStorage
+        localStorage.setItem('isSortingByBirthday', isSortingByBirthday);
+        localStorage.setItem('sortField', currentSortField);
+        // Update button text based on current sort
+        const langData = translations[currentLang];
+        document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ?
+            langData.sortLatest :
+            langData.sortMonth;
+
         currentLanguageFilter = null;
         fetchMessages(7, true);
     });
@@ -190,6 +203,15 @@ function fetchMessages(limit = 7, reset = false) {
         query = query.startAfter(lastVisible);
     }
 
+    if (isSortingByBirthday) {
+        // For birthday sorting, we need to sort by birthMonth first, then birthDay
+        query = db.collection('submissions')
+            .orderBy('birthDay');
+    } else {
+        // Default sorting by timestamp (newest first)
+        query = db.collection('submissions')
+            .orderBy('timestamp', 'desc');
+    };
     // Simulate longer loading time (2 seconds)
     setTimeout(() => {
         query.get()
@@ -223,18 +245,8 @@ function fetchMessages(limit = 7, reset = false) {
                 } else {
                     loadMoreContainer.classList.remove('hidden');
                 }
-            })
-            .catch((error) => {
-                console.error("Error getting messages: ", error);
-                loadingIndicator.classList.add('hidden');
-                errorDisplay.classList.remove('hidden');
-                isFetching = false;
-
-                loadMoreText.textContent = translations[currentLang].loadMoreText;
-                loadMoreSpinner.classList.add('hidden');
-                loadMoreBtn.disabled = false;
             });
-    }, 2300); // 2 second delay
+    }, 500); // half second delay
 }
 
 function addMessageToDOM(msg) {
