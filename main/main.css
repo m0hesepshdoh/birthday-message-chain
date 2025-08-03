@@ -1,466 +1,710 @@
+/* Define CSS variables for easy color management throughout the stylesheet */
 :root {
     --primary-color: #CF0820;
+    /* Main brand red color */
     --secondary-color: #000000;
+    /* Black color for text */
     --background-color: #FFFFFF;
+    /* White background color */
     --accent-color: #FFD700;
+    /* Gold accent color */
 }
 
+/* Load custom English font */
 @font-face {
     font-family: 'MyFont';
-    /* Name the font family */
+    /* Name we'll use to reference this font */
     src: url('../font/Franklin Gothic.ttf') format('truetype');
     /* Path to font file */
     font-weight: normal;
-    /* Normal weight */
+    /* Regular thickness */
     font-style: normal;
-    /* Normal style */
+    /* Not italic */
     font-display: swap;
-    /* Ensure text remains visible during font load */
+    /* Show text immediately with fallback font */
 }
 
-/* Define a custom font face for Arabic text */
+/* Load custom Arabic font */
 @font-face {
     font-family: 'MyFont2';
-    /* Name the font family */
+    /* Name for Arabic font */
     src: url('../font/KSAHeading.ttf') format('truetype');
-    /* Path to font file */
+    /* Path to Arabic font */
     font-weight: normal;
-    /* Normal weight */
+    /* Regular thickness */
     font-style: normal;
-    /* Normal style */
+    /* Not italic */
     font-display: swap;
-    /* Ensure text remains visible during font load */
+    /* Show text immediately with fallback font */
 }
 
+/* Basic body styles */
 body {
     font-family: 'Inter', sans-serif;
+    /* Default English font */
     background-color: #FFF5F5;
+    /* Light pink background */
     font-size: clamp(14px, 2.5vw, 16px);
+    /* Responsive font size */
 }
 
+/* Right-to-left text direction styles */
 [dir="rtl"] body {
     font-family: 'Cairo', sans-serif;
+    /* Default Arabic font */
 }
 
-/* In main.css - minimal overrides */
+/* Dark mode footer style */
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+    /* Dark gradient */
 }
 
-/* Sharing buttons styles */
+/* Social sharing buttons container */
 .share-buttons-container {
     display: flex;
+    /* Horizontal layout */
     justify-content: center;
+    /* Center buttons */
     gap: 1rem;
+    /* Space between buttons */
     margin: 0 auto;
+    /* Center container */
     padding: 0;
+    /* No padding */
 }
 
-/* Properly reverse the order in RTL */
+/* Reverse button order for RTL languages */
 [dir="rtl"] .share-buttons-container {
     flex-direction: row-reverse !important;
+    /* Right-to-left order */
 }
 
-/* Remove left margin in RTL for correct spacing */
+/* Fix spacing for RTL buttons */
 [dir="rtl"] .share-buttons-container>* {
     margin-left: 0 !important;
+    /* Remove left margin */
     margin-right: 0 !important;
+    /* Remove right margin */
 }
 
-/* Confetti effect */
+/* Animation for confetti effect */
 @keyframes confetti {
     0% {
         transform: translateY(0) rotate(0deg);
+        /* Start position */
     }
 
     100% {
         transform: translateY(100vh) rotate(360deg);
+        /* End position */
     }
 }
 
+/* Confetti element styles */
 .confetti {
     position: absolute;
+    /* Position relative to viewport */
     width: 10px;
+    /* Small square */
     height: 10px;
+    /* Small square */
     background-color: var(--accent-color);
+    /* Gold color */
     animation: confetti 3s ease-in-out forwards;
+    /* Apply animation */
 }
 
+/* RTL form direction */
 [dir="rtl"] .form-group {
     direction: rtl;
+    /* Right-to-left text */
 }
 
+/* RTL input alignment */
 [dir="rtl"] input,
 [dir="rtl"] textarea {
     text-align: right;
+    /* Text starts from right */
 }
 
-
-
+/* RTL spacing utilities */
 [dir="rtl"] .space-x-2> :not([hidden])~ :not([hidden]) {
     --tw-space-x-reverse: 1;
+    /* Reverse horizontal spacing */
     margin-left: calc(0.5rem * var(--tw-space-x-reverse));
     margin-right: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 [dir="rtl"] .space-x-4> :not([hidden])~ :not([hidden]) {
     --tw-space-x-reverse: 1;
+    /* Reverse larger horizontal spacing */
     margin-left: calc(1rem * var(--tw-space-x-reverse));
     margin-right: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
+/* Reverse wheel direction for RTL */
 [dir="rtl"] .wheel-container {
     flex-direction: row-reverse;
+    /* Right-to-left layout */
 }
 
+/* Main title and date picker sizing */
 #main-title,
 .date-picker,
 .flex.flex-col.items-center.mb-2 {
     width: 100%;
+    /* Full width */
 }
 
+/* Utility class to hide elements */
 .hidden {
     display: none;
+    /* Completely hidden */
 }
 
+/* Main title styling */
 #main-title {
     font-size: 1.5rem;
+    /* Large text */
     white-space: nowrap;
+    /* Prevent line breaks */
     overflow: hidden;
+    /* Hide overflow */
     text-overflow: ellipsis;
+    /* Show ... if too long */
 }
 
+/* Date picker container */
 .date-picker {
     display: flex;
+    /* Flexible layout */
     flex-direction: column;
+    /* Stack vertically */
     align-items: center;
+    /* Center horizontally */
     margin-bottom: 20px;
+    /* Space below */
 }
 
+/* Wheel container for date selection */
 .wheel-container {
     display: flex;
+    /* Horizontal layout */
     overflow: hidden;
+    /* Hide scrollbars */
     width: 100%;
+    /* Full width */
     height: 120px;
+    /* Fixed height */
     border-radius: 5px;
+    /* Rounded corners */
     border: 1px solid var(--primary-color);
+    /* Red border */
     background-color: var(--background-color);
+    /* White background */
 }
 
+/* Individual wheel styling */
 .wheel {
     flex: 1;
+    /* Equal width */
     overflow-y: auto;
+    /* Vertical scrolling */
     -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
     border-right: 1px solid var(--primary-color);
+    /* Divider line */
     font-size: 16px;
+    /* Medium text size */
     scroll-behavior: smooth;
+    /* Smooth scrolling */
     scroll-snap-type: y mandatory;
+    /* Snap to items */
     overscroll-behavior: contain;
+    /* Prevent scroll chaining */
 }
 
-
+/* Remove border from last wheel */
 .wheel:last-child {
     border-right: none;
+    /* No divider on last item */
 }
 
+/* Hide scrollbar but keep functionality */
 .wheel::-webkit-scrollbar {
     display: none;
+    /* Invisible scrollbar */
 }
 
+/* Wheel item styling */
 .wheel-item {
     height: 40px;
+    /* Fixed height */
     line-height: 40px;
+    /* Center text vertically */
     display: flex;
+    /* Center content */
     align-items: center;
+    /* Center vertically */
     justify-content: center;
+    /* Center horizontally */
     font-size: 16px;
+    /* Medium text */
     cursor: pointer;
+    /* Pointer cursor */
     scroll-snap-align: center;
+    /* Snap to center */
 }
 
+/* Selected wheel item */
 .wheel-item.selected {
     background-color: var(--primary-color);
+    /* Red background */
     color: white;
+    /* White text */
     font-weight: bold;
+    /* Bold text */
 }
 
+/* Display for selected date */
 .selected-date {
     font-size: 16px;
+    /* Medium text */
     margin-top: 10px;
+    /* Space above */
     color: var(--secondary-color);
+    /* Black text */
     text-align: center;
+    /* Centered */
 }
 
+/* Form element styling */
 input,
 textarea,
 button,
 .bg-blue-500 {
     border-radius: 8px;
+    /* Rounded corners */
 }
 
+/* Text area and gray text sizing */
 textarea,
 .text-gray-600 {
     font-size: clamp(14px, 3vw, 16px);
+    /* Responsive text */
 }
 
+/* Large text sizing */
 .text-2xl {
     font-size: clamp(1.1rem, 5vw, 1.5rem);
+    /* Responsive large text */
 }
 
+/* Small text sizing */
 .text-sm,
 .text-gray-500 {
     font-size: clamp(12px, 3vw, 14px);
+    /* Responsive small text */
 }
 
+/* Full width utility */
 .w-full {
     width: 100%;
+    /* Full width */
 }
 
+/* Fixed height utility */
 .h-32 {
     height: clamp(100px, 30vw, 128px);
+    /* Responsive height */
 }
 
+/* Centering utility */
 .flex-center {
     display: flex;
+    /* Flexible layout */
     justify-content: center;
+    /* Center horizontally */
     align-items: center;
+    /* Center vertically */
 }
 
+/* Error message styling */
 .error-message {
     color: red;
+    /* Red text */
     font-size: clamp(12px, 3vw, 14px);
+    /* Responsive size */
     margin-top: 5px;
+    /* Small space above */
 }
 
+/* Main container */
 .container {
     max-width: 600px;
+    /* Limit width */
     margin: 0 auto;
+    /* Center horizontally */
     padding: clamp(10px, 3vw, 20px);
+    /* Responsive padding */
 }
 
+/* Description text styling */
 .main-description {
     font-size: clamp(14px, 3.5vw, 18px);
+    /* Responsive size */
     line-height: 1.4;
+    /* Comfortable spacing */
     margin-bottom: clamp(10px, 3vw, 20px);
+    /* Responsive space below */
 }
 
+/* Toggle button styling */
 .toggle-button {
     font-size: clamp(10px, 2.5vw, 12px);
+    /* Responsive text */
     padding: clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px);
+    /* Responsive padding */
 }
 
+/* Form group spacing */
 .form-group {
     margin-bottom: clamp(10px, 3vw, 16px);
+    /* Responsive space below */
 }
 
+/* Input and textarea styling */
 input,
 textarea {
     padding: clamp(6px, 2vw, 8px) clamp(8px, 3vw, 12px);
+    /* Responsive padding */
     font-size: clamp(14px, 3vw, 16px);
+    /* Responsive text */
 }
 
+/* Submit button styling */
 .submit-button {
     font-size: clamp(14px, 3.5vw, 16px);
+    /* Responsive text */
     padding: clamp(8px, 2vw, 8px) clamp(12px, 3vw, 16px);
+    /* Responsive padding */
     transition: all 0.3s ease;
+    /* Smooth hover effects */
 }
 
+/* Submit button hover effects */
 .submit-button:hover {
     transform: translateY(-2px);
+    /* Slight lift */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Shadow effect */
 }
 
+/* Message card styling */
 .message-card {
     background: white;
+    /* White background */
     border-radius: 8px;
+    /* Rounded corners */
     padding: 15px;
+    /* Inner spacing */
     margin: 10px 0;
+    /* Outer spacing */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
     border-left: 4px solid var(--primary-color);
+    /* Red accent border */
 }
 
+/* RTL text alignment */
 [dir="rtl"] .text-left {
     text-align: right !important;
+    /* Right align for RTL */
 }
 
 [dir="rtl"] .text-center {
     text-align: center !important;
+    /* Still centered */
 }
 
 [dir="rtl"] .text-right {
     text-align: right !important;
+    /* Right align */
 }
 
 [dir="rtl"] .main-description.text-start {
     text-align: right !important;
+    /* Right align descriptions */
 }
 
 /* Logo styling with gradient text */
 .logo {
     font-family: 'MyFont', 'Comic Neue', cursive;
+    /* Custom font */
     background: linear-gradient(45deg, #FFD700, #CF0820);
+    /* Gold to red gradient */
     -webkit-background-clip: text;
+    /* Clip to text */
     background-clip: text;
+    /* Clip to text */
     -webkit-text-fill-color: transparent;
+    /* Hide original color */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
-/* Arabic version of logo */
+/* Arabic logo styling */
 [dir="rtl"] .logo {
     font-family: 'MyFont2', 'Cairo', sans-serif;
+    /* Arabic font */
 }
 
-/* Navigation link styles */
+/* Navigation link styling */
 .nav-link {
     position: relative;
+    /* For pseudo-element */
     transition: all 0.3s ease;
+    /* Smooth hover effects */
 }
 
+/* Nav link hover color */
 .nav-link:hover {
     color: var(--primary-color);
+    /* Red on hover */
 }
 
+/* Nav link underline animation */
 .nav-link::after {
     content: '';
+    /* Empty content */
     position: absolute;
+    /* Position relative to link */
     width: 0;
+    /* Start invisible */
     height: 2px;
+    /* Thin line */
     bottom: 0;
+    /* At bottom */
     left: 0;
+    /* From left */
     background-color: var(--primary-color);
+    /* Red line */
     transition: width 0.3s ease;
+    /* Smooth expansion */
 }
 
+/* Animate underline on hover */
 .nav-link:hover::after {
     width: 100%;
+    /* Full width */
 }
 
-/* Footer gradient background */
+/* Footer styling */
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);
+    /* Red gradient */
     position: relative;
+    /* For z-index */
     z-index: 200;
+    /* Above other content */
 }
 
+/* Footer container padding */
 .footer .container {
     padding-left: 1.5rem;
+    /* Left padding */
     padding-right: 1.5rem;
+    /* Right padding */
     width: 100%;
+    /* Full width */
 }
 
 /* RTL footer container */
 .rtl .footer .container {
     padding-left: 1.5rem;
+    /* Same as above */
     padding-right: 1.5rem;
+    /* Same as above */
 }
 
+/* RTL footer links column */
 [dir="rtl"] #footer-links-col {
     align-items: flex-start;
+    /* Align to start (right) */
 }
 
+/* RTL footer links */
 [dir="rtl"] #footer-links {
     flex-direction: row-reverse;
+    /* Reverse order */
     padding-right: 0;
+    /* Remove padding */
     padding-left: 1rem;
+    /* Add left padding */
 }
 
+/* RTL footer container direction */
 [dir="rtl"] .footer .container {
     direction: rtl;
+    /* Right-to-left */
     text-align: right;
+    /* Align text right */
 }
 
+/* RTL footer link spacing */
 [dir="rtl"] #footer-links li {
     margin-left: 0;
+    /* Remove left margin */
     margin-right: 1rem;
+    /* Add right margin */
 }
 
+/* Remove margin from last RTL link */
 [dir="rtl"] #footer-links li:last-child {
     margin-right: 0;
+    /* No margin */
 }
 
+/* RTL footer logo description */
 [dir="rtl"] #footer-logo-desc {
     text-align: right;
+    /* Right align */
     margin-right: 0;
+    /* Remove margin */
     margin-left: auto;
+    /* Push to left */
 }
 
 /* Mobile footer styles */
 @media (max-width: 768px) {
 
+    /* Center RTL footer content */
     [dir="rtl"] .footer .container,
     [dir="rtl"] #footer-logo-desc,
     [dir="rtl"] #footer-links-col {
         text-align: center;
+        /* Center text */
         align-items: center;
+        /* Center items */
     }
 
+    /* Center RTL links */
     [dir="rtl"] #footer-links {
         justify-content: center;
+        /* Center horizontally */
         padding-left: 0;
+        /* Remove padding */
     }
 
+    /* Stack footer content vertically */
     .footer .container {
         flex-direction: column;
+        /* Stack vertically */
         align-items: center;
+        /* Center horizontally */
         text-align: center;
+        /* Center text */
     }
 
+    /* RTL vertical stacking */
     [dir="rtl"] .footer .container {
         flex-direction: column;
+        /* Stack vertically */
         align-items: center;
+        /* Center horizontally */
         text-align: center;
+        /* Center text */
     }
 
+    /* Full width footer sections */
     #footer-logo-desc,
     #footer-links-col {
         width: 100%;
+        /* Full width */
         text-align: center;
+        /* Center text */
         align-items: center;
+        /* Center items */
         margin: 0;
+        /* Remove margins */
     }
 
+    /* Center links */
     #footer-links {
         justify-content: center;
+        /* Center horizontally */
     }
 
+    /* Reorder columns */
     #footer-links-col {
         order: 2;
+        /* Move to bottom */
     }
 
+    /* Logo above links */
     #footer-logo-desc {
         order: 1;
+        /* Move to top */
         margin-bottom: 1rem;
+        /* Space below */
         display: flex;
+        /* Flexible layout */
         flex-direction: column;
+        /* Stack vertically */
         align-items: center;
+        /* Center horizontally */
     }
 }
 
 /* Language toggle button */
 #toggleLangBtn {
     position: fixed;
+    /* Fixed position */
     bottom: 20px;
+    /* 20px from bottom */
     left: 20px;
+    /* 20px from left */
     z-index: 100;
+    /* Above other content */
     background-color: #ffffff;
+    /* White background */
     color: #CF0820;
+    /* Red text */
     border: none;
+    /* No border */
     border-radius: 50%;
+    /* Circular */
     width: 48px;
+    /* Fixed width */
     height: 48px;
+    /* Fixed height */
     display: flex;
+    /* Center content */
     align-items: center;
+    /* Center vertically */
     justify-content: center;
+    /* Center horizontally */
     cursor: pointer;
+    /* Pointer cursor */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Shadow */
     transition: all 0.3s ease;
+    /* Smooth hover */
     font-weight: bold;
+    /* Bold text */
     font-size: 16px;
+    /* Medium size */
 }
 
+/* Hover effects for language button */
 #toggleLangBtn:hover {
     transform: translateY(-2px);
+    /* Lift up */
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    /* Bigger shadow */
     background-color: #CF0820;
+    /* Red background */
     color: white;
+    /* White text */
 }
