@@ -1,38 +1,64 @@
 <!DOCTYPE html>
+<!-- Declares this is an HTML5 document -->
 <html lang="en" dir="ltr">
+<!-- Root HTML element with English language and left-to-right direction -->
 
 <head>
+  <!-- Document metadata and resources -->
   <meta charset="UTF-8">
+  <!-- Sets character encoding to UTF-8 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Makes page responsive on mobile devices -->
   <title>Message Hub</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap"
-    rel="stylesheet">
+  <!-- Page title shown in browser tab -->
+  
+  <!-- Google Fonts for Inter and Cairo fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS framework -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Firebase libraries for database functionality -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Favicon (small icon in browser tab) -->
   <link rel="icon" href="../img/chain.ico" type="image/x-icon">
+  
+  <!-- Custom CSS file -->
   <link rel="stylesheet" href="hub.css">
+  
+  <!-- Dark mode JavaScript library -->
   <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
-
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- Body with light gray background, minimum full viewport height, and flex column layout -->
+  
+  <!-- Header section with white background and shadow -->
   <header class="bg-white shadow-sm">
     <div class="container mx-auto px-4 py-3">
+      <!-- Container with automatic margins and padding -->
       <div class="flex justify-between items-center">
+        <!-- Flexbox layout for header content -->
+        
+        <!-- Logo and title section -->
         <div class="flex items-center space-x-2 rtl:space-x-reverse">
-          <!-- Logo and title -->
-          <img src="../img/chain.png" alt="Yellow Chain Logo" class="h-8 w-8"> <!-- Logo image -->
+          <img src="../img/chain.png" alt="Yellow Chain Logo" class="h-8 w-8">
+          <!-- Logo image -->
           <h1 class="logo text-2xl" id="logo-title">Chain</h1>
+          <!-- Website title -->
         </div>
-        <!-- Navigation links -->
+        
+        <!-- Desktop navigation links (hidden on mobile) -->
         <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
           <a href="../index.html" class="nav-main text-gray-700 font-medium" id="nav-main">Join Now</a>
           <a href="../FAQ/FAQ.html" class="nav-faq text-gray-700 font-medium" id="nav-faq">FAQ</a>
         </nav>
-        <!-- Menu icon -->
+        
+        <!-- Mobile menu button (only visible on small screens) -->
         <button id="mobileMenuBtn" class="md:hidden text-gray-700">
+          <!-- Hamburger menu icon -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -41,35 +67,41 @@
     </div>
   </header>
 
+  <!-- Mobile menu (hidden by default) -->
   <div id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
     <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+      <!-- Vertical stack of navigation links -->
       <a href="../index.html" class="nav-main text-gray-700 font-medium py-2" id="mobile-nav-main">Join Now</a>
       <a href="../FAQ/FAQ.html" class="nav-faq text-gray-700 font-medium py-2" id="mobile-nav-faq">FAQ</a>
     </div>
   </div>
 
+  <!-- Main content area -->
   <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Centered title section -->
     <div class="flex flex-col items-center mb-2">
       <h2 id="main-title" class="text-3xl font-bold text-gray-800 mb-2">Birthday Message Chain</h2>
       <p id="main-description" class="text-gray-600">Heartfelt messages from people around the world</p>
     </div>
 
+    <!-- Messages header with sort button -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold text-gray-700" id="messages-title">All Messages</h2>
       <div class="flex space-x-2">
-        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by
-          Birthday</button>
+        <button id="sortMonthBtn" class="px-3 py-1 bg-gray-200 rounded-md text-sm hover:bg-gray-300">Sort by Birthday</button>
       </div>
     </div>
 
-    <!-- Rest of your existing hub content... -->
+    <!-- Loading indicator (shown while loading messages) -->
     <div id="loadingIndicator" class="flex justify-center my-12">
       <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
     </div>
 
+    <!-- Container where messages will be displayed -->
     <div id="messagesContainer" class="grid gap-6">
     </div>
 
+    <!-- Empty state (shown when no messages exist) -->
     <div id="noMessages" class="hidden text-center py-12">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none"
         viewBox="0 0 24 24" stroke="currentColor">
@@ -80,6 +112,7 @@
       <p class="text-gray-500" id="no-messages-desc">Be the first to share your birthday wishes!</p>
     </div>
 
+    <!-- Error state (shown when loading messages fails) -->
     <div id="errorDisplay" class="hidden text-center py-12 text-red-500">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">
@@ -88,17 +121,18 @@
       </svg>
       <h3 class="text-lg font-medium mb-1" id="error-title">Failed to load messages</h3>
       <p class="mb-4" id="error-desc">Please try refreshing the page</p>
-      <button onclick="window.location.reload()"
-        class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Refresh</button>
+      <button onclick="window.location.reload()" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Refresh</button>
     </div>
 
+    <!-- Load more button (hidden by default) -->
     <div id="loadMoreContainer" class="text-center mt-6 hidden">
-      <button id="loadMoreBtn"
-        class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 flex items-center justify-center mx-auto">
+      <button id="loadMoreBtn" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 flex items-center justify-center mx-auto">
         <span id="loadMoreText">Load More Messages</span>
         <span id="loadMoreSpinner" class="hidden ml-2">
           <svg class="animate-spin h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24">
+          <!-- Loading spinner SVG -->
+          <svg class="animate-spin h-4 w-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor"
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
@@ -109,6 +143,7 @@
     </div>
   </main>
 
+  <!-- Floating "Join Now" button -->
   <div class="flex justify-center my-8">
     <a href="../index.html" id="joinNowBtn"
       class="floating-button px-6 py-3 bg-[#CF0820] text-white rounded-full hover:bg-[#9d0618] transition shadow-lg">
@@ -116,8 +151,10 @@
     </a>
   </div>
 
+  <!-- Footer section -->
   <footer class="footer text-white py-8">
     <div class="container mx-auto flex flex-col md:flex-row justify-between items-center w-full">
+      <!-- Footer logo and description -->
       <div class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
         <img src="../img/chainF.png" alt="Yellow Chain Logo" class="h-6 w-6"> <!-- Footer logo -->
         <div>
@@ -125,6 +162,8 @@
           <p class="text-sm mt-2" id="footer-desc">Making birthdays special since 2024</p>
         </div>
       </div>
+      
+      <!-- Footer links and copyright -->
       <div class="flex flex-col items-center md:items-end" id="footer-links-col">
         <div class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
           <a href="../index.html" class="hover:text-yellow-300 transition-colors" id="footer-main">Join Now</a>
@@ -134,10 +173,13 @@
       </div>
     </div>
   </footer>
+
+  <!-- Language toggle button -->
   <button id="toggleLangBtn" title="Toggle Language">
     <span id="langToggleText">ع</span>
   </button>
+
+  <!-- Main JavaScript file -->
   <script src="hub.js"></script>
 </body>
-
 </html>
