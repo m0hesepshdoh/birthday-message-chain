@@ -1,169 +1,247 @@
+/* Define a custom font called 'MyFont' */
 @font-face {
     font-family: 'MyFont';
-    /* Name the font family */
+    /* Give the font a name we can use later */
     src: url('../font/Franklin Gothic.ttf') format('truetype');
-    /* Path to font file */
+    /* Path to the font file */
     font-weight: normal;
-    /* Normal weight */
+    /* Regular thickness (not bold) */
     font-style: normal;
-    /* Normal style */
+    /* Normal style (not italic) */
     font-display: swap;
-    /* Ensure text remains visible during font load */
+    /* Show text immediately with fallback font while loading */
 }
 
-/* Define a custom font face for Arabic text */
+/* Define another custom font called 'MyFont2' for Arabic text */
 @font-face {
     font-family: 'MyFont2';
-    /* Name the font family */
+    /* Name for the Arabic font */
     src: url('../font/KSAHeading.ttf') format('truetype');
-    /* Path to font file */
+    /* Path to Arabic font file */
     font-weight: normal;
-    /* Normal weight */
+    /* Regular thickness */
     font-style: normal;
     /* Normal style */
     font-display: swap;
-    /* Ensure text remains visible during font load */
+    /* Show text immediately while font loads */
 }
 
+/* Style for the entire webpage body */
 body {
     font-family: 'Inter', sans-serif;
+    /* Default font for English text */
     --primary-color: #CF0820;
+    /* Define a red color variable */
     --background-color: #FFFFFF;
+    /* Define white background variable */
 }
 
+/* Special body styles when text direction is right-to-left (for Arabic) */
 [dir="rtl"] body {
     font-family: 'Cairo', sans-serif;
+    /* Arabic font stack */
 }
 
+/* Style for message cards */
 .message-card {
     transition: all 0.3s ease;
+    /* Smooth animation for hover effects */
 }
 
+/* Hover effect for message cards */
 .message-card:hover {
     transform: translateY(-2px);
+    /* Move card up slightly */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    /* Add shadow for floating effect */
 }
 
+/* Style for birthday badges */
 .birthday-badge {
     background-color: var(--primary-color);
+    /* Use the red color */
     color: white;
+    /* White text */
 }
 
+/* Style for loading spinner */
 .loader {
     border-top-color: var(--primary-color);
+    /* Red color for spinner */
     animation: spinner 0.8s linear infinite;
+    /* Continuous spinning animation */
 }
 
+/* Define the spinning animation */
 @keyframes spinner {
     0% {
         transform: rotate(0deg);
+        /* Start at 0 degrees */
     }
 
     100% {
         transform: rotate(360deg);
+        /* End at full circle */
     }
 }
 
+/* Style for the "Join Now" button */
 #joinNowBtn {
     position: fixed;
+    /* Stays in place when scrolling */
     left: 50%;
+    /* Center horizontally */
     transform: translateX(-50%);
+    /* Precise centering */
     bottom: 2rem;
+    /* Position from bottom */
     z-index: 100;
+    /* Ensure it's above other elements */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Shadow effect */
     padding: 0.75rem 1.5rem;
+    /* Button padding */
     font-weight: 600;
+    /* Bold text */
     min-width: 120px;
+    /* Minimum width */
     text-align: center;
+    /* Center text */
     animation: pulse 2s infinite;
+    /* Continuous pulsing animation */
 }
 
+/* Define the pulsing animation */
 @keyframes pulse {
     0% {
         transform: translateX(-50%) scale(1);
+        /* Normal size */
         box-shadow: 0 0 0 0 rgba(207, 8, 32, 0.7);
+        /* Starting shadow */
     }
 
     70% {
         transform: translateX(-50%) scale(1.05);
+        /* Slightly larger */
         box-shadow: 0 0 0 10px rgba(207, 8, 32, 0);
+        /* Expanding shadow */
     }
 
     100% {
         transform: translateX(-50%) scale(1);
+        /* Back to normal */
         box-shadow: 0 0 0 0 rgba(207, 8, 32, 0);
+        /* Shadow disappears */
     }
 }
 
+/* Style for language badges */
 .language-badge {
     background-color: #4F46E5;
+    /* Purple background */
     color: white;
+    /* White text */
 }
 
+/* Style for Arabic messages */
 .arabic-message {
     direction: rtl;
+    /* Right-to-left text direction */
     text-align: right;
+    /* Align text to the right */
 }
 
-/* Logo styles */
+/* Style for the logo text */
 .logo {
     font-family: 'MyFont', 'Comic Neue', cursive;
+    /* Custom font with fallbacks */
     background: linear-gradient(45deg, #FFD700, #CF0820);
+    /* Gold to red gradient */
     -webkit-background-clip: text;
+    /* Clip background to text (for WebKit browsers) */
     background-clip: text;
+    /* Clip background to text */
     -webkit-text-fill-color: transparent;
+    /* Make text transparent to show gradient */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
 }
 
-/* Arabic version of logo */
+/* Arabic version of the logo */
 [dir="rtl"] .logo {
     font-family: 'MyFont2', 'Cairo', sans-serif;
-    /* Arabic font stack */
+    /* Arabic font with fallbacks */
 }
 
 /* Footer styles */
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);
+    /* Red gradient */
     z-index: 200;
-    /* Higher than other elements */
+    /* Make sure footer stays above other elements */
 }
 
-/* In main.css - minimal overrides */
+/* Dark mode overrides for footer */
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+    /* Dark gradient */
 }
 
+/* Ensure dark mode elements stay properly layered */
 .darkmode-layer,
 .darkmode-toggle {
     z-index: 100;
+    /* Proper layering for dark mode toggle */
 }
 
-/* Floating language toggle button */
+/* Style for language toggle button */
 #toggleLangBtn {
     position: fixed;
+    /* Stays in place when scrolling */
     bottom: 20px;
+    /* Position from bottom */
     left: 20px;
+    /* Position from left */
     z-index: 100;
-    /* Ensure it's above everything */
+    /* Above most elements */
     background-color: #ffffff;
+    /* White background */
     color: #CF0820;
+    /* Red text */
     border: none;
+    /* No border */
     border-radius: 50%;
+    /* Circular shape */
     width: 49px;
+    /* Fixed width */
     height: 49px;
+    /* Fixed height */
     display: flex;
+    /* Flexbox for centering */
     align-items: center;
+    /* Center vertically */
     justify-content: center;
+    /* Center horizontally */
     cursor: pointer;
+    /* Pointer cursor on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Shadow */
     transition: all 0.3s ease;
+    /* Smooth hover animation */
     font-weight: bold;
+    /* Bold text */
     font-size: 16px;
+    /* Text size */
 }
 
+/* Hover effect for language toggle */
 #toggleLangBtn:hover {
     transform: translateY(-2px);
+    /* Move up slightly */
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    /* Bigger shadow */
     background-color: #CF0820;
+    /* Red background */
     color: white;
+    /* White text */
 }
