@@ -1,55 +1,69 @@
+// Dark mode widget configuration
 const options = {
-    bottom: '80px',
-    left: '20px',
-    right: 'unset',
-    label: '🌓',
+    bottom: '80px', // Position from bottom
+    left: '20px',   // Position from left
+    right: 'unset', // No right position
+    label: '🌓',    // Moon/sun icon for toggle
 };
 
+// Create dark mode widget with above options
 const darkmode = new Darkmode(options);
+// Show the dark mode toggle widget on page
 darkmode.showWidget();
 
+// Mobile menu toggle functionality
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {
     const menu = document.getElementById('mobileMenu');
+    // Toggle hidden class to show/hide mobile menu
     menu.classList.toggle('hidden');
 });
 
+// Function to set up share buttons
 function setupShareButtons() {
-    // Only two buttons: copy-link-share and whatsapp-share
+    // Get current webpage URL
     const websiteUrl = window.location.href;
 
-    // Copy Link Button
+    // Copy Link Button setup
     const copyBtn = document.getElementById('copy-link-share');
     if (copyBtn) {
         copyBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Stop default button behavior
+            // Create temporary input element to copy text
             const tempInput = document.createElement('input');
             tempInput.value = websiteUrl;
             document.body.appendChild(tempInput);
-            tempInput.select();
+            tempInput.select(); // Select the text
 
             try {
+                // Try modern clipboard API first
                 if (navigator.clipboard) {
                     await navigator.clipboard.writeText(websiteUrl);
-                } else if (document.execCommand('copy')) {
+                } 
+                // Fallback for older browsers
+                else if (document.execCommand('copy')) {
                     document.execCommand('copy');
                 } else {
                     throw new Error('Clipboard API not available');
                 }
+                // Show feedback that copy worked
                 showCopyFeedback(copyBtn);
             } catch (err) {
                 console.error('Failed to copy URL: ', err);
+                // Fallback if copy fails - show prompt
                 prompt('Copy this URL:', websiteUrl);
             } finally {
+                // Clean up by removing temp input
                 document.body.removeChild(tempInput);
             }
         });
     }
 
-    // WhatsApp Button
+    // WhatsApp Button setup
     const whatsappBtn = document.getElementById('whatsapp-share');
     if (whatsappBtn) {
         whatsappBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Stop default button behavior
+            // Open WhatsApp share URL in new tab
             window.open(`https://wa.me/?text=${encodeURIComponent(websiteUrl)}`, '_blank');
         });
     }
@@ -57,17 +71,21 @@ function setupShareButtons() {
 
 // Helper function to show copy feedback
 function showCopyFeedback(button) {
+    // Get original tooltip text
     const originalText = button.querySelector('.tooltip')?.textContent || '';
     const tooltip = button.querySelector('.tooltip');
 
     if (tooltip) {
+        // Temporarily change to "Copied!" message
         tooltip.textContent = 'Copied!';
+        // Revert back after 2 seconds
         setTimeout(() => {
             tooltip.textContent = originalText;
         }, 2000);
     }
 }
 
+// Firebase configuration for database
 const firebaseConfig = {
     apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
     authDomain: 'birthdaymessagesapp.firebaseapp.com',
@@ -77,11 +95,12 @@ const firebaseConfig = {
     appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
 };
 
-
+// Initialize Firebase with above config
 firebase.initializeApp(firebaseConfig);
+// Get Firestore database reference
 const db = firebase.firestore();
 
-
+// Translation texts for English and Arabic
 const translations = {
     en: {
         title: "Birthday Message Chain",
@@ -153,7 +172,7 @@ const translations = {
     }
 };
 
-
+// Cache all important DOM elements
 const elements = {
     email: document.getElementById('email'),
     monthWheel: document.getElementById('monthWheel'),
@@ -190,28 +209,36 @@ const elements = {
     logoTitle: document.getElementById('logo-title')
 };
 
+// Block specific email address from submitting
 const blockedEmail = "ug671431015@ftu.ac.th";
+// Maximum allowed submission attempts
 const BLOCKED_ATTEMPTS = 3;
+// Track selected month and day
 let selectedMonth = 0,
     selectedDay = 1,
     currentLang;
 
+// Clean email input to prevent special characters
 elements.email.addEventListener('input', () => {
     elements.email.value = elements.email.value.replace(/[^a-zA-Z0-9@_+.-\s]/g, '');
 });
 
+// Function to populate wheel UI element with items
 const populateWheel = (wheel, items, selectedIndex = 0) => {
-    wheel.innerHTML = '';
-    // wheel.dataset.initialized = "true"; // Mark as initialized
-    const fragment = document.createDocumentFragment();
+    wheel.innerHTML = ''; // Clear existing items
+    const fragment = document.createDocumentFragment(); // Create document fragment for better performance
+    
+    // Create each wheel item
     items.forEach((item, index) => {
         const itemElement = document.createElement('div');
         itemElement.className = 'wheel-item' + (index === selectedIndex ? ' selected' : '');
         itemElement.textContent = item;
         itemElement.dataset.index = index;
+        // Add click handler for each item
         itemElement.addEventListener('click', () => {
             wheel.dataset.initialized = "false"; // Mark as user-interacted
             handleItemClick(wheel, index);
+            // Smooth scroll to selected item
             itemElement.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center'
@@ -222,23 +249,32 @@ const populateWheel = (wheel, items, selectedIndex = 0) => {
     wheel.appendChild(fragment);
 };
 
+// Generate days based on selected month
 const generateDays = monthIndex => {
+    // Handle February (leap year)
     const daysInMonth = (monthIndex === 1) ? 29 : new Date(2024, monthIndex + 1, 0).getDate();
-    const days = Array.from({
-        length: daysInMonth
-    }, (_, i) => i + 1);
+    // Create array of days (1 to daysInMonth)
+    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    // Ensure selected day is valid for this month
     selectedDay = Math.min(selectedDay, daysInMonth);
+    // Populate day wheel with days
     populateWheel(elements.dayWheel, days, selectedDay - 1);
 };
 
+// Handle wheel item clicks
 const handleItemClick = function (wheel, index) {
+    // Remove selected class from all items
     var items = wheel.querySelectorAll('.wheel-item');
     for (var i = 0; i < items.length; i++) {
         items[i].classList.remove('selected');
     }
+    // Add selected class to clicked item
     wheel.children[index].classList.add('selected');
+    // Calculate scroll position to center selected item
     var scrollPos = index * 40 - wheel.clientHeight / 2 + 20;
     wheel.scrollTop = scrollPos;
+    
+    // If month wheel was clicked, update days
     if (wheel === elements.monthWheel && selectedMonth !== index) {
         selectedMonth = index;
         generateDays(selectedMonth);
@@ -248,24 +284,29 @@ const handleItemClick = function (wheel, index) {
     updateSelectedDate();
 };
 
+// Update the displayed selected date text
 const updateSelectedDate = () => {
     elements.selectedDate.textContent = `${translations[currentLang].selectedDatePrefix}${translations[currentLang].months[selectedMonth]} ${selectedDay}`;
 };
 
+// Apply translations to all elements on page
 const applyTranslations = () => {
     const langText = document.getElementById('langToggleText');
     const langData = translations[currentLang];
     const isRTL = currentLang === 'ar';
+    
+    // Set HTML lang and direction attributes
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
 
+    // Add/remove RTL class from body
     if (isRTL) {
         document.body.classList.add('rtl');
     } else {
         document.body.classList.remove('rtl');
     }
 
-    // Main content
+    // Update main content translations
     elements.mainTitle.textContent = langData.title;
     elements.mainDescription.textContent = langData.description;
     elements.emailLabel.textContent = langData.emailLabel;
@@ -274,33 +315,37 @@ const applyTranslations = () => {
     elements.message.placeholder = langData.messagePlaceholder;
     elements.submitButton.textContent = langData.submitButtonText;
     elements.toggleLangBtn.textContent = isRTL ? "🌐" : "🇵🇸";
+    
+    // Update wheels with translated months
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
     updateCharCount();
 
-    // Header, nav, footer
+    // Update navigation translations
     if (elements.navFAQ) elements.navFAQ.textContent = langData.navFAQ;
     if (elements.navHub) elements.navHub.textContent = langData.navHub;
     if (elements.mobileNavFAQ) elements.mobileNavFAQ.textContent = langData.navFAQ;
     if (elements.mobileNavHub) elements.mobileNavHub.textContent = langData.navHub;
 
-    // Footer translations
+    // Update footer translations
     if (elements.footerFAQ) elements.footerFAQ.textContent = langData.footerFAQ;
     if (elements.footerHub) elements.footerHub.textContent = langData.footerHub;
     if (elements.footerTitle) elements.footerTitle.textContent = langData.footerTitle;
     if (elements.footerDesc) elements.footerDesc.textContent = langData.footerDesc;
 
-    // Logo translation
+    // Update logo and copyright
     if (elements.logoTitle) elements.logoTitle.textContent = langData.logoTitle;
     if (document.getElementById('footer-copyright')) {
         document.getElementById('footer-copyright').innerHTML = langData.copyright;
     }
 
-    // Other UI
+    // Clear and hide error messages
     [elements.emailError, elements.messageError, elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => {
         el.textContent = "";
         el.style.display = 'none';
     });
+    
+    // Update share button labels
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
     if (document.getElementById('whatsapp-share')) {
         document.getElementById('whatsapp-share').title = langData.whatsappLabel;
@@ -309,34 +354,42 @@ const applyTranslations = () => {
     if (document.getElementById('share-label')) {
         document.getElementById('share-label').textContent = langData.shareLabel;
     }
-    // Force reflow to ensure RTL layout updates
+    
+    // Force reflow to ensure RTL layout updates properly
     document.body.style.display = 'none';
     document.body.offsetHeight;
     document.body.style.display = '';
 };
 
+// Update character count display for message input
 const updateCharCount = () => {
     const langData = translations[currentLang];
     elements.charCount.textContent = `${elements.message.value.length}/100 ${langData.charCountSuffix}`;
 };
 
+// Toggle between English and Arabic
 const toggleLanguage = () => {
     currentLang = currentLang === 'en' ? 'ar' : 'en';
-    localStorage.setItem('selectedLanguage', currentLang);
-    applyTranslations();
-    generateDays(selectedMonth);
-    langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
+    localStorage.setItem('selectedLanguage', currentLang); // Save preference
+    applyTranslations(); // Update all text
+    generateDays(selectedMonth); // Regenerate days wheel
+    langText.textContent = currentLang === 'en' ? '🇵🇸' : '🌐'; // Update language toggle icon
 };
 
+// Update character count when message changes
 elements.message.addEventListener('input', function () {
     updateCharCount();
-    // Ensure the count updates even if the event doesn't fire properly
+    // Double-check count updates
     requestAnimationFrame(updateCharCount);
 });
+
+// Validate email format
 const validateEmail = email => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((hotmail|gmail|yahoo|icloud|ftu.ac|outlook)\.(com|co\.uk|th|ca|de|fr|net|org|[a-z]{2,}))$/i.test(String(email).toLowerCase());
 
+// Get user's IP address
 const getIpAddress = function () {
     return new Promise(function (resolve) {
+        // Use fetch API if available
         if (window.fetch) {
             fetch('https://api64.ipify.org?format=json')
                 .then(function (response) {
@@ -346,9 +399,10 @@ const getIpAddress = function () {
                     resolve(data.ip);
                 })
                 .catch(function () {
-                    resolve('127.0.0.1');
+                    resolve('127.0.0.1'); // Fallback if API fails
                 });
         } else {
+            // Fallback for older browsers
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'https://api64.ipify.org?format=json', true);
             xhr.onload = function () {
@@ -367,19 +421,28 @@ const getIpAddress = function () {
     });
 };
 
+// Main form submission handler
 const checkIpAndSubmit = async event => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent form default submission
+    
+    // Hide all messages initially
     [elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => el.style.display = 'none');
     [elements.emailError, elements.messageError].forEach(el => {
         el.textContent = "";
         el.style.display = 'none';
     });
+    
+    // Disable submit button during processing
     elements.submitButton.disabled = true;
     elements.submitButton.textContent = translations[currentLang].submitButtonJoining;
+    
+    // Get form values
     const email = elements.email.value.trim();
     const message = elements.message.value.trim();
     const langData = translations[currentLang];
     let hasErrors = false;
+    
+    // Validate email
     if (!validateEmail(email)) {
         elements.emailError.textContent = langData.emailValidationError;
         hasErrors = true;
@@ -387,6 +450,8 @@ const checkIpAndSubmit = async event => {
         elements.emailError.textContent = currentLang === 'ar' ? 'هذا البريد الإلكتروني حقي' : 'This email address is mine.';
         hasErrors = true;
     }
+    
+    // Validate message
     if (!message) {
         elements.messageError.textContent = langData.messageRequiredError;
         hasErrors = true;
@@ -394,6 +459,8 @@ const checkIpAndSubmit = async event => {
         elements.messageError.textContent = langData.messageLengthError;
         hasErrors = true;
     }
+    
+    // If errors found, show them and stop
     if (hasErrors) {
         elements.formError.textContent = langData.formGenericError;
         elements.formError.style.display = 'block';
@@ -401,28 +468,36 @@ const checkIpAndSubmit = async event => {
         elements.submitButton.textContent = langData.submitButtonText;
         return;
     }
+    
     try {
+        // Get user's IP address
         const ipAddress = await getIpAddress();
         const attemptsRef = db.collection('ipAttempts').doc(ipAddress);
         const doc = await attemptsRef.get();
+        
+        // Check if user has exceeded submission attempts
         if (doc.exists && doc.data().attempts >= BLOCKED_ATTEMPTS) {
             elements.ipBlockError.textContent = langData.ipBlockedError;
             elements.ipBlockError.style.display = 'block';
             elements.submitButton.disabled = false;
             elements.submitButton.textContent = langData.submitButtonText;
+            // Redirect after delay
             setTimeout(() => {
                 window.location.href = "hub/hub.html";
             }, 8000);
-
             return;
         }
+        
+        // Save submission to database
         await db.collection("submissions").add({
             email: email,
-            birthMonth: selectedMonth + 1,
+            birthMonth: selectedMonth + 1, // Months are 1-based in database
             birthDay: selectedDay,
             message: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
+        
+        // Update attempt count
         await (doc.exists ?
             attemptsRef.update({
                 attempts: firebase.firestore.FieldValue.increment(1)
@@ -430,11 +505,17 @@ const checkIpAndSubmit = async event => {
             attemptsRef.set({
                 attempts: 1
             }));
+        
+        // Show success message
         elements.formSuccess.textContent = langData.formSuccessMessage;
         elements.formSuccess.style.display = 'block';
+        
+        // Redirect after delay
         setTimeout(() => {
             window.location.href = "hub/hub.html";
         }, 10000);
+        
+        // Reset form
         elements.birthdayForm.reset();
         selectedMonth = 0;
         selectedDay = 1;
@@ -447,21 +528,28 @@ const checkIpAndSubmit = async event => {
         elements.formError.textContent = `${langData.formSubmitError} (${error.message})`;
         elements.formError.style.display = 'block';
     } finally {
+        // Re-enable submit button
         elements.submitButton.disabled = false;
         elements.submitButton.textContent = langData.submitButtonText;
     }
 };
+
+// Set up event listeners
 elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', function () {
+    // Determine initial language (from localStorage or browser)
     currentLang = localStorage.getItem('selectedLanguage') || ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
+    
+    // Small delay to ensure DOM is fully ready
     setTimeout(function () {
-        applyTranslations();
-        generateDays(selectedMonth);
-        updateCharCount();
+        applyTranslations(); // Apply translations
+        generateDays(selectedMonth); // Generate days wheel
+        updateCharCount(); // Update character counter
 
-        // Click/tap selection for wheel items
+        // Set up click handlers for wheel items
         document.querySelectorAll('.wheel-item').forEach(item => {
             item.addEventListener('click', function () {
                 handleItemClick(this.parentNode, parseInt(this.dataset.index));
@@ -469,5 +557,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }, 100);
+    
+    // Set up share buttons
     setupShareButtons();
 });
