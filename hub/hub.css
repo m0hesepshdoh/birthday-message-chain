@@ -127,13 +127,17 @@ body {
     z-index: 200;
     /* Higher than other elements */
 }
+
 /* In main.css - minimal overrides */
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
 }
-.darkmode-layer, .darkmode-toggle {
-  z-index: 100;
+
+.darkmode-layer,
+.darkmode-toggle {
+    z-index: 100;
 }
+
 /* Floating language toggle button */
 #toggleLangBtn {
     position: fixed;

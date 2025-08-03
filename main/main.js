@@ -461,51 +461,6 @@ document.addEventListener('DOMContentLoaded', function () {
         generateDays(selectedMonth);
         updateCharCount();
 
-        // Improved touch handling for wheel scrolling
-        const wheels = document.querySelectorAll('.wheel');
-        wheels.forEach(wheel => {
-            wheel.dataset.initialized = "true";
-
-            let startY, scrollTop;
-            let isScrolling = false;
-            let scrollTimeout;
-
-            wheel.addEventListener('touchstart', (e) => {
-                startY = e.touches[0].pageY;
-                scrollTop = wheel.scrollTop;
-                isScrolling = true;
-                clearTimeout(scrollTimeout);
-                wheel.style.scrollSnapType = 'none';
-            }, { passive: false });
-
-            wheel.addEventListener('touchmove', (e) => {
-                if (!isScrolling) return;
-                e.preventDefault();
-                const y = e.touches[0].pageY;
-                const walk = (y - startY) * 2;
-                wheel.scrollTop = scrollTop - walk;
-            }, { passive: false });
-
-            wheel.addEventListener('touchend', () => {
-                isScrolling = false;
-                wheel.style.scrollSnapType = 'y mandatory';
-                scrollTimeout = setTimeout(() => {
-                    const items = wheel.querySelectorAll('.wheel-item');
-                    const itemHeight = items[0]?.offsetHeight || 40;
-                    const scrollPosition = wheel.scrollTop;
-                    const centerIndex = Math.round(scrollPosition / itemHeight);
-
-                    if (items[centerIndex]) {
-                        handleItemClick(wheel, parseInt(items[centerIndex].dataset.index));
-                        items[centerIndex].scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                    }
-                }, 100);
-            });
-        });
-
         // Click/tap selection for wheel items
         document.querySelectorAll('.wheel-item').forEach(item => {
             item.addEventListener('click', function () {
