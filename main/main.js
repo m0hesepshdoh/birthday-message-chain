@@ -1,3 +1,13 @@
+const options = {
+    bottom: '80px',
+    left: '20px',
+    right: 'unset',
+    label: '🌓',
+};
+
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {
     const menu = document.getElementById('mobileMenu');
     menu.classList.toggle('hidden');
@@ -192,7 +202,7 @@ elements.email.addEventListener('input', () => {
 
 const populateWheel = (wheel, items, selectedIndex = 0) => {
     wheel.innerHTML = '';
-   // wheel.dataset.initialized = "true"; // Mark as initialized
+    // wheel.dataset.initialized = "true"; // Mark as initialized
     const fragment = document.createDocumentFragment();
     items.forEach((item, index) => {
         const itemElement = document.createElement('div');
@@ -402,7 +412,7 @@ const checkIpAndSubmit = async event => {
             elements.submitButton.textContent = langData.submitButtonText;
             setTimeout(() => {
                 window.location.href = "hub/hub.html";
-            }, 10000);
+            }, 8000);
 
             return;
         }
@@ -445,10 +455,7 @@ elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 
 document.addEventListener('DOMContentLoaded', function () {
-    currentLang = localStorage.getItem('selectedLanguage') ||
-        ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
-
-
+    currentLang = localStorage.getItem('selectedLanguage') || ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
     setTimeout(function () {
         applyTranslations();
         generateDays(selectedMonth);

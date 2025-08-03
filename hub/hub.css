@@ -127,20 +127,26 @@ body {
     z-index: 200;
     /* Higher than other elements */
 }
-
+/* In main.css - minimal overrides */
+.darkmode--activated .footer {
+    background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+}
+.darkmode-layer, .darkmode-toggle {
+  z-index: 100;
+}
 /* Floating language toggle button */
 #toggleLangBtn {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     z-index: 100;
     /* Ensure it's above everything */
     background-color: #ffffff;
     color: #CF0820;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 49px;
+    height: 49px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -156,10 +162,4 @@ body {
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
     background-color: #CF0820;
     color: white;
-}
-
-/* For RTL languages */
-.rtl #toggleLangBtn {
-    right: auto;
-    left: 20px;
 }

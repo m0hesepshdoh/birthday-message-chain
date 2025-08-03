@@ -19,20 +19,20 @@
   <link rel="stylesheet" href="main/main.css">
   <link rel="preload" href="font/KSAHeading.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="font/Franklin Gothic.ttf" as="font" type="font/ttf" crossorigin>
-
+  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
   <header class="bg-white shadow-sm">
     <section class="container mx-auto px-4 py-3"> <!-- Container with padding -->
       <nav class="flex justify-between items-center"> <!-- Flex navigation bar -->
+
         <!-- Logo section -->
         <figure class="flex items-center space-x-2 rtl:space-x-reverse">
           <img src="img/chain.png" alt="Yellow chain link logo representing connection" class="h-8 w-8">
           <!-- Logo image -->
           <figcaption class="logo text-2xl" id="logo-title">Chain</figcaption> <!-- Logo text -->
         </figure>
-
         <!-- Desktop navigation menu (hidden on mobile) -->
         <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
           <!-- Navigation link -->
@@ -169,7 +169,7 @@
 
   <!-- Language toggle button -->
   <button id="toggleLangBtn" title="Toggle Language" aria-label="Toggle between English and Arabic">
-    <span id="langToggleText">ع</span> <!-- Arabic character for language toggle -->
+    <span id="langToggleText">ع</span>
   </button>
   <script src="main/main.js"></script>
 

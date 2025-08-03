@@ -1,3 +1,13 @@
+const options = {
+    bottom: '80px',
+    left: '20px',
+    right: 'unset',
+    label: '🌓',
+};
+
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+
 const firebaseConfig = {
     apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
     authDomain: 'birthdaymessagesapp.firebaseapp.com',

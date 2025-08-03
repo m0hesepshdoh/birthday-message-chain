@@ -296,15 +296,18 @@ body {
 .rtl #footer-links {
     direction: rtl;
 }
-
+/* In main.css - minimal overrides */
+.darkmode--activated .footer {
+    background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+}
 /* Floating language toggle button */
 #toggleLangBtn {
     position: fixed;
     /* Fixed position */
     bottom: 20px;
     /* From bottom */
-    right: 20px;
-    /* From right */
+    left: 20px;
+    /* From left */
     z-index: 100;
     /* Above other content */
     background-color: #ffffff;
@@ -315,9 +318,9 @@ body {
     /* No border */
     border-radius: 50%;
     /* Circular */
-    width: 30px;
+    width: 49px;
     /* Fixed width */
-    height: 30px;
+    height: 49px;
     /* Fixed height */
     display: flex;
     align-items: center;
@@ -344,12 +347,4 @@ body {
     /* Primary color */
     color: white;
     /* White text */
-}
-
-/* RTL language button positioning */
-.rtl #toggleLangBtn {
-    right: auto;
-    /* Reset right */
-    left: 20px;
-    /* Position on left */
 }

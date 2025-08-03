@@ -7,6 +7,15 @@ function toggleFAQ(element) {
 // Get current language from localStorage or default to English ('en')
 let currentLang = localStorage.getItem('selectedLanguage') || 'en';
 
+const options = {
+    bottom: '80px',
+    left: '20px',
+    right: 'unset',
+    label: '🌓',
+};
+
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
 // Function to translate page content to Arabic
 async function translatePage() {
     if (currentLang !== 'ar') return;
@@ -25,7 +34,7 @@ async function translatePage() {
         { selector: 'main header h1', text: 'الأسئلة المتكررة' },
         { selector: 'main header p', text: 'اعثر على إجابات للأسئلة الشائعة حول سلسلة رسائل عيد الميلاد' },
         { selector: 'main header a', text: 'العودة للانضمام' },
-        
+
         // Navigation
         { selector: 'nav a[href="../index.html"]', text: 'انضم الآن' },
         { selector: 'nav a[href="../hub/hub.html"]', text: 'مركز الرسائل' },
@@ -55,21 +64,21 @@ async function translatePage() {
 
     // FAQ answers that need API translation
     const answersToTranslate = [
-        { 
-            selector: '.faq-item:nth-child(1) .faq-answer', 
-            text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!' 
+        {
+            selector: '.faq-item:nth-child(1) .faq-answer',
+            text: 'The Birthday Message Chain is a community project where people share birthday wishes. When you submit a message, you\'ll receive a random birthday message from someone else on your special day!'
         },
-        { 
-            selector: '.faq-item:nth-child(3) .faq-answer', 
-            text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.' 
+        {
+            selector: '.faq-item:nth-child(3) .faq-answer',
+            text: 'We take privacy seriously. We only collect your email and birthday (month/day, not year). Your email will only be used to send you a birthday message and will never be shared publicly or with third parties.'
         },
-        { 
-            selector: '.faq-item:nth-child(4) .faq-answer', 
-            text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.' 
+        {
+            selector: '.faq-item:nth-child(4) .faq-answer',
+            text: 'To keep it fair for everyone, we limit submissions to one message per email address. This helps ensure everyone gets a unique message on their birthday.'
         },
-        { 
-            selector: '.faq-item:nth-child(6) .faq-answer', 
-            text: 'Yes! If you\'d like to remove your message from the chain, simply email us from the address you used to submit and we\'ll remove your entry.' 
+        {
+            selector: '.faq-item:nth-child(6) .faq-answer',
+            text: 'Yes! If you\'d like to remove your message from the chain, simply email us from the address you used to submit and we\'ll remove your entry.'
         }
     ];
 
@@ -161,17 +170,17 @@ async function translateText(text) {
     try {
         // Using MyMemory Translation API (free tier available)
         const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ar`);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (data.responseData && data.responseData.translatedText) {
             return data.responseData.translatedText;
         }
-        
+
         // If MyMemory fails, try LibreTranslate (if available)
         const libreResponse = await fetch('https://libretranslate.de/translate', {
             method: 'POST',
@@ -183,17 +192,17 @@ async function translateText(text) {
             }),
             headers: { 'Content-Type': 'application/json' }
         });
-        
+
         if (libreResponse.ok) {
             const libreData = await libreResponse.json();
             return libreData.translatedText || text;
         }
-        
+
         throw new Error('Both translation services failed');
-        
+
     } catch (error) {
         console.error('Translation API error:', error);
-        
+
         // Fallback translations for common phrases
         const fallbackTranslations = {
             'Submit your birthday and a heartfelt message': 'أرسل تاريخ ميلادك ورسالة صادقة',
@@ -202,7 +211,7 @@ async function translateText(text) {
             'Your message will be shared with someone else on their birthday': 'ستتم مشاركة رسالتك مع شخص آخر في عيد ميلاده',
             'Write something kind, uplifting, and birthday-appropriate!': 'اكتب شيئاً لطيفاً ومشجعاً ومناسباً لعيد الميلاد!'
         };
-        
+
         return fallbackTranslations[text] || text;
     }
 }
@@ -218,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
-    
+
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', function () {
             mobileMenu.classList.toggle('hidden');

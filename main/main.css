@@ -4,22 +4,34 @@
     --background-color: #FFFFFF;
     --accent-color: #FFD700;
 }
+
 @font-face {
-    font-family: 'MyFont'; /* Name the font family */
-    src: url('../font/Franklin Gothic.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont';
+    /* Name the font family */
+    src: url('../font/Franklin Gothic.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
 
 /* Define a custom font face for Arabic text */
 @font-face {
-    font-family: 'MyFont2'; /* Name the font family */
-    src: url('../font/KSAHeading.ttf') format('truetype'); /* Path to font file */
-    font-weight: normal; /* Normal weight */
-    font-style: normal; /* Normal style */
-    font-display: swap; /* Ensure text remains visible during font load */
+    font-family: 'MyFont2';
+    /* Name the font family */
+    src: url('../font/KSAHeading.ttf') format('truetype');
+    /* Path to font file */
+    font-weight: normal;
+    /* Normal weight */
+    font-style: normal;
+    /* Normal style */
+    font-display: swap;
+    /* Ensure text remains visible during font load */
 }
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: #FFF5F5;
@@ -30,6 +42,10 @@ body {
     font-family: 'Cairo', sans-serif;
 }
 
+/* In main.css - minimal overrides */
+.darkmode--activated .footer {
+    background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+}
 
 /* Sharing buttons styles */
 .share-buttons-container {
@@ -103,8 +119,8 @@ body {
     width: 100%;
 }
 
-.hidden{
-display: none;
+.hidden {
+    display: none;
 }
 
 #main-title {
@@ -424,14 +440,14 @@ textarea {
 #toggleLangBtn {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     z-index: 100;
     background-color: #ffffff;
     color: #CF0820;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -447,9 +463,4 @@ textarea {
     box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
     background-color: #CF0820;
     color: white;
-}
-
-.rtl #toggleLangBtn {
-    right: auto;
-    left: 20px;
 }
