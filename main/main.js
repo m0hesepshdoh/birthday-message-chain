@@ -38,7 +38,7 @@ function setupShareButtons() {
                 // Try modern clipboard API first
                 if (navigator.clipboard) {
                     await navigator.clipboard.writeText(websiteUrl);
-                } 
+                }
                 // Fallback for older browsers
                 else if (document.execCommand('copy')) {
                     document.execCommand('copy');
@@ -85,14 +85,14 @@ function showCopyFeedback(button) {
     }
 }
 
-// Firebase configuration for database
+// Firebase configuration for connecting to the database
 const firebaseConfig = {
-    apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
-    authDomain: 'birthdaymessagesapp.firebaseapp.com',
-    projectId: 'birthdaymessagesapp',
-    storageBucket: 'birthdaymessagesapp.firebasestorage.app',
-    messagingSenderId: '220266164498',
-    appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
+    apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w', // API key for authentication
+    authDomain: 'birthdaymessagesapp.firebaseapp.com', // Domain for authentication
+    projectId: 'birthdaymessagesapp',                  // Project ID
+    storageBucket: 'birthdaymessagesapp.firebasestorage.app', // Storage bucket
+    messagingSenderId: '220266164498',                // Sender ID for messaging
+    appId: '1:220266164498:web:2adcb2520b75f580cd83cb' // App ID
 };
 
 // Initialize Firebase with above config
@@ -227,7 +227,7 @@ elements.email.addEventListener('input', () => {
 const populateWheel = (wheel, items, selectedIndex = 0) => {
     wheel.innerHTML = ''; // Clear existing items
     const fragment = document.createDocumentFragment(); // Create document fragment for better performance
-    
+
     // Create each wheel item
     items.forEach((item, index) => {
         const itemElement = document.createElement('div');
@@ -273,7 +273,7 @@ const handleItemClick = function (wheel, index) {
     // Calculate scroll position to center selected item
     var scrollPos = index * 40 - wheel.clientHeight / 2 + 20;
     wheel.scrollTop = scrollPos;
-    
+
     // If month wheel was clicked, update days
     if (wheel === elements.monthWheel && selectedMonth !== index) {
         selectedMonth = index;
@@ -294,7 +294,7 @@ const applyTranslations = () => {
     const langText = document.getElementById('langToggleText');
     const langData = translations[currentLang];
     const isRTL = currentLang === 'ar';
-    
+
     // Set HTML lang and direction attributes
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
@@ -315,7 +315,7 @@ const applyTranslations = () => {
     elements.message.placeholder = langData.messagePlaceholder;
     elements.submitButton.textContent = langData.submitButtonText;
     elements.toggleLangBtn.textContent = isRTL ? "🌐" : "🇵🇸";
-    
+
     // Update wheels with translated months
     populateWheel(elements.monthWheel, langData.months, selectedMonth);
     updateSelectedDate();
@@ -344,7 +344,7 @@ const applyTranslations = () => {
         el.textContent = "";
         el.style.display = 'none';
     });
-    
+
     // Update share button labels
     if (elements.shareLabel) elements.shareLabel.textContent = langData.shareLabel;
     if (document.getElementById('whatsapp-share')) {
@@ -354,7 +354,7 @@ const applyTranslations = () => {
     if (document.getElementById('share-label')) {
         document.getElementById('share-label').textContent = langData.shareLabel;
     }
-    
+
     // Force reflow to ensure RTL layout updates properly
     document.body.style.display = 'none';
     document.body.offsetHeight;
@@ -424,24 +424,24 @@ const getIpAddress = function () {
 // Main form submission handler
 const checkIpAndSubmit = async event => {
     event.preventDefault(); // Prevent form default submission
-    
+
     // Hide all messages initially
     [elements.formError, elements.formSuccess, elements.ipBlockError].forEach(el => el.style.display = 'none');
     [elements.emailError, elements.messageError].forEach(el => {
         el.textContent = "";
         el.style.display = 'none';
     });
-    
+
     // Disable submit button during processing
     elements.submitButton.disabled = true;
     elements.submitButton.textContent = translations[currentLang].submitButtonJoining;
-    
+
     // Get form values
     const email = elements.email.value.trim();
     const message = elements.message.value.trim();
     const langData = translations[currentLang];
     let hasErrors = false;
-    
+
     // Validate email
     if (!validateEmail(email)) {
         elements.emailError.textContent = langData.emailValidationError;
@@ -450,7 +450,7 @@ const checkIpAndSubmit = async event => {
         elements.emailError.textContent = currentLang === 'ar' ? 'هذا البريد الإلكتروني حقي' : 'This email address is mine.';
         hasErrors = true;
     }
-    
+
     // Validate message
     if (!message) {
         elements.messageError.textContent = langData.messageRequiredError;
@@ -459,7 +459,7 @@ const checkIpAndSubmit = async event => {
         elements.messageError.textContent = langData.messageLengthError;
         hasErrors = true;
     }
-    
+
     // If errors found, show them and stop
     if (hasErrors) {
         elements.formError.textContent = langData.formGenericError;
@@ -468,13 +468,13 @@ const checkIpAndSubmit = async event => {
         elements.submitButton.textContent = langData.submitButtonText;
         return;
     }
-    
+
     try {
         // Get user's IP address
         const ipAddress = await getIpAddress();
         const attemptsRef = db.collection('ipAttempts').doc(ipAddress);
         const doc = await attemptsRef.get();
-        
+
         // Check if user has exceeded submission attempts
         if (doc.exists && doc.data().attempts >= BLOCKED_ATTEMPTS) {
             elements.ipBlockError.textContent = langData.ipBlockedError;
@@ -487,7 +487,7 @@ const checkIpAndSubmit = async event => {
             }, 8000);
             return;
         }
-        
+
         // Save submission to database
         await db.collection("submissions").add({
             email: email,
@@ -496,7 +496,7 @@ const checkIpAndSubmit = async event => {
             message: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
-        
+
         // Update attempt count
         await (doc.exists ?
             attemptsRef.update({
@@ -505,16 +505,16 @@ const checkIpAndSubmit = async event => {
             attemptsRef.set({
                 attempts: 1
             }));
-        
+
         // Show success message
         elements.formSuccess.textContent = langData.formSuccessMessage;
         elements.formSuccess.style.display = 'block';
-        
+
         // Redirect after delay
         setTimeout(() => {
             window.location.href = "hub/hub.html";
         }, 10000);
-        
+
         // Reset form
         elements.birthdayForm.reset();
         selectedMonth = 0;
@@ -542,7 +542,7 @@ elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 document.addEventListener('DOMContentLoaded', function () {
     // Determine initial language (from localStorage or browser)
     currentLang = localStorage.getItem('selectedLanguage') || ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
-    
+
     // Small delay to ensure DOM is fully ready
     setTimeout(function () {
         applyTranslations(); // Apply translations
@@ -557,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
     }, 100);
-    
+
     // Set up share buttons
     setupShareButtons();
 });
