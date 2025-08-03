@@ -1,28 +1,33 @@
+// Dark mode widget configuration
 const options = {
-    bottom: '80px',
-    left: '20px',
-    right: 'unset',
-    label: '🌓',
+    bottom: '80px', // Position from bottom
+    left: '20px',   // Position from left
+    right: 'unset', // No right positioning
+    label: '🌓',    // Moon/sun icon for toggle
 };
 
+// Initialize dark mode widget
 const darkmode = new Darkmode(options);
-darkmode.showWidget();
+darkmode.showWidget(); // Display the widget on page
 
+// Firebase configuration for connecting to the database
 const firebaseConfig = {
-    apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w',
-    authDomain: 'birthdaymessagesapp.firebaseapp.com',
-    projectId: 'birthdaymessagesapp',
-    storageBucket: 'birthdaymessagesapp.firebasestorage.app',
-    messagingSenderId: '220266164498',
-    appId: '1:220266164498:web:2adcb2520b75f580cd83cb'
+    apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w', // API key for authentication
+    authDomain: 'birthdaymessagesapp.firebaseapp.com', // Domain for authentication
+    projectId: 'birthdaymessagesapp',                  // Project ID
+    storageBucket: 'birthdaymessagesapp.firebasestorage.app', // Storage bucket
+    messagingSenderId: '220266164498',                // Sender ID for messaging
+    appId: '1:220266164498:web:2adcb2520b75f580cd83cb' // App ID
 };
 
+// Initialize Firebase with the configuration
 firebase.initializeApp(firebaseConfig);
+// Get Firestore database instance
 const db = firebase.firestore();
 
-// Language support
+// Language translations for English and Arabic
 const translations = {
-    en: {
+    en: { // English translations
         title: "Birthday Messages",
         description: "Heartfelt messages from people around the world",
         messagesTitle: "All Messages",
@@ -44,7 +49,7 @@ const translations = {
         joinNowButton: "Join Now"
 
     },
-    ar: {
+    ar: { // Arabic translations
         title: "رسائل يوم الولادة",
         description: "رسائل صادقة من أشخاص حول العالم",
         messagesTitle: "جميع الرسائل",
@@ -67,21 +72,26 @@ const translations = {
     }
 };
 
+// Get current language from storage or browser, default to English
 let currentLang = localStorage.getItem('selectedLanguage') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
+// Get current sort field from storage or default to timestamp
 let currentSortField = localStorage.getItem('sortField') || 'timestamp';
+// Check if sorting by birthday from storage
 let isSortingByBirthday = localStorage.getItem('isSortingByBirthday') === 'true' || false;
-let currentLanguageFilter = null;
-let isFetching = false;
-let lastVisible = null;
+let currentLanguageFilter = null; // No language filter by default
+let isFetching = false; // Flag to prevent multiple fetches
+let lastVisible = null; // Last document seen for pagination
 
-// Apply translations
+// Function to apply translations to the page
 function applyTranslations() {
     const langData = translations[currentLang];
-    const isRTL = currentLang === 'ar';
+    const isRTL = currentLang === 'ar'; // Check if Arabic (right-to-left)
 
+    // Set HTML language and direction
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
 
+    // Add/remove RTL class to body
     if (isRTL) {
         document.body.classList.add('rtl');
     } else {
@@ -119,63 +129,70 @@ function applyTranslations() {
     document.getElementById('footer-copyright').innerHTML = langData.copyright;
 
     document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
+    // ... (updating various elements on the page)
 }
 
-// Toggle language
+// Function to toggle between English and Arabic
 function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'ar' : 'en';
-    localStorage.setItem('selectedLanguage', currentLang);
-    window.location.reload(); // This will refresh the page
     applyTranslations();
+    currentLang = currentLang === 'en' ? 'ar' : 'en'; // Switch language
+    localStorage.setItem('selectedLanguage', currentLang); // Save to storage
+    window.location.reload(); // Refresh page to apply changes
 }
 
+// Add click event to language toggle button
 document.getElementById('toggleLangBtn').addEventListener('click', toggleLanguage);
 
-// Mobile menu toggle
+// Mobile menu toggle functionality
 document.getElementById('mobileMenuBtn').addEventListener('click', function () {
     const menu = document.getElementById('mobileMenu');
-    menu.classList.toggle('hidden');
+    menu.classList.toggle('hidden'); // Show/hide menu
 });
 
-// Rest of your existing hub functionality...
+// When page loads
 document.addEventListener('DOMContentLoaded', function () {
-    applyTranslations();
-    fetchMessages(7);
+    applyTranslations(); // Apply translations
+    fetchMessages(7);    // Load first 7 messages
 
+    // Sort button click handler
     document.getElementById('sortMonthBtn').addEventListener('click', () => {
-        isSortingByBirthday = !isSortingByBirthday;
+        isSortingByBirthday = !isSortingByBirthday; // Toggle sort method
         currentSortField = isSortingByBirthday ? 'birthDay' : 'timestamp';
         // Save to localStorage
         localStorage.setItem('isSortingByBirthday', isSortingByBirthday);
         localStorage.setItem('sortField', currentSortField);
-        // Update button text based on current sort
+        // Update button text
         const langData = translations[currentLang];
         document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ?
             langData.sortLatest :
             langData.sortMonth;
 
         currentLanguageFilter = null;
-        fetchMessages(7, true);
+        fetchMessages(7, true); // Reload messages with new sort
     });
 
+    // Load more button click handler
     document.getElementById('loadMoreBtn').addEventListener('click', () => {
-        fetchMessages(7);
+        fetchMessages(7); // Load 7 more messages
     });
 
     // Infinite scroll detection
     window.addEventListener('scroll', () => {
+        // If near bottom of page
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-            if (!isFetching && lastVisible) {
-                fetchMessages(7);
+            if (!isFetching && lastVisible) { // If not already loading and more to load
+                fetchMessages(7); // Load more
             }
         }
     });
 });
 
+// Function to fetch messages from database
 function fetchMessages(limit = 7, reset = false) {
-    if (isFetching) return;
+    if (isFetching) return; // Don't fetch if already fetching
 
-    isFetching = true;
+    isFetching = true; // Set flag
+    // Get various UI elements
     const loadingIndicator = document.getElementById('loadingIndicator');
     const errorDisplay = document.getElementById('errorDisplay');
     const noMessages = document.getElementById('noMessages');
@@ -185,18 +202,21 @@ function fetchMessages(limit = 7, reset = false) {
     const loadMoreSpinner = document.getElementById('loadMoreSpinner');
 
     if (reset) {
-        lastVisible = null;
-        document.getElementById('messagesContainer').innerHTML = '';
+        lastVisible = null; // Reset pagination
+        document.getElementById('messagesContainer').innerHTML = ''; // Clear container
     } else {
+        // Update load more button state
         loadMoreText.textContent = translations[currentLang].loadMoreText;
         loadMoreSpinner.classList.remove('hidden');
         loadMoreBtn.disabled = true;
     }
 
+    // Show loading, hide errors
     loadingIndicator.classList.remove('hidden');
     errorDisplay.classList.add('hidden');
     noMessages.classList.add('hidden');
 
+    // Create database query
     let query = db.collection('submissions')
         .orderBy(currentSortField);
 
@@ -205,12 +225,13 @@ function fetchMessages(limit = 7, reset = false) {
         query = query.where('language', '==', currentLanguageFilter);
     }
 
-    query = query.limit(limit);
+    query = query.limit(limit); // Limit results
 
     if (lastVisible && !reset) {
-        query = query.startAfter(lastVisible);
+        query = query.startAfter(lastVisible); // Paginate
     }
 
+    // Adjust query based on sort method
     if (isSortingByBirthday) {
         // For birthday sorting, we need to sort by birthMonth first, then birthDay
         query = db.collection('submissions')
@@ -220,31 +241,36 @@ function fetchMessages(limit = 7, reset = false) {
         query = db.collection('submissions')
             .orderBy('timestamp', 'desc');
     };
-    // Simulate longer loading time (2 seconds)
+
+    // Add slight delay for better UX
     setTimeout(() => {
         query.get()
             .then((querySnapshot) => {
+                // Hide loading indicators
                 loadingIndicator.classList.add('hidden');
                 isFetching = false;
 
+                // Update load more button
                 loadMoreText.textContent = translations[currentLang].loadMoreText;
                 loadMoreSpinner.classList.add('hidden');
                 loadMoreBtn.disabled = false;
 
                 const container = document.getElementById('messagesContainer');
 
+                // Show "no messages" if empty
                 if (querySnapshot.empty && reset) {
                     noMessages.classList.remove('hidden');
                     loadMoreContainer.classList.add('hidden');
                     return;
                 }
 
+                // Add each message to page
                 querySnapshot.forEach((doc) => {
                     const msg = doc.data();
                     addMessageToDOM(msg);
                 });
 
-                // Update last visible document
+                // Update last visible for pagination
                 lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
                 // Show/hide load more button
@@ -257,19 +283,23 @@ function fetchMessages(limit = 7, reset = false) {
     }, 500); // half second delay
 }
 
+// Function to add a message to the page
 function addMessageToDOM(msg) {
+    // Month names in English and Arabic
     const monthNames = currentLang === 'en'
         ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         : ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
 
     const container = document.getElementById('messagesContainer');
 
+    // Create message card
     const card = document.createElement('div');
     card.className = 'message-card bg-white rounded-lg shadow-md p-6';
 
     // Add Arabic RTL direction if language is Arabic
     const messageClass = msg.language === 'Arabic' ? 'arabic-message' : '';
 
+    // Card HTML structure
     card.innerHTML = `
         <div class="flex justify-between items-start mb-4">
           <div class="flex space-x-2">
@@ -280,15 +310,17 @@ function addMessageToDOM(msg) {
         </div>
         <p class="text-gray-700 mb-4 ${messageClass}">${msg.message}</p>
       `;
-    container.appendChild(card);
+    container.appendChild(card); // Add to container
 }
 
+// Function to format time as "X time ago"
 function formatTimeAgo(date) {
     if (!date) return currentLang === 'en' ? "just now" : "الآن";
 
     const now = new Date();
     const seconds = Math.floor((now - date) / 1000);
 
+    // Return appropriate time string based on elapsed time
     if (seconds < 60) return currentLang === 'en' ? "just now" : "الآن";
     if (seconds < 3600) {
         const minutes = Math.floor(seconds / 60);
