@@ -217,8 +217,7 @@ function fetchMessages(limit = 7, reset = false) {
     noMessages.classList.add('hidden');
 
     // Create database query
-    let query = db.collection('submissions')
-        .orderBy(currentSortField);
+    let query;
 
     // Apply language filter if set
     if (currentLanguageFilter) {
