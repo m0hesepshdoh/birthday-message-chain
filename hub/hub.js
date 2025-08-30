@@ -25,6 +25,11 @@ firebase.initializeApp(firebaseConfig);
 // Get Firestore database instance
 const db = firebase.firestore();
 
+// Add this function near the top of your file with other utility functions
+function isMessageDisplayed(messageId) {
+    return document.getElementById(`message-${messageId}`) !== null;
+}
+
 // Language translations for English and Arabic
 const translations = {
     en: { // English translations
@@ -37,7 +42,6 @@ const translations = {
         noMessagesDesc: "Be the first to share your birthday wishes!",
         errorTitle: "Failed to load messages",
         errorDesc: "Please try refreshing the page",
-        loadMoreText: "Load More Messages",
         logoTitle: "Chain",
         navJoin: "Join Now",
         navFaq: "FAQ",
@@ -59,7 +63,6 @@ const translations = {
         noMessagesDesc: "كن أول من يشارك تمنيات يوم الولادة!",
         errorTitle: "فشل تحميل الرسائل",
         errorDesc: "يرجى محاولة تحديث الصفحة",
-        loadMoreText: "تحميل المزيد من الرسائل",
         logoTitle: "سلسلة",
         navJoin: "انضم الآن",
         navFaq: "الأسئلة الشائعة",
@@ -81,6 +84,7 @@ let isSortingByBirthday = localStorage.getItem('isSortingByBirthday') === 'true'
 let currentLanguageFilter = null; // No language filter by default
 let isFetching = false; // Flag to prevent multiple fetches
 let lastVisible = null; // Last document seen for pagination
+let hasMoreMessages = true; // Flag to check if more messages exist
 
 // Function to apply translations to the page
 function applyTranslations() {
@@ -119,7 +123,6 @@ function applyTranslations() {
     document.getElementById('no-messages-desc').textContent = langData.noMessagesDesc;
     document.getElementById('error-title').textContent = langData.errorTitle;
     document.getElementById('error-desc').textContent = langData.errorDesc;
-    document.getElementById('loadMoreText').textContent = langData.loadMoreText;
 
     // Footer
     document.getElementById('footer-title').textContent = langData.footerTitle;
@@ -168,47 +171,40 @@ document.addEventListener('DOMContentLoaded', function () {
             langData.sortMonth;
 
         currentLanguageFilter = null;
+        lastVisible = null;
+        hasMoreMessages = true;
         fetchMessages(7, true); // Reload messages with new sort
     });
 
-    // Load more button click handler
-    document.getElementById('loadMoreBtn').addEventListener('click', () => {
-        fetchMessages(7); // Load 7 more messages
-    });
-
-    // Infinite scroll detection
+    // Infinite scroll detection - throttled to prevent multiple calls
+    let scrollTimeout;
     window.addEventListener('scroll', () => {
-        // If near bottom of page
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-            if (!isFetching && lastVisible) { // If not already loading and more to load
-                fetchMessages(7); // Load more
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            // If near bottom of page and not already loading and more messages exist
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 400) {
+                if (!isFetching && lastVisible && hasMoreMessages) {
+                    fetchMessages(7); // Load more
+                }
             }
-        }
+        }, 200);
     });
 });
 
 // Function to fetch messages from database
 function fetchMessages(limit = 7, reset = false) {
-    if (isFetching) return; // Don't fetch if already fetching
+    if (isFetching || (!hasMoreMessages && !reset)) return; // Don't fetch if already fetching or no more messages
 
     isFetching = true; // Set flag
     // Get various UI elements
     const loadingIndicator = document.getElementById('loadingIndicator');
     const errorDisplay = document.getElementById('errorDisplay');
     const noMessages = document.getElementById('noMessages');
-    const loadMoreContainer = document.getElementById('loadMoreContainer');
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    const loadMoreText = document.getElementById('loadMoreText');
-    const loadMoreSpinner = document.getElementById('loadMoreSpinner');
 
     if (reset) {
         lastVisible = null; // Reset pagination
+        hasMoreMessages = true;
         document.getElementById('messagesContainer').innerHTML = ''; // Clear container
-    } else {
-        // Update load more button state
-        loadMoreText.textContent = translations[currentLang].loadMoreText;
-        loadMoreSpinner.classList.remove('hidden');
-        loadMoreBtn.disabled = true;
     }
 
     // Show loading, hide errors
@@ -219,27 +215,27 @@ function fetchMessages(limit = 7, reset = false) {
     // Create database query
     let query;
 
-    // Apply language filter if set
-    if (currentLanguageFilter) {
-        query = query.where('language', '==', currentLanguageFilter);
-    }
-
-    query = query.limit(limit); // Limit results
-
-    if (lastVisible && !reset) {
-        query = query.startAfter(lastVisible); // Paginate
-    }
-
-    // Adjust query based on sort method
     if (isSortingByBirthday) {
-        // For birthday sorting, we need to sort by birthMonth first, then birthDay
+        // For birthday sorting, sort by birthMonth first, then birthDay
         query = db.collection('submissions')
             .orderBy('birthDay');
     } else {
         // Default sorting by timestamp (newest first)
         query = db.collection('submissions')
             .orderBy('timestamp', 'desc');
-    };
+    }
+
+    // Apply language filter if set
+    if (currentLanguageFilter) {
+        query = query.where('language', '==', currentLanguageFilter);
+    }
+
+    // Apply pagination if not the first page
+    if (lastVisible && !reset) {
+        query = query.startAfter(lastVisible);
+    }
+
+    query = query.limit(limit); // Limit results
 
     // Add slight delay for better UX
     setTimeout(() => {
@@ -249,40 +245,42 @@ function fetchMessages(limit = 7, reset = false) {
                 loadingIndicator.classList.add('hidden');
                 isFetching = false;
 
-                // Update load more button
-                loadMoreText.textContent = translations[currentLang].loadMoreText;
-                loadMoreSpinner.classList.add('hidden');
-                loadMoreBtn.disabled = false;
-
                 const container = document.getElementById('messagesContainer');
 
                 // Show "no messages" if empty
                 if (querySnapshot.empty && reset) {
                     noMessages.classList.remove('hidden');
-                    loadMoreContainer.classList.add('hidden');
+                    hasMoreMessages = false;
                     return;
                 }
 
                 // Add each message to page
                 querySnapshot.forEach((doc) => {
                     const msg = doc.data();
-                    addMessageToDOM(msg, doc);
+                    // Check if this message is already displayed to avoid duplicates
+                    if (!document.getElementById(`message-${doc.id}`)) {
+                        addMessageToDOM(msg, doc);
+                    }
                 });
 
                 // Update last visible for pagination
                 lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-                // Show/hide load more button
+                // Check if we have fewer results than requested (no more messages)
                 if (querySnapshot.size < limit) {
-                    loadMoreContainer.classList.add('hidden');
-                } else {
-                    loadMoreContainer.classList.remove('hidden');
+                    hasMoreMessages = false;
                 }
+            })
+            .catch((error) => {
+                console.error("Error fetching messages:", error);
+                loadingIndicator.classList.add('hidden');
+                errorDisplay.classList.remove('hidden');
+                isFetching = false;
             });
-    }, 500); // half second delay
+    }, 50); // small delay
 }
 
-function addMessageToDOM(msg, doc) {  // Changed parameter name from docId to doc
+function addMessageToDOM(msg, doc) {
     // Month names in English and Arabic
     const monthNames = currentLang === 'en'
         ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -297,8 +295,16 @@ function addMessageToDOM(msg, doc) {  // Changed parameter name from docId to do
     // Add Arabic RTL direction if language is Arabic
     const messageClass = msg.language === 'Arabic' ? 'arabic-message' : '';
 
-    // Add a unique ID for Vue to mount
-    const vueAppId = `message-${doc.id}`;  // Now using doc.id directly
+    // Create a unique ID for this message
+    const messageId = doc.id;
+    const vueAppId = `message-${messageId}`;
+
+    // Store the initial like count from the message data
+    const initialLikeCount = msg.likes || 0;
+
+    // Check if user has already liked this message
+    const isAlreadyLiked = localStorage.getItem(`liked-${messageId}`) === 'true';
+
     card.innerHTML = `
     <div id="${vueAppId}">
       <div class="flex justify-between items-start mb-4">
@@ -330,13 +336,13 @@ function addMessageToDOM(msg, doc) {  // Changed parameter name from docId to do
 
     container.appendChild(card);
 
-    // Initialize Vue for this message
+    // Initialize Vue for this message with proper initial values
     const app = Vue.createApp({
         data() {
             return {
-                isLiked: false,
-                likeCount: msg.likes || 0,
-                messageId: doc.id
+                isLiked: isAlreadyLiked,
+                likeCount: initialLikeCount,
+                messageId: messageId
             };
         },
         methods: {
@@ -360,14 +366,15 @@ function addMessageToDOM(msg, doc) {  // Changed parameter name from docId to do
                 localStorage.setItem(`liked-${this.messageId}`, this.isLiked);
             }
         },
-        async created() {
-            // Check localStorage for existing like
-            const savedLike = localStorage.getItem(`liked-${this.messageId}`);
-            this.isLiked = savedLike === 'true';
-
-            // Fetch current like count from Firebase
-            const doc = await db.collection('submissions').doc(this.messageId).get();
-            this.likeCount = doc.data().likes || 0;
+        async mounted() {
+            // Only fetch from Firebase if we don't have the latest data
+            // This prevents the glitch when scrolling
+            if (!this.isLiked) {
+                const docSnapshot = await db.collection('submissions').doc(this.messageId).get();
+                if (docSnapshot.exists) {
+                    this.likeCount = docSnapshot.data().likes || 0;
+                }
+            }
         }
     }).mount(`#${vueAppId}`);
 }
