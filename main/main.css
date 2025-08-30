@@ -88,33 +88,6 @@ body {
     /* Remove right margin */
 }
 
-/* Animation for confetti effect */
-@keyframes confetti {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        /* Start position */
-    }
-
-    100% {
-        transform: translateY(100vh) rotate(360deg);
-        /* End position */
-    }
-}
-
-/* Confetti element styles */
-.confetti {
-    position: absolute;
-    /* Position relative to viewport */
-    width: 10px;
-    /* Small square */
-    height: 10px;
-    /* Small square */
-    background-color: var(--accent-color);
-    /* Gold color */
-    animation: confetti 3s ease-in-out forwards;
-    /* Apply animation */
-}
-
 /* RTL form direction */
 [dir="rtl"] .form-group {
     direction: rtl;
@@ -282,8 +255,7 @@ body {
 /* Form element styling */
 input,
 textarea,
-button,
-.bg-blue-500 {
+.button {
     border-radius: 8px;
     /* Rounded corners */
 }
@@ -320,16 +292,6 @@ textarea,
     /* Responsive height */
 }
 
-/* Centering utility */
-.flex-center {
-    display: flex;
-    /* Flexible layout */
-    justify-content: center;
-    /* Center horizontally */
-    align-items: center;
-    /* Center vertically */
-}
-
 /* Error message styling */
 .error-message {
     color: red;
@@ -358,14 +320,6 @@ textarea,
     /* Comfortable spacing */
     margin-bottom: clamp(10px, 3vw, 20px);
     /* Responsive space below */
-}
-
-/* Toggle button styling */
-.toggle-button {
-    font-size: clamp(10px, 2.5vw, 12px);
-    /* Responsive text */
-    padding: clamp(2px, 1vw, 4px) clamp(4px, 2vw, 8px);
-    /* Responsive padding */
 }
 
 /* Form group spacing */
@@ -399,22 +353,6 @@ textarea {
     /* Slight lift */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     /* Shadow effect */
-}
-
-/* Message card styling */
-.message-card {
-    background: white;
-    /* White background */
-    border-radius: 8px;
-    /* Rounded corners */
-    padding: 15px;
-    /* Inner spacing */
-    margin: 10px 0;
-    /* Outer spacing */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
-    border-left: 4px solid var(--primary-color);
-    /* Red accent border */
 }
 
 /* RTL text alignment */
