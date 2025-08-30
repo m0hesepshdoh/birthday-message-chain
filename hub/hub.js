@@ -100,7 +100,7 @@ function applyTranslations() {
 
     // Header and nav
     document.getElementById('logo-title').textContent = langData.logoTitle;
-    document.getElementById('nav-main').textContent = langData.navJoin;
+    document.getElementById('nav-Join').textContent = langData.navJoin;
     document.getElementById('nav-faq').textContent = langData.navFaq;
     // Mobile menu
     document.getElementById('mobile-nav-main').textContent = langData.navJoin;
@@ -267,7 +267,7 @@ function fetchMessages(limit = 7, reset = false) {
                 // Add each message to page
                 querySnapshot.forEach((doc) => {
                     const msg = doc.data();
-                    addMessageToDOM(msg);
+                    addMessageToDOM(msg, doc);
                 });
 
                 // Update last visible for pagination
@@ -283,8 +283,7 @@ function fetchMessages(limit = 7, reset = false) {
     }, 500); // half second delay
 }
 
-// Function to add a message to the page
-function addMessageToDOM(msg) {
+function addMessageToDOM(msg, doc) {  // Changed parameter name from docId to doc
     // Month names in English and Arabic
     const monthNames = currentLang === 'en'
         ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -299,18 +298,79 @@ function addMessageToDOM(msg) {
     // Add Arabic RTL direction if language is Arabic
     const messageClass = msg.language === 'Arabic' ? 'arabic-message' : '';
 
-    // Card HTML structure
+    // Add a unique ID for Vue to mount
+    const vueAppId = `message-${doc.id}`;  // Now using doc.id directly
     card.innerHTML = `
-        <div class="flex justify-between items-start mb-4">
-          <div class="flex space-x-2">
-            <span class="birthday-badge px-3 py-1 rounded-full text-xs font-semibold">${monthNames[msg.birthMonth - 1]} ${msg.birthDay}</span>
-            ${msg.language ? `<span class="language-badge px-3 py-1 rounded-full text-xs font-semibold">${msg.language}</span>` : ''}
-          </div>
-          <span class="text-gray-500 text-sm">${formatTimeAgo(msg.timestamp?.toDate())}</span>
+    <div id="${vueAppId}">
+      <div class="flex justify-between items-start mb-4">
+        <div class="flex space-x-2">
+          <span class="birthday-badge px-3 py-1 rounded-full text-xs font-semibold">
+            ${monthNames[msg.birthMonth - 1]} ${msg.birthDay}
+          </span>
+          ${msg.language ? `<span class="language-badge px-3 py-1 rounded-full text-xs font-semibold">${msg.language}</span>` : ''}
         </div>
-        <p class="text-gray-700 mb-4 ${messageClass}">${msg.message}</p>
-      `;
-    container.appendChild(card); // Add to container
+        <span class="text-gray-500 text-sm">${formatTimeAgo(msg.timestamp?.toDate())}</span>
+      </div>
+      <p class="text-gray-700 mb-4 ${msg.language === 'Arabic' ? 'arabic-message' : ''}">
+        ${msg.message}
+      </p>
+      <div class="flex items-center space-x-2">
+        <button 
+          @click="toggleLike" 
+          :class="{ 'text-red-500': isLiked }" 
+          class="flex items-center space-x-1 text-gray-500 hover:text-red-500 transition"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          <span>{{ likeCount }}</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+    container.appendChild(card);
+
+    // Initialize Vue for this message
+    const app = Vue.createApp({
+        data() {
+            return {
+                isLiked: false,
+                likeCount: msg.likes || 0,
+                messageId: doc.id
+            };
+        },
+        methods: {
+            async toggleLike() {
+                const likesRef = db.collection('submissions').doc(this.messageId);
+
+                if (this.isLiked) {
+                    // Decrement like
+                    await likesRef.update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                    this.likeCount--;
+                } else {
+                    // Increment like
+                    await likesRef.update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    this.likeCount++;
+                }
+                this.isLiked = !this.isLiked;
+                localStorage.setItem(`liked-${this.messageId}`, this.isLiked);
+            }
+        },
+        async created() {
+            // Check localStorage for existing like
+            const savedLike = localStorage.getItem(`liked-${this.messageId}`);
+            this.isLiked = savedLike === 'true';
+
+            // Fetch current like count from Firebase
+            const doc = await db.collection('submissions').doc(this.messageId).get();
+            this.likeCount = doc.data().likes || 0;
+        }
+    }).mount(`#${vueAppId}`);
 }
 
 // Function to format time as "X time ago"

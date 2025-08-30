@@ -111,6 +111,57 @@ body {
     /* Continuous pulsing animation */
 }
 
+/* Navigation link styling */
+.nav-link {
+    position: relative;
+    /* For pseudo-element */
+    transition: all 0.3s ease;
+    /* Smooth hover effects */
+}
+
+/* Nav link hover color */
+.nav-link:hover {
+    color: var(--primary-color);
+    /* Red on hover */
+}
+
+/* Nav link underline animation */
+.nav-link::after {
+    content: '';
+    /* Empty content */
+    position: absolute;
+    /* Position relative to link */
+    width: 0;
+    /* Start invisible */
+    height: 2px;
+    /* Thin line */
+    bottom: 0;
+    /* At bottom */
+    left: 0;
+    /* From left */
+    background-color: var(--primary-color);
+    /* Red line */
+    transition: width 0.3s ease;
+    /* Smooth expansion */
+}
+
+/* Animate underline on hover */
+.nav-link:hover::after {
+    width: 100%;
+    /* Full width */
+}
+
+/* Like button animation */
+button:hover svg {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.text-red-500 {
+    color: var(--primary-color);
+    /* Use your red color */
+}
+
 /* Define the pulsing animation */
 @keyframes pulse {
     0% {

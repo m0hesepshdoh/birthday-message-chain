@@ -494,6 +494,7 @@ const checkIpAndSubmit = async event => {
             birthMonth: selectedMonth + 1, // Months are 1-based in database
             birthDay: selectedDay,
             message: message,
+            likes: 0,  // Add this field
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
 

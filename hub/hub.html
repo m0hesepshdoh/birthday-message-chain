@@ -32,6 +32,9 @@
 
   <!-- Dark mode JavaScript library -->
   <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+  <!-- Vue.js framework for building user interfaces -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -52,11 +55,14 @@
           <!-- Website title -->
         </div>
 
-        <!-- Desktop navigation links (hidden on mobile) -->
-        <nav class="hidden md:flex space-x-6 rtl:space-x-reverse">
-          <a href="../index.html" class="nav-main text-gray-700 font-medium" id="nav-main">Join Now</a>
-          <a href="../FAQ/FAQ.html" class="nav-faq text-gray-700 font-medium" id="nav-faq">FAQ</a>
-        </nav>
+        <!-- Desktop navigation menu (hidden on mobile) -->
+        <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
+          <!-- Navigation link -->
+          <li><a id="nav-Join" href="../index.html" class="nav-link text-gray-700 font-medium text-[#CF0820]">Join
+              Now</a></li>
+          <li><a id="nav-faq" href="../FAQ/FAQ.html" class="nav-link text-gray-700 font-medium">FAQ</a></li>
+          <!-- Active link with red color -->
+        </menu>
 
         <!-- Mobile menu button (only visible on small screens) -->
         <button id="mobileMenuBtn" class="md:hidden text-gray-700">
