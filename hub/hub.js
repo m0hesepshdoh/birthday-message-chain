@@ -48,6 +48,7 @@ const translations = {
         footerTitle: "Birthday Message Chain",
         footerDesc: "Making birthdays special since 2024",
         footerJoin: "Join Now",
+        searchPlaceholder: "Search messages...",
         footerFaq: "FAQ",
         copyright: "© Mohammed Bafuleh",
         joinNowButton: "Join Now"
@@ -69,16 +70,19 @@ const translations = {
         footerTitle: "سلسلة رسائل يوم الولادة",
         footerDesc: "نجعل أيام الولادة مميزة منذ 2024",
         footerJoin: "انضم الآن",
+        searchPlaceholder: "البحث في الرسائل...",
         footerFaq: "الأسئلة الشائعة",
         copyright: "© محمد بافليح",
         joinNowButton: "انضم الآن"
     }
 };
 
-// Get current language from storage or browser, default to English
+// Get current language from storage or browser
 let currentLang = localStorage.getItem('selectedLanguage') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
+
 // Get current sort field from storage or default to timestamp
 let currentSortField = localStorage.getItem('sortField') || 'timestamp';
+
 // Check if sorting by birthday from storage
 let isSortingByBirthday = localStorage.getItem('isSortingByBirthday') === 'true' || false;
 let currentLanguageFilter = null; // No language filter by default
@@ -89,7 +93,7 @@ let hasMoreMessages = true; // Flag to check if more messages exist
 // Function to apply translations to the page
 function applyTranslations() {
     const langData = translations[currentLang];
-    const isRTL = currentLang === 'ar'; // Check if Arabic (right-to-left)
+    const isRTL = currentLang === 'ar'; // Check if Arabic
 
     // Set HTML language and direction
     document.documentElement.lang = currentLang;
@@ -106,6 +110,7 @@ function applyTranslations() {
     document.getElementById('logo-title').textContent = langData.logoTitle;
     document.getElementById('nav-Join').textContent = langData.navJoin;
     document.getElementById('nav-faq').textContent = langData.navFaq;
+    
     // Mobile menu
     document.getElementById('mobile-nav-main').textContent = langData.navJoin;
     document.getElementById('mobile-nav-faq').textContent = langData.navFaq;
@@ -115,6 +120,7 @@ function applyTranslations() {
 
     // Sort button
     document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ? langData.sortLatest : langData.sortMonth;
+    
     // Main content
     document.getElementById('main-title').textContent = langData.title;
     document.getElementById('main-description').textContent = langData.description;
@@ -124,6 +130,9 @@ function applyTranslations() {
     document.getElementById('error-title').textContent = langData.errorTitle;
     document.getElementById('error-desc').textContent = langData.errorDesc;
 
+    // Update Search Bar Placeholder
+    document.getElementById('searchBar').placeholder = langData.searchPlaceholder;
+    
     // Footer
     document.getElementById('footer-title').textContent = langData.footerTitle;
     document.getElementById('footer-desc').textContent = langData.footerDesc;
@@ -132,7 +141,7 @@ function applyTranslations() {
     document.getElementById('footer-copyright').innerHTML = langData.copyright;
 
     document.getElementById('toggleLangBtn').textContent = currentLang === 'en' ? '🇵🇸' : '🌐';
-    // ... (updating various elements on the page)
+    //updating various elements on the page
 }
 
 // Function to toggle between English and Arabic
@@ -155,88 +164,106 @@ document.getElementById('mobileMenuBtn').addEventListener('click', function () {
 // When page loads
 document.addEventListener('DOMContentLoaded', function () {
     applyTranslations(); // Apply translations
-    fetchMessages(7);    // Load first 7 messages
+    fetchMessages(7); // Load first 7 messages
 
-    // Sort button click handler
-    document.getElementById('sortMonthBtn').addEventListener('click', () => {
-        isSortingByBirthday = !isSortingByBirthday; // Toggle sort method
-        currentSortField = isSortingByBirthday ? 'birthDay' : 'timestamp';
-        // Save to localStorage
-        localStorage.setItem('isSortingByBirthday', isSortingByBirthday);
-        localStorage.setItem('sortField', currentSortField);
-        // Update button text
-        const langData = translations[currentLang];
-        document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ?
-            langData.sortLatest :
-            langData.sortMonth;
+    // --- DEBOUNCING SETUP FOR SEARCH ---
+    let searchTimeout;
+    const searchBar = document.getElementById('searchBar');
 
-        currentLanguageFilter = null;
-        lastVisible = null;
-        hasMoreMessages = true;
-        fetchMessages(7, true); // Reload messages with new sort
+    searchBar.addEventListener('input', () => {
+        clearTimeout(searchTimeout); // Clear previous timeout
+        // Wait 300ms after user stops typing before searching
+        searchTimeout = setTimeout(() => {
+            fetchMessages(7, true, searchBar.value.trim());
+        }, 300);
     });
 
-    // Infinite scroll detection - throttled to prevent multiple calls
+    // --- SORT BUTTON ---
+    document.getElementById('sortMonthBtn').addEventListener('click', () => {
+        isSortingByBirthday = !isSortingByBirthday;
+        currentSortField = isSortingByBirthday ? 'birthDay' : 'timestamp';
+        localStorage.setItem('isSortingByBirthday', isSortingByBirthday);
+        localStorage.setItem('sortField', currentSortField);
+
+        const langData = translations[currentLang];
+        document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ? langData.sortLatest : langData.sortMonth;
+
+        // Reset and fetch with current search term
+        fetchMessages(7, true, searchBar.value.trim());
+    });
+
+    // --- INFINITE SCROLL ---
     let scrollTimeout;
     window.addEventListener('scroll', () => {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-            // If near bottom of page and not already loading and more messages exist
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 400) {
                 if (!isFetching && lastVisible && hasMoreMessages) {
-                    fetchMessages(7); // Load more
+                    // Fetch more with current search term
+                    fetchMessages(7, false, searchBar.value.trim());
                 }
             }
         }, 200);
     });
 });
 
-// Function to fetch messages from database
-function fetchMessages(limit = 7, reset = false) {
-    if (isFetching || (!hasMoreMessages && !reset)) return; // Don't fetch if already fetching or no more messages
 
-    isFetching = true; // Set flag
-    // Get various UI elements
+// Function to fetch messages from database
+function fetchMessages(limit = 7, reset = false, searchTerm = '') {
+    if (isFetching || (!hasMoreMessages && !reset)) return;
+    isFetching = true;
+
     const loadingIndicator = document.getElementById('loadingIndicator');
     const errorDisplay = document.getElementById('errorDisplay');
     const noMessages = document.getElementById('noMessages');
 
     if (reset) {
-        lastVisible = null; // Reset pagination
+        lastVisible = null;
         hasMoreMessages = true;
-        document.getElementById('messagesContainer').innerHTML = ''; // Clear container
+        document.getElementById('messagesContainer').innerHTML = '';
     }
 
-    // Show loading, hide errors
     loadingIndicator.classList.remove('hidden');
     errorDisplay.classList.add('hidden');
-    noMessages.classList.add('hidden');
-
-    // Create database query
-    let query;
-
-    if (isSortingByBirthday) {
-        // For birthday sorting, sort by birthMonth first, then birthDay
-        query = db.collection('submissions')
-            .orderBy('birthDay');
-    } else {
-        // Default sorting by timestamp (newest first)
-        query = db.collection('submissions')
-            .orderBy('timestamp', 'desc');
+    if (reset) {
+        noMessages.classList.add('hidden');
     }
 
-    // Apply language filter if set
+    // Start with the base collection
+    let query = db.collection('submissions');
+
+    // --- QUERY LOGIC ---
+    if (searchTerm) {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+        query = query.where('message', '>=', lowerCaseSearchTerm)
+            .where('message', '<=', lowerCaseSearchTerm + '\uf8ff')
+            .orderBy('message'); // First orderBy must match the where clause
+
+        // Add secondary sorting
+        if (isSortingByBirthday) {
+            query = query.orderBy('birthMonth').orderBy('birthDay');
+        } else {
+            query = query.orderBy('timestamp', 'desc');
+        }
+
+    } else {
+        // Original sorting when not searching
+        if (isSortingByBirthday) {
+            query = query.orderBy('birthMonth').orderBy('birthDay');
+        } else {
+            query = query.orderBy('timestamp', 'desc');
+        }
+    }
+
     if (currentLanguageFilter) {
         query = query.where('language', '==', currentLanguageFilter);
     }
 
-    // Apply pagination if not the first page
     if (lastVisible && !reset) {
         query = query.startAfter(lastVisible);
     }
 
-    query = query.limit(limit); // Limit results
-
+    query = query.limit(limit);
     // Add slight delay for better UX
     setTimeout(() => {
         query.get()
@@ -398,4 +425,24 @@ function formatTimeAgo(date) {
     }
     const days = Math.floor(seconds / 86400);
     return currentLang === 'en' ? `${days} days ago` : `منذ ${days} يوم`;
+}
+
+// Get the button:
+let mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }

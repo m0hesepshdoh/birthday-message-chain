@@ -296,3 +296,51 @@ button:hover svg {
     color: white;
     /* White text */
 }
+
+#searchBar:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px #cf082033;
+}
+
+#myBtn {
+    position: fixed;
+    /* Stays in place when scrolling */
+    bottom: 20px;
+    /* Position from bottom */
+    right: 20px;
+    /* Position from right */
+    z-index: 100;
+    /* Above most elements */
+    background-color: #ffffff;
+    /* White background */
+    color: #CF0820;
+    /* Red text */
+    border: none;
+    /* No border */
+    border-radius: 50%;
+    /* Circular shape */
+    width: 49px;
+    /* Fixed width */
+    height: 49px;
+    /* Fixed height */
+    display: flex;
+    /* Flexbox for centering */
+    align-items: center;
+    /* Center vertically */
+    justify-content: center;
+    /* Center horizontally */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    /* Shadow */
+    transition: all 0.3s ease;
+    /* Smooth hover animation */
+    font-weight: bold;
+    /* Bold text */
+    font-size: 16px;
+    /* Text size */
+}
+
+#myBtn:hover {
+    background-color: #cf082033;
+}
