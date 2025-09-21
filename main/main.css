@@ -56,14 +56,13 @@ body {
 
 .darkmode-layer,
 .darkmode-toggle {
-    z-index: 29;
+    z-index: 19;
 }
 
 /* Dark mode footer style */
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
     /* Dark gradient */
-    z-index: 30 !important;
 }
 
 .darkmode--activated .wheel-item {
@@ -454,7 +453,7 @@ textarea {
     background: linear-gradient(to right, #CF0820, #9d0618);
     /* Red gradient */
     position: relative;
-    z-index: 30;
+    z-index: 20;
     /* Above other content */
 }
 
@@ -612,7 +611,7 @@ textarea {
     bottom: 20px;
     /* 20px from bottom */
     left: 20px;
-    z-index: 29;
+    z-index: 19;
     /* Above other content */
     background-color: #ffffff;
     /* White background */
