@@ -1,81 +1,140 @@
 <!DOCTYPE html> <!-- Declares the document type and version of HTML (HTML5) -->
+
 <html lang="en" dir="ltr"> <!-- Root element with language set to English and left-to-right direction -->
 
 <head> <!-- Document metadata container -->
+
   <meta charset="UTF-8"> <!-- Sets character encoding to UTF-8 -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive viewport settings -->
+
   <title>FAQs</title> <!-- Page title shown in browser tab -->
+
   <!-- Google Fonts import for Inter, Cairo, and Comic Neue fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
     rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS framework -->
+
   <link rel="icon" href="../img/chain.ico" type="image/x-icon"> <!-- Favicon -->
+
   <link rel="stylesheet" href="FAQ.css"> <!-- Custom CSS file -->
+
   <!-- Preload custom fonts for better performance -->
   <link rel="preload" href="../font/KSAHeading.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="../font/Franklin Gothic.ttf" as="font" type="font/ttf" crossorigin>
-  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 
+  <link rel="preload" href="../font/Franklin Gothic.ttf" as="font" type="font/ttf" crossorigin>
+
+  <!-- Firebase libraries for database functionality -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen flex flex-col"> <!-- Body with background color and flex layout -->
+
   <!-- Header section with navigation -->
+
   <header class="bg-white shadow-sm">
+
     <section class="container mx-auto px-4 py-3"> <!-- Container with padding -->
+
       <nav class="flex justify-between items-center"> <!-- Flex navigation bar -->
+
         <!-- Logo section -->
+
         <figure class="flex items-center space-x-2 rtl:space-x-reverse">
+
           <img src="../img/chain.png" alt="Yellow Chain Logo" class="h-8 w-8"> <!-- Logo image -->
+
           <figcaption class="logo text-2xl" id="logo-title">Chain</figcaption> <!-- Logo text -->
+
         </figure>
 
         <!-- Desktop navigation menu (hidden on mobile) -->
+
         <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
+
           <li><a href="../index.html" class="nav-link text-gray-700 font-medium">Join Now</a></li>
+
           <!-- Navigation link -->
+
           <li><a href="../hub/hub.html" class="nav-link text-gray-700 font-medium text-[#CF0820]">Message Hub</a></li>
+
           <!-- Active link with red color -->
+
         </menu>
 
+
+
         <!-- Mobile menu button (visible only on small screens) -->
+
         <button id="mobileMenuBtn" class="md:hidden text-gray-700">
+
           <!-- Hamburger menu icon -->
+
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+
           </svg>
+
         </button>
+
       </nav>
+
     </section>
+
   </header>
 
   <!-- Mobile menu (hidden by default) -->
+
   <aside id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
+
     <menu class="container mx-auto px-4 py-2 space-y-3"> <!-- Stacked menu items -->
+
       <li><a href="../index.html" class="nav-link text-gray-700 font-medium py-2">Join Now</a></li>
+
       <li><a href="../hub/hub.html" class="nav-link text-gray-700 font-medium py-2 text-[#CF0820]">Message Hub</a></li>
+
     </menu>
+
   </aside>
 
+
   <!-- Main content area -->
+
   <main class="container mx-auto px-4 py-12 max-w-3xl flex-grow">
+
     <!-- Page header section -->
+
     <header class="text-center mb-12">
+
       <h1 class="text-3xl font-bold text-gray-800 mb-3">Frequently Asked Questions</h1> <!-- Main heading -->
+
       <p class="text-gray-600">Find answers to common questions about the Birthday Message Chain</p> <!-- Subtitle -->
+
       <!-- Back button -->
+
       <section class="mt-6">
+
         <a href="../index.html"
           class="inline-flex items-center px-4 py-2 bg-[#CF0820] text-white rounded-md hover:bg-[#9d0618] transition">
+
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-              clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
           </svg>
           Back To Join
         </a>
+
       </section>
+
     </header>
+
+
 
     <!-- FAQ items container -->
     <article class="bg-white rounded-xl shadow-md overflow-hidden">
@@ -201,17 +260,62 @@
     <section class="mt-12 text-center bg-white p-6 rounded-xl shadow-md">
       <h3 class="text-xl font-semibold mb-3">Still have questions?</h3>
       <p class="text-gray-600 mb-4">We're happy to help! Contact our support team.</p>
-      <!-- Email support button -->
-      <a href="mailto:ug671431015@ftu.ac.th"
+      <!-- Email support button that opens the form -->
+      <button id="emailSupportBtn"
         class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
         </svg>
-        Email Support
-      </a>
+        Contact Us
+      </button>
     </section>
   </main>
+
+  <!-- Retractable Contact Form -->
+  <div id="contactFormContainer"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md relative">
+      <button id="closeFormBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <h2 class="text-2xl font-bold mb-6 text-center">Contact Us</h2>
+      <form id="contactForm">
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" pattern="[a-zA-Z\s]*" id="name" name="name" placeholder="Enter your first name"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          <p class="text-red-500 text-xs mt-1 hidden" id="nameError">Name must be text only.</p>
+        </div>
+        <div class="mb-4">
+          <label for="surname" class="block text-sm font-medium text-gray-700">Surname</label>
+          <input type="text" id="surname" name="surname" placeholder="Enter your last name"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          <p class="text-red-500 text-xs mt-1 hidden" id="surnameError">Surname must be text only.</p>
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email" placeholder="your@ftu.ac.th"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" title="@ftu.ac.th" required>
+          <p class="text-red-500 text-xs mt-1 hidden" id="emailError">Please use a valid @ftu.ac.th email.</p>
+        </div>
+        <div class="mb-6">
+          <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+          <textarea id="message" name="message" rows="4" placeholder="Write your message here..."
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-red-700 text-white py-2 px-4 rounded-md hover:bg-red-800 transition">
+          Send Message
+        </button>
+        <p id="successMessage" class="text-green-600 text-sm mt-2 text-center hidden">Your message has been sent
+          successfully!</p>
+        <p id="errorMessage" class="text-red-600 text-sm mt-2 text-center hidden">An error occurred. Please try again.
+        </p>
+      </form>
+    </div>
+  </div>
 
   <!-- Footer section -->
   <footer class="footer text-white py-8 w-full">

@@ -181,7 +181,7 @@ body {
     /* Red gradient */
     position: relative;
     /* For z-index */
-    z-index: 200;
+    z-index: 30;
     /* Higher than other elements */
 }
 
@@ -308,7 +308,7 @@ body {
     /* From bottom */
     left: 20px;
     /* From left */
-    z-index: 100;
+    z-index: 20;
     /* Above other content */
     background-color: #ffffff;
     /* White background */
@@ -347,4 +347,44 @@ body {
     /* Primary color */
     color: white;
     /* White text */
+}
+
+/* Contact Form Modal */
+#contactFormContainer {
+    transition: opacity 0.3s ease;
+}
+
+#contactFormContainer > div {
+    transform: scale(5);
+    transition: transform 0.3s ease;
+}
+
+#contactFormContainer:not(.hidden) > div {
+    transform: scale(1);
+}
+
+/* Base styles for form inputs */
+input[type="text"],
+input[type="email"],
+textarea {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #CF0820; /* Primary red color */
+    box-shadow: 0 0 0 2px rgba(207, 8, 32, 0.2);
+}
+
+/* Error state for inputs */
+input.border-red-500,
+textarea.border-red-500 {
+    border-color: #ef4444; /* Tailwind's red-500 */
+}
+
+input.border-red-500:focus,
+textarea.border-red-500:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }

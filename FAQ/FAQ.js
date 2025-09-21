@@ -89,7 +89,25 @@ async function translatePage() {
         { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(3)', text: 'On your birthday, we\'ll email you a random message from another participant' },
         { selector: '.faq-item:nth-child(2) .faq-answer li:nth-child(4)', text: 'Your message will be shared with someone else on their birthday' }
     ];
-
+    // --- Contact Form Elements to Translate ---
+    const formTextElements = [
+        { selector: '#contactFormContainer h2', text: 'Contact Us' },
+        { selector: 'label[for="name"]', text: 'Name' },
+        { selector: 'label[for="surname"]', text: 'Surname' },
+        { selector: 'label[for="email"]', text: 'Email' },
+        { selector: 'label[for="message"]', text: 'Message' },
+        { selector: '#contactForm button[type="submit"]', text: 'Send Message' },
+        { selector: '#surnameError', text: 'Surname must be text only.' },
+        { selector: '#emailError', text: 'Please use a valid @ftu.ac.th email.' },
+        { selector: '#successMessage', text: 'Your message has been sent successfully!' },
+        { selector: '#errorMessage', text: 'An error occurred. Please try again.' }
+    ];
+    const formPlaceholderElements = [
+        { selector: '#name', text: 'Enter your first name' },
+        { selector: '#surname', text: 'Enter your last name' },
+        { selector: '#email', text: 'your.email@ftu.ac.th' },
+        { selector: '#message', text: 'Write your message here...' }
+    ];
     // Message examples that need API translation
     const messageExamples = [
         { selector: '.faq-item:nth-child(5) .faq-answer p', text: 'Write something kind, uplifting, and birthday-appropriate! Some ideas:\n- May your birthday be as wonderful as you are!\n- Wishing you a year filled with joy and success!\n- Hope your special day is as amazing as you deserve!\nKeep it positive and under 100 characters.' }
@@ -107,7 +125,33 @@ async function translatePage() {
             console.error(`Error translating ${element.selector}:`, error);
         }
     }
+    // --- Translate Contact Form Text using API ---
+    for (const element of formTextElements) {
+        try {
+            const el = document.querySelector(element.selector);
+            if (el && !el.dataset.translated) {
+                const translated = await translateText(element.text);
+                el.textContent = translated;
+                el.dataset.translated = 'true';
+            }
+        } catch (error) {
+            console.error(`Error translating form element ${element.selector}:`, error);
+        }
+    }
 
+    // --- Translate Contact Form Placeholders using API ---
+    for (const element of formPlaceholderElements) {
+        try {
+            const el = document.querySelector(element.selector);
+            if (el && !el.dataset.translatedPlaceholder) {
+                const translated = await translateText(element.text);
+                el.placeholder = translated;
+                el.dataset.translatedPlaceholder = 'true';
+            }
+        } catch (error) {
+            console.error(`Error translating placeholder ${element.selector}:`, error);
+        }
+    }
     // Translate FAQ answers using API
     for (const answer of answersToTranslate) {
         try {
@@ -223,6 +267,127 @@ document.addEventListener('DOMContentLoaded', function () {
     if (firstFaq) {
         firstFaq.classList.add('active');
     }
+
+    const emailSupportBtn = document.getElementById('emailSupportBtn');
+    const contactFormContainer = document.getElementById('contactFormContainer');
+    const closeFormBtn = document.getElementById('closeFormBtn');
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+
+    // Firebase configuration for connecting to the database
+    const firebaseConfig = {
+        apiKey: 'AIzaSyA0wcgv_6dH14g37F6fdqXv1A97amw23_w', // API key for authentication
+        authDomain: 'birthdaymessagesapp.firebaseapp.com', // Domain for authentication
+        projectId: 'birthdaymessagesapp',                  // Project ID
+        storageBucket: 'birthdaymessagesapp.firebasestorage.app', // Storage bucket
+        messagingSenderId: '220266164498',                // Sender ID for messaging
+        appId: '1:220266164498:web:2adcb2520b75f580cd83cb' // App ID
+    };
+
+    // Initialize Firebase with the configuration
+    firebase.initializeApp(firebaseConfig);
+
+    // Get Firestore database instance
+    const db = firebase.firestore();
+
+    // Show the form
+    emailSupportBtn.addEventListener('click', () => {
+        contactFormContainer.classList.remove('hidden');
+    });
+
+    // Hide the form
+    closeFormBtn.addEventListener('click', () => {
+        contactFormContainer.classList.add('hidden');
+    });
+
+    // Hide form if clicking outside the modal content
+    contactFormContainer.addEventListener('click', (event) => {
+        if (event.target === contactFormContainer) {
+            contactFormContainer.classList.add('hidden');
+        }
+    });
+
+    // Handle form submission
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Get form elements
+        const nameInput = document.getElementById('name');
+        const surnameInput = document.getElementById('surname');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+
+        // Get error message elements
+        const nameError = document.getElementById('nameError');
+        const surnameError = document.getElementById('surnameError');
+        const emailError = document.getElementById('emailError');
+
+        // Reset previous errors
+        nameInput.classList.remove('border-red-500');
+        surnameInput.classList.remove('border-red-500');
+        emailInput.classList.remove('border-red-500');
+        nameError.classList.add('hidden');
+        surnameError.classList.add('hidden');
+        emailError.classList.add('hidden');
+
+        let isValid = true;
+
+        // --- Validation ---
+
+        // Validate Surname (text only)
+        if (!/^[a-zA-Z\s]+$/.test(surnameInput.value.trim())) {
+            surnameInput.classList.add('border-red-500');
+            surnameError.classList.remove('hidden');
+            isValid = false;
+        }
+
+        const emailValue = emailInput.value.trim().toLowerCase();
+        let isEmailFormatValid = true;
+
+        if (!emailValue.endsWith('@ftu.ac.th')) {
+            isEmailFormatValid = false;
+        } else {
+            const localPart = emailValue.split('@')[0];
+            const digitCount = (localPart.match(/\d/g) || []).length;
+            if (digitCount > 0 && digitCount !== 9) {
+                isEmailFormatValid = false;
+            }
+        }
+        if (!isEmailFormatValid) {
+            emailInput.classList.add('border-red-500');
+            emailError.classList.remove('hidden');
+            isValid = false;
+        }
+
+        // If all validations pass
+        if (isValid) {
+            try {
+                // Add a new document to the 'contacts' collection
+                await db.collection("contacts").add({
+                    name: nameInput.value.trim(),
+                    surname: surnameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    message: messageInput.value.trim(),
+                });
+
+                // Show success message
+                successMessage.classList.remove('hidden');
+                contactForm.reset(); // Clear the form
+
+                // Hide the form after a short delay
+                setTimeout(() => {
+                    contactFormContainer.classList.add('hidden');
+                    successMessage.classList.add('hidden'); // Reset for next time
+                }, 1300); // 2-second delay
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                // Show error message
+                errorMessage.classList.remove('hidden');
+            }
+        }
+    });
 
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
