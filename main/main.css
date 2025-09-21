@@ -60,8 +60,13 @@ body {
     /* Dark gradient */
 }
 .darkmode-layer, .darkmode-toggle {
-  z-index: 19;
+  z-index: 30;
 }
+.darkmode--activated .wheel-item {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
 /* Social sharing buttons container */
 .share-buttons-container {
     display: flex;
