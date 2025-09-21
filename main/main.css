@@ -59,7 +59,9 @@ body {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
     /* Dark gradient */
 }
-
+.darkmode-layer, .darkmode-toggle {
+  z-index: 19;
+}
 /* Social sharing buttons container */
 .share-buttons-container {
     display: flex;
@@ -443,8 +445,7 @@ textarea {
     background: linear-gradient(to right, #CF0820, #9d0618);
     /* Red gradient */
     position: relative;
-    /* For z-index */
-    z-index: 200;
+    z-index: 20;
     /* Above other content */
 }
 
@@ -602,8 +603,7 @@ textarea {
     bottom: 20px;
     /* 20px from bottom */
     left: 20px;
-    /* 20px from left */
-    z-index: 100;
+    z-index: 19;
     /* Above other content */
     background-color: #ffffff;
     /* White background */
