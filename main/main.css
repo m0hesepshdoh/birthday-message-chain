@@ -54,15 +54,16 @@ body {
     /* Default Arabic font */
 }
 
+.darkmode-layer,
+.darkmode-toggle {
+    z-index: 29;
+}
+
 /* Dark mode footer style */
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
     /* Dark gradient */
-}
-
-.darkmode-layer,
-.darkmode-toggle {
-    z-index: 29;
+    z-index: 30 !important;
 }
 
 .darkmode--activated .wheel-item {
