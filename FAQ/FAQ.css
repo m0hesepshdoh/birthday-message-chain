@@ -98,6 +98,12 @@ body {
     /* Right alignment */
 }
 
+.rtl .text-lg {
+    direction: rtl;
+    text-align: right;
+    /* Right alignment */
+}
+
 /* RTL answer text alignment */
 .rtl .faq-answer {
     text-align: right;
@@ -180,8 +186,7 @@ body {
     background: linear-gradient(to right, #CF0820, #9d0618);
     /* Red gradient */
     position: relative;
-    /* For z-index */
-    z-index: 30;
+    z-index: 20;
     /* Higher than other elements */
 }
 
@@ -300,6 +305,13 @@ body {
 .darkmode--activated .footer {
     background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
 }
+
+.darkmode-layer,
+.darkmode-toggle {
+    z-index: 19;
+    /* Proper layering for dark mode toggle */
+}
+
 /* Floating language toggle button */
 #toggleLangBtn {
     position: fixed;
@@ -308,7 +320,7 @@ body {
     /* From bottom */
     left: 20px;
     /* From left */
-    z-index: 20;
+    z-index: 19;
     /* Above other content */
     background-color: #ffffff;
     /* White background */
@@ -361,6 +373,22 @@ body {
 
 #contactFormContainer:not(.hidden) > div {
     transform: scale(1);
+}
+.darkmode--activated #contact-us{
+    background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+    color: white;
+}
+.darkmode--activated #namel label, #surnamel label, #email-l label, #message-l label{
+    color: white;
+}
+.darkmode--activated #name , #surname, #email, #message{
+    background-color: #333 !important;
+    color: white !important;
+    border: 1px solid #555 !important;
+}
+.darkmode--activated #sendm{
+    background-color: #40e0d0 !important;
+    color: black !important;
 }
 
 /* Base styles for form inputs */

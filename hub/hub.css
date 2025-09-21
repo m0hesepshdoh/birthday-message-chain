@@ -95,7 +95,7 @@ body {
     /* Precise centering */
     bottom: 2rem;
     /* Position from bottom */
-    z-index: 100;
+    z-index: 18;
     /* Ensure it's above other elements */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     /* Shadow effect */
@@ -228,7 +228,7 @@ button:hover svg {
 .footer {
     background: linear-gradient(to right, #CF0820, #9d0618);
     /* Red gradient */
-    z-index: 200;
+    z-index: 20;
     /* Make sure footer stays above other elements */
 }
 
@@ -241,7 +241,7 @@ button:hover svg {
 /* Ensure dark mode elements stay properly layered */
 .darkmode-layer,
 .darkmode-toggle {
-    z-index: 100;
+    z-index: 19;
     /* Proper layering for dark mode toggle */
 }
 
@@ -253,7 +253,7 @@ button:hover svg {
     /* Position from bottom */
     left: 20px;
     /* Position from left */
-    z-index: 100;
+    z-index: 19;
     /* Above most elements */
     background-color: #ffffff;
     /* White background */
@@ -304,43 +304,46 @@ button:hover svg {
 
 #myBtn {
     position: fixed;
-    /* Stays in place when scrolling */
     bottom: 20px;
-    /* Position from bottom */
     right: 20px;
-    /* Position from right */
-    z-index: 100;
-    /* Above most elements */
+    z-index: 19;
     background-color: #ffffff;
-    /* White background */
     color: #CF0820;
-    /* Red text */
     border: none;
-    /* No border */
     border-radius: 50%;
-    /* Circular shape */
     width: 49px;
-    /* Fixed width */
     height: 49px;
-    /* Fixed height */
-    display: flex;
-    /* Flexbox for centering */
+    display: none;
     align-items: center;
-    /* Center vertically */
     justify-content: center;
-    /* Center horizontally */
     cursor: pointer;
-    /* Pointer cursor on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-    /* Shadow */
-    transition: all 0.3s ease;
-    /* Smooth hover animation */
+    transition: all 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
     font-weight: bold;
-    /* Bold text */
     font-size: 16px;
-    /* Text size */
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 #myBtn:hover {
-    background-color: #cf082033;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #CF0820;
+    color: white;
+}
+
+#myBtn:active {
+    transform: translateY(-2px) scale(1.02);
+    transition: all 0.1s ease;
+}
+
+/* Add smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
 }

@@ -110,7 +110,7 @@ function applyTranslations() {
     document.getElementById('logo-title').textContent = langData.logoTitle;
     document.getElementById('nav-Join').textContent = langData.navJoin;
     document.getElementById('nav-faq').textContent = langData.navFaq;
-    
+
     // Mobile menu
     document.getElementById('mobile-nav-main').textContent = langData.navJoin;
     document.getElementById('mobile-nav-faq').textContent = langData.navFaq;
@@ -120,7 +120,7 @@ function applyTranslations() {
 
     // Sort button
     document.getElementById('sortMonthBtn').textContent = isSortingByBirthday ? langData.sortLatest : langData.sortMonth;
-    
+
     // Main content
     document.getElementById('main-title').textContent = langData.title;
     document.getElementById('main-description').textContent = langData.description;
@@ -132,7 +132,7 @@ function applyTranslations() {
 
     // Update Search Bar Placeholder
     document.getElementById('searchBar').placeholder = langData.searchPlaceholder;
-    
+
     // Footer
     document.getElementById('footer-title').textContent = langData.footerTitle;
     document.getElementById('footer-desc').textContent = langData.footerDesc;
@@ -427,22 +427,62 @@ function formatTimeAgo(date) {
     return currentLang === 'en' ? `${days} days ago` : `منذ ${days} يوم`;
 }
 
-// Get the button:
+// Get the scroll-to-top button
 let mybutton = document.getElementById("myBtn");
 
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
-
+// Function to show/hide scroll button based on scroll position
 function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
+    // Show button when user scrolls down 100px from top
+    if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+        mybutton.style.display = "flex";
+        mybutton.style.opacity = "1";
+        mybutton.style.transform = "translateY(0)";
+    } else {
+        mybutton.style.opacity = "0";
+        mybutton.style.transform = "translateY(10px)";
+        setTimeout(() => {
+            if (mybutton.style.opacity === "0") {
+                mybutton.style.display = "none";
+            }
+        }, 300);
+    }
 }
 
-// When the user clicks on the button, scroll to the top of the document
+// When the user clicks on the button, scroll to the top smoothly
 function topFunction() {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    window.scrollTo({
+        top: 10,
+        behavior: 'smooth'
+    });
+
+    // Fallback for older browsers
+    if (!window.CSS || !window.CSS.supports || !window.CSS.supports('scroll-behavior', 'smooth')) {
+        const scrollToTop = () => {
+            const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            if (currentScroll > 0) {
+                window.requestAnimationFrame(scrollToTop);
+                window.scrollTo(0, currentScroll - (currentScroll / 8));
+            }
+        };
+        scrollToTop();
+    }
 }
+
+// Attach scroll event listener with throttling
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(scrollFunction, 10);
+});
+
+// Initialize button state when page loads
+document.addEventListener('DOMContentLoaded', function () {
+    if (mybutton) {
+        mybutton.style.display = "none";
+        mybutton.style.opacity = "0";
+        mybutton.style.transform = "translateY(10px)";
+        mybutton.addEventListener('click', topFunction);
+    }
+});
