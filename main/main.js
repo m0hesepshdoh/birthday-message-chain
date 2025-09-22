@@ -18,6 +18,43 @@ document.getElementById('mobileMenuBtn').addEventListener('click', function () {
     menu.classList.toggle('hidden');
 });
 
+function updateVisitorCount() {
+  // Use a third-party service to get the public IP address
+  fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+      const userIp = data.ip;
+      const visitorsCollection = db.collection('visitors');
+      const userDocRef = visitorsCollection.doc(userIp); // Use the IP as the document ID
+
+      // Check if this visitor (IP) has been here before
+      userDocRef.get().then((doc) => {
+        if (!doc.exists) {
+          // If the document doesn't exist, it's a new visitor.
+          // Create a document for them.
+          userDocRef.set({
+            firstVisit: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      });
+
+      // 3. Listen for real-time updates to the visitors collection
+      visitorsCollection.onSnapshot((snapshot) => {
+        const totalVisitors = snapshot.size; // .size gives the number of documents
+        const countElement = document.getElementById('visitor-count');
+        if (countElement) {
+          countElement.textContent = totalVisitors;
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      const countElement = document.getElementById('visitor-count');
+      if (countElement) {
+        countElement.textContent = 'N/A';
+      }
+    });
+}
 // Function to set up share buttons
 function setupShareButtons() {
     // Get current webpage URL
@@ -561,7 +598,7 @@ elements.toggleLangBtn.addEventListener('click', toggleLanguage);
 elements.birthdayForm.addEventListener('submit', checkIpAndSubmit);
 
 // Initialize when page loads
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', updateVisitorCount, function () {
     // Determine initial language (from localStorage or browser)
     currentLang = localStorage.getItem('selectedLanguage') || ((navigator.language && navigator.language.startsWith('ar')) ? 'ar' : 'en');
 
