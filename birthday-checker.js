@@ -80,7 +80,7 @@ async function checkBirthdaysAndSendEmails() {
 
       console.log(`Processing birthday for: ${birthdayPerson.email}`);
 
-      let messageToSend = "Hope you have a wonderful day"; // Default message
+      let messageToSend = "Hope you have a wonderful day";
       if (potentialMessages.length > 0) {
         const randomIndex = Math.floor(
           Math.random() * potentialMessages.length

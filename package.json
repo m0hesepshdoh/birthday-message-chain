@@ -1,16 +1,25 @@
 {
-  "name": "birthday-message-sender",
+  "name": "birthday-message-chain",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
-  "main": "birthday-checker.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^11.11.1",
-    "sib-api-v3-sdk": "^8.5.0"
+    "darkmode-js": "^1.5.7",
+    "firebase": "^10.12.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.24.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "vite": "^5.3.1"
   }
 }

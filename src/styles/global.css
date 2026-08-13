@@ -1,0 +1,692 @@
+/* =========================================================
+   Global styles for the Birthday Message Chain React app
+   Consolidated & migrated from: main.css, hub.css, FAQ.css
+   Tailwind utility classes now live directly on components;
+   everything below is the custom / non-utility CSS that
+   Tailwind cannot express, preserved from the original files.
+   ========================================================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- CSS variables (from main.css / hub.css / FAQ.css) ---------- */
+:root {
+  --primary-color: #CF0820;
+  --secondary-color: #000000;
+  --background-color: #FFFFFF;
+  --accent-color: #FFD700;
+}
+
+/* ---------- Custom fonts (from all three CSS files) ---------- */
+@font-face {
+  font-family: 'MyFont';
+  src: url('/font/Franklin Gothic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MyFont2';
+  src: url('/font/KSAHeading.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Base body styles ---------- */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #FFF5F5;
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+[dir="rtl"] body {
+  font-family: 'Cairo', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ---------- Logo (gradient text) ---------- */
+.logo {
+  font-family: 'MyFont', 'Comic Neue', cursive;
+  background: linear-gradient(45deg, #FFD700, #CF0820);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[dir="rtl"] .logo {
+  font-family: 'MyFont2', 'Cairo', sans-serif;
+}
+
+/* ---------- Navigation links ---------- */
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background: linear-gradient(to right, #CF0820, #9d0618);
+  position: relative;
+  z-index: 20;
+}
+
+.footer .container {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  width: 100%;
+}
+
+.rtl .footer .container,
+[dir="rtl"] .footer .container {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  direction: rtl;
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .footer .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer .container,
+  [dir="rtl"] .footer .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #footer-logo-desc,
+  #footer-links-col {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  #footer-links {
+    justify-content: center;
+  }
+
+  #footer-links-col {
+    order: 2;
+  }
+
+  #footer-logo-desc {
+    order: 1;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+[dir="rtl"] #footer-links-col {
+  align-items: flex-start;
+}
+
+[dir="rtl"] #footer-links {
+  flex-direction: row-reverse;
+  padding-right: 0;
+  padding-left: 1rem;
+  direction: rtl;
+}
+
+[dir="rtl"] #footer-links li {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] #footer-links li:last-child {
+  margin-right: 0;
+}
+
+[dir="rtl"] #footer-logo-desc {
+  text-align: right;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.darkmode--activated .footer {
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+}
+
+.darkmode-layer,
+.darkmode-toggle {
+  z-index: 19;
+}
+
+/* ---------- Base RTL rules ---------- */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right !important;
+}
+
+[dir="rtl"] .text-center {
+  text-align: center !important;
+}
+
+[dir="rtl"] .text-right {
+  text-align: right !important;
+}
+
+[dir="rtl"] .main-description.text-start {
+  text-align: right !important;
+}
+
+[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-left: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-right: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+  margin-left: calc(1rem * var(--tw-space-x-reverse));
+  margin-right: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+/* ---------- Floating language toggle button ---------- */
+#toggleLangBtn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 19;
+  background-color: #ffffff;
+  color: #CF0820;
+  border: none;
+  border-radius: 50%;
+  width: 49px;
+  height: 49px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#toggleLangBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  background-color: #CF0820;
+  color: white;
+}
+
+/* =========================================================
+   FAQ page specific styles (from FAQ.css)
+   ========================================================= */
+.faq-item {
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  transition: color 0.2s ease;
+}
+
+.faq-question:hover {
+  color: var(--primary-color);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 300px;
+  padding-top: 12px;
+}
+
+.faq-item.active .faq-toggle svg {
+  transform: rotate(180deg);
+}
+
+.rtl .faq-item {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .text-lg {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .faq-answer {
+  text-align: right;
+}
+
+.rtl .faq-answer ol,
+.rtl .faq-answer ul {
+  direction: rtl;
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.rtl .faq-question {
+  flex-direction: row-reverse;
+}
+
+.faq-toggle {
+  margin-left: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.rtl .faq-toggle {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+.rtl #footer-links {
+  direction: rtl;
+}
+
+/* ---------- Contact form modal (from FAQ.css) ---------- */
+#contactFormContainer {
+  transition: opacity 0.3s ease;
+}
+
+#contactFormContainer > div {
+  transform: scale(5);
+  transition: transform 0.3s ease;
+}
+
+#contactFormContainer:not(.hidden) > div {
+  transform: scale(1);
+}
+
+.darkmode--activated #contact-us {
+  background: linear-gradient(to right, #1a1a1a, #2d2d2d) !important;
+  color: white;
+}
+
+.darkmode--activated #namel label,
+.darkmode--activated #surnamel label,
+.darkmode--activated #email-l label,
+.darkmode--activated #message-l label {
+  color: white;
+}
+
+.darkmode--activated #name,
+.darkmode--activated #surname,
+.darkmode--activated #email,
+.darkmode--activated #message {
+  background-color: #333 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
+}
+
+.darkmode--activated #sendm {
+  background-color: #40e0d0 !important;
+  color: black !important;
+}
+
+/* ---------- Form inputs (shared across FAQ + Join pages) ---------- */
+input[type="text"],
+input[type="email"],
+textarea {
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #CF0820;
+  box-shadow: 0 0 0 2px rgba(207, 8, 32, 0.2);
+}
+
+input.border-red-500,
+textarea.border-red-500 {
+  border-color: #ef4444;
+}
+
+input.border-red-500:focus,
+textarea.border-red-500:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* =========================================================
+   Hub page specific styles (from hub.css)
+   ========================================================= */
+.message-card {
+  transition: all 0.3s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.birthday-badge {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.loader {
+  border-top-color: var(--primary-color);
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#joinNowBtn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 2rem;
+  z-index: 18;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  min-width: 120px;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+button:hover svg {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.text-red-500 {
+  color: var(--primary-color);
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 0 0 0 rgba(207, 8, 32, 0.7);
+  }
+  70% {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 0 0 10px rgba(207, 8, 32, 0);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 0 0 0 rgba(207, 8, 32, 0);
+  }
+}
+
+.language-badge {
+  background-color: #4F46E5;
+  color: white;
+}
+
+.arabic-message {
+  direction: rtl;
+  text-align: right;
+}
+
+#searchBar:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px #cf082033;
+}
+
+#myBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 19;
+  background-color: #ffffff;
+  color: #CF0820;
+  border: none;
+  border-radius: 50%;
+  width: 49px;
+  height: 49px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  font-weight: bold;
+  font-size: 16px;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+#myBtn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #CF0820;
+  color: white;
+}
+
+#myBtn:active {
+  transform: translateY(-2px) scale(1.02);
+  transition: all 0.1s ease;
+}
+
+/* =========================================================
+   Join (index) page specific styles (from main.css)
+   ========================================================= */
+.darkmode--activated .wheel-item {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.share-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 0;
+}
+
+[dir="rtl"] .share-buttons-container {
+  flex-direction: row-reverse !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+[dir="rtl"] .form-group {
+  direction: rtl;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+[dir="rtl"] .wheel-container {
+  flex-direction: row-reverse;
+}
+
+.main-title,
+.date-picker,
+.flex.flex-col.items-center.mb-2 {
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.main-title {
+  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wheel-container {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 120px;
+  border-radius: 5px;
+  border: 1px solid var(--primary-color);
+  background-color: var(--background-color);
+}
+
+.wheel {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  border-right: 1px solid var(--primary-color);
+  font-size: 16px;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+}
+
+.wheel:last-child {
+  border-right: none;
+}
+
+.wheel::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel-item {
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  scroll-snap-align: center;
+}
+
+.wheel-item.selected {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+}
+
+.selected-date {
+  font-size: 16px;
+  margin-top: 10px;
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+input,
+textarea,
+.button {
+  border-radius: 8px;
+}
+
+textarea,
+.text-gray-600 {
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+.text-2xl {
+  font-size: clamp(1.1rem, 5vw, 1.5rem);
+}
+
+.text-sm,
+.text-gray-500 {
+  font-size: clamp(12px, 3vw, 14px);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-32 {
+  height: clamp(100px, 30vw, 128px);
+}
+
+.error-message {
+  color: red;
+  font-size: clamp(12px, 3vw, 14px);
+  margin-top: 5px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: clamp(10px, 3vw, 20px);
+}
+
+.main-description {
+  font-size: clamp(14px, 3.5vw, 18px);
+  line-height: 1.4;
+  margin-bottom: clamp(10px, 3vw, 20px);
+}
+
+.form-group {
+  margin-bottom: clamp(10px, 3vw, 16px);
+}
+
+input,
+textarea {
+  padding: clamp(6px, 2vw, 8px) clamp(8px, 3vw, 12px);
+  font-size: clamp(14px, 3vw, 16px);
+}
+
+.submit-button {
+  font-size: clamp(14px, 3.5vw, 16px);
+  padding: clamp(8px, 2vw, 8px) clamp(12px, 3vw, 16px);
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

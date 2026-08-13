@@ -1,214 +1,40 @@
-<!DOCTYPE html> <!-- Tells the browser this is an HTML5 document -->
-<html lang="en" dir="ltr"> <!-- Root HTML element with English language and left-to-right direction -->
-
-<head> <!-- Contains meta information and links to resources -->
-  <!-- Character encoding for proper text display -->
-  <meta charset="UTF-8" />
-  <!-- Makes page responsive on mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Title shown in browser tab -->
-  <title>Birthday message Chain</title>
-  <!-- Description for search engines -->
-  <meta name="description" content="Join our birthday message chain and share heartfelt wishes">
-  <!-- Keywords for SEO -->
-  <meta name="keywords" content="html, css, js, birthday, birthdays, gift, chain, wishes, message, messages">
-  <!-- Author information -->
-  <meta name="author" content="mohammed yousef bafuleh, محمد يوسف بافليح">
-
-  <!-- Google Fonts for typography -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
-    rel="stylesheet" />
-
-  <!-- Tailwind CSS framework -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Polyfill for older browsers -->
-  <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es7,fetch"></script>
-  <!-- Firebase for database functionality -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-  <!-- Favicon for browser tab -->
-  <link rel="icon" href="img/chain.ico" type="image/x-icon" alt="Chain link icon representing connection">
-  <!-- Custom CSS file -->
-  <link rel="stylesheet" href="main/main.css">
-  <!-- Preloading custom fonts for better performance -->
-  <link rel="preload" href="font/KSAHeading.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="font/Franklin Gothic.ttf" as="font" type="font/ttf" crossorigin>
-  <!-- Dark mode JavaScript library -->
-  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
-</head>
-
-<!-- Body of the webpage with Tailwind classes for styling -->
-
-<body class="bg-gray-50 min-h-screen flex flex-col">
-  <!-- Header section with navigation -->
-  <header class="bg-white shadow-sm">
-    <section class="container mx-auto px-4 py-3"> <!-- Container with padding -->
-      <nav class="flex justify-between items-center"> <!-- Flex navigation bar -->
-
-        <!-- Logo section with image and text -->
-        <figure class="flex items-center space-x-2 rtl:space-x-reverse">
-          <img src="img/chain.png" alt="Yellow chain link logo representing connection" class="h-8 w-8">
-          <!-- Logo image -->
-          <figcaption class="logo text-2xl" id="logo-title">Chain</figcaption> <!-- Logo text -->
-        </figure>
-
-        <!-- Desktop navigation menu (hidden on mobile) -->
-        <menu class="hidden md:flex space-x-6 rtl:space-x-reverse">
-          <!-- Navigation link -->
-          <li><a id="nav-hub" href="hub/hub.html" class="nav-link text-gray-700 font-medium text-[#CF0820]">Message
-              Hub</a></li>
-          <li><a id="nav-FAQ" href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium">FAQ</a></li>
-          <!-- Active link with red color -->
-        </menu>
-
-        <!-- Mobile menu button (visible only on small screens) -->
-        <button id="mobileMenuBtn" class="md:hidden text-gray-700" aria-label="Toggle mobile menu">
-          <!-- Hamburger menu icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </nav>
-    </section>
-  </header>
-
-  <!-- Mobile menu (hidden by default) -->
-  <aside id="mobileMenu" class="hidden md:hidden bg-white shadow-md">
-    <menu class="container mx-auto px-4 py-2 space-y-3"> <!-- Stacked menu items -->
-      <li><a id="mobile-nav-hub" href="hub/hub.html"
-          class="nav-link text-gray-700 font-medium py-2 text-[#CF0820]">Message Hub</a></li>
-      <li><a id="mobile-nav-FAQ" href="FAQ/FAQ.html" class="nav-link text-gray-700 font-medium py-2">FAQ</a></li>
-    </menu>
-  </aside>
-
-  <!-- Main content area -->
-  <main class="flex-grow container mx-auto px-4 py-8">
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-2xl mx-auto">
-      <div class="p-4 sm:p-6 w-full">
-        <!-- Title section -->
-        <div class="flex flex-col items-center mb-2">
-          <h2 id="main-title" class="text-2xl font-semibold">Birthday Message Chain</h2>
-        </div>
-
-        <!-- Description text -->
-        <div class="mb-4 sm:mb-6">
-          <p id="main-description" class="text-black-600 main-description text-start grow">Join our birthday</p>
-        </div>
-
-        <!-- Birthday form -->
-        <form class="space-y-4" id="birthdayForm">
-          <!-- Email input field -->
-          <div class="form-group">
-            <label id="email-label" for="email"
-              class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Email</label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required
-              class="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center" />
-            <div id="email-error" class="error-message"></div>
-          </div>
-
-          <!-- Birthday date picker -->
-          <div class="form-group">
-            <label id="birthday-label" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Birthday (Month &
-              Day)</label>
-            <div class="date-picker">
-              <div class="wheel-container">
-                <div class="wheel" id="monthWheel"></div> <!-- Month selection wheel -->
-                <div class="wheel" id="dayWheel"></div> <!-- Day selection wheel -->
-              </div>
-              <div class="selected-date" id="selectedDate">Selected Date: </div> <!-- Shows selected date -->
-            </div>
-          </div>
-
-          <!-- Message textarea -->
-          <div class="form-group">
-            <label id="message-label" for="message" class="block text-black-700 text-sm font-bold mb-1 sm:mb-2">Your
-              Birthday Message</label>
-            <textarea id="message" name="message" placeholder="Write a heartfelt birthday message (max 100 characters)"
-              required maxlength="300"
-              class="border rounded w-full py-2 px-3 text-black-700 leading-tight focus:outline-none focus:shadow-outline h-32 resize-none text-center"></textarea>
-            <p id="char-count" class="text-gray-500 text-xs text-right">0/100 characters</p> <!-- Character counter -->
-            <div id="message-error" class="error-message"></div>
-          </div>
-
-          <!-- Submit button -->
-          <button id="submit-button" type="submit"
-            class="bg-[#CF0820] hover:bg-[#9d0618] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full submit-button">Join
-            the Birthday Chain</button>
-
-          <!-- Form status messages (hidden by default) -->
-          <div id="form-success" class="text-green-500 text-center mt-4 hidden"></div>
-          <div id="form-error" class="text-red-500 text-center mt-4 hidden"></div>
-          <div id="ipblockerror" class="text-red-500 text-center mt-4 hidden"></div>
-        </form>
-
-        <!-- Share buttons section -->
-        <p id="share-label" class="text-sm text-center mt-6 mb-2"></p>
-        <div class="share-buttons-container flex justify-center space-x-4 rtl:space-x-reverse mb-6" id="share-buttons">
-          <!-- Copy Link Button -->
-          <button class="share-button bg-gray-600 hover:bg-gray-800 text-white p-2 rounded-full" id="copy-link-share"
-            title="Copy Link" aria-label="Copy link to share">
-            <!-- Copy icon SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <rect x="3" y="3" width="13" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none" />
-              <rect x="7" y="7" width="13" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none" />
-            </svg>
-            <span class="tooltip hidden">Copy Link</span>
-          </button>
-
-          <!-- WhatsApp Share Button -->
-          <button class="share-button whatsapp-share bg-green-500 hover:bg-green-600 text-white p-2 rounded-full"
-            id="whatsapp-share" title="Share on WhatsApp" aria-label="Share on WhatsApp">
-            <svg height="20px" width="20px" version="1.1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 58 58" xml:space="preserve">
-              <g>
-                <path style="fill:#ffffff;"
-                  d="M0,58l4.988-14.963C2.457,38.78,1,33.812,1,28.5C1,12.76,13.76,0,29.5,0S58,12.76,58,28.5 S45.24,57,29.5,57c-4.789,0-9.299-1.187-13.26-3.273L0,58z" />
-                <path style="fill:#2CB742;"
-                  d="M47.683,37.985c-1.316-2.487-6.169-5.331-6.169-5.331c-1.098-0.626-2.423-0.696-3.049,0.42 c0,0-1.577,1.891-1.978,2.163c-1.832,1.241-3.529,1.193-5.242-0.52l-3.981-3.981l-3.981-3.981c-1.713-1.713-1.761-3.41-0.52-5.242 c0.272-0.401,2.163-1.978,2.163-1.978c1.116-0.627,1.046-1.951,0.42-3.049c0,0-2.844-4.853-5.331-6.169 c-1.058-0.56-2.357-0.364-3.203,0.482l-1.758,1.758c-5.577,5.577-2.831,11.873,2.746,17.45l5.097,5.097l5.097,5.097 c5.577,5.577,11.873,8.323,17.45,2.746l1.758-1.758C48.048,40.341,48.243,39.042,47.683,37.985z" />
-              </g>
-            </svg>
-            <span class="tooltip hidden">Share on WhatsApp</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-  <!-- Footer section -->
-  <footer class="footer text-white py-8 w-full">
-    <section class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-      <!-- Footer logo and description -->
-      <figure class="flex items-center space-x-2 rtl:space-x-reverse mb-4 md:mb-0" id="footer-logo-desc">
-        <img src="img/chainF.png" alt="Yellow chain link logo in footer section" class="h-6 w-6">
-        <!-- Footer logo -->
-        <figcaption>
-          <span class="font-bold text-lg">Birthday Message Chain</span>
-          <p class="text-sm mt-2">Making birthdays special since 2024</p>
-        </figcaption>
-      </figure>
-
-      <!-- Footer navigation links -->
-      <nav class="flex flex-col items-center md:items-end" id="footer-links-col">
-        <menu class="flex space-x-4 rtl:space-x-reverse mb-3" id="footer-links">
-          <li><a id="footer-hub" href="hub/hub.html" class="hover:text-yellow-300 transition-colors">Message Hub</a>
-          </li>
-          <li><a id="footer-FAQ" href="FAQ/FAQ.html" class="hover:text-yellow-300 transition-colors">FAQ</a></li>
-        </menu>
-        <p id="footer-copyright" class="text-xs">&copy; Mohammed Bafuleh</p> <!-- Copyright notice -->
-      </nav>
-    </section>
-  </footer>
-  
-  <!-- Language toggle button (floating button) -->
-  <button id="toggleLangBtn" title="Toggle Language" aria-label="Toggle between English and Arabic">
-    <span id="langToggleText">ع</span> <!-- Arabic character for language toggle -->
-  </button>
-
-  <!-- Main JavaScript file -->
-  <script src="main/main.js"></script>
-
-</body>
-
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Birthday Message Chain</title>
+    <meta
+      name="description"
+      content="Join our birthday message chain and share heartfelt wishes"
+    />
+    <meta
+      name="keywords"
+      content="html, css, js, birthday, birthdays, gift, chain, wishes, message, messages"
+    />
+    <meta name="author" content="mohammed yousef bafuleh" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cairo:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/img/chain.ico" type="image/x-icon" />
+    <link
+      rel="preload"
+      href="/font/KSAHeading.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/font/Franklin Gothic.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
