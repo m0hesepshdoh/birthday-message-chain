@@ -9,6 +9,7 @@ export default function DarkModeWidget() {
       left: '20px',
       right: 'unset',
       label: '🌓',
+      autoMatchOsTheme: false,
     };
     const darkmode = new Darkmode(options);
     darkmode.showWidget();
